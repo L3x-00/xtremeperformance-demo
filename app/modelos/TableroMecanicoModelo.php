@@ -26,7 +26,7 @@ class TableroMecanicoModelo
 		$sql.= "o.antena, o.emblemas, o.tapones, o.cables, o.estereo, o.encendedor, o.tapetes, ";
 		$sql.= "o.estado, CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo, ";
 		$sql.= "CONCAT(m.nombres,' ',m.apellidos) as mecanico, e.estado as edo ";
-		$sql.= "FROM ordenreparacion as o, vehiculos as v, mecanicos as m, EstadoOrdenReparacion as e ";
+		$sql.= "FROM ordenreparacion as o, vehiculos as v, mecanicos as m, estadoordenreparacion as e ";
 		$sql.= "WHERE o.id='".$id."' AND o.baja=0 AND o.estado=e.id AND ";
 		$sql.= "o.idVehiculo=v.id AND o.idMecanico=m.id";
 		return $this->db->query($sql);
@@ -45,7 +45,7 @@ class TableroMecanicoModelo
 	{
 		if(empty($idOrdenReparacion)) return [];
 		$sql = "SELECT  a.idOrdenReparacion, p.nombrePieza, d.cantidad, p.costo ";
-		$sql.= "FROM ordenAlmacen as a, ordenAlmacenDetalle as d, piezas as p ";
+		$sql.= "FROM ordenalmacen as a, ordenalmacendetalle as d, piezas as p ";
 		$sql.= "WHERE a.idOrdenReparacion=".$idOrdenReparacion." AND ";
 		$sql.= "a.id=d.idOrdenAlmacen AND ";
 		$sql.= "d.idPieza=p.id";
@@ -56,7 +56,7 @@ class TableroMecanicoModelo
 	{
 		$sql = "SELECT s.id, s.fecha, SUBSTRING(s.observacion, 1, 50) as observacion, ";
 		$sql.= "CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo ";
-		$sql.= "FROM Seguimientos as s, OrdenReparacion as o, Vehiculos as v ";
+		$sql.= "FROM seguimientos as s, ordenreparacion as o, vehiculos as v ";
 		$sql.= "WHERE s.idOrdenReparacion=o.id AND ";
 		$sql.= "o.idVehiculo=v.id AND s.baja=0 AND s.idOrdenReparacion=".$idOrdenReparacion;
 		return $this->db->querySelect($sql);
@@ -66,7 +66,7 @@ class TableroMecanicoModelo
 	{
 		$sql = "SELECT o.id, o.idVehiculo, o.fechaIngreso, o.fechaSalida,  ";
 		$sql.= "CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo, e.estado, o.estado as edo ";
-		$sql.= "FROM OrdenReparacion as o, Vehiculos as v, EstadoOrdenReparacion as e ";
+		$sql.= "FROM ordenreparacion as o, vehiculos as v, estadoordenreparacion as e ";
 		$sql.= "WHERE o.baja=0 AND ";
 		$sql.= "o.idVehiculo=v.id AND ";
 		$sql.= "o.estado=e.id AND o.idMecanico=".$id;
