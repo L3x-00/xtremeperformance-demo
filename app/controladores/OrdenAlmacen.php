@@ -191,19 +191,19 @@ class OrdenAlmacen extends Controlador
 				if ($this->modelo->borrarPiezasOrdenAlmacen($id)){
 					for ($i=0; $i < count($detalle); $i++) { 
 						if (!$this->modelo->regresarPiezasOrdenAlmacen($detalle[$i]["idPieza"],$detalle[$i]["cantidad"])){
-							$this->mensaje(
-							"Baja de una orden de almacén", 
-							"Baja de una orden de almacén", 
-							"Error al borrar la orden de almacén: ".$id, 
-							"ordenalmacen/".$pagina, 
-							"success");
+								$this->mensaje(
+								"Baja de una orden de almacén", 
+								"Baja de una orden de almacén", 
+								"Error al borrar la orden de almacén: ".$id, 
+								"OrdenAlmacen/".$pagina, 
+								"success");
 						}
 					}
 					$this->mensaje(
 					"Baja de una orden de almacén", 
 					"Baja de una orden de almacén", 
 					"Se borró correctamente la orden de almacén: ".$id, 
-					"ordenalmacen/".$pagina,
+					"OrdenAlmacen/".$pagina,
 					"success");
 				} else {
 					$this->mensaje(
@@ -223,19 +223,19 @@ class OrdenAlmacen extends Controlador
 			if ($this->modelo->bajaLogica($idOrdenAlmacen)) {
 				$this->caratula();
 			} else {
-				$this->mensaje(
-				"Error al borrar orden de almacén", 
-				"Error al borrar orden de almacén", 
-				"Error al borrar la orden de almacén: ".$idOrdenAlmacen, 
-				"ordenalmacen/".$pag,
-				"danger");
+					$this->mensaje(
+					"Error al borrar orden de almacén", 
+					"Error al borrar orden de almacén", 
+					"Error al borrar la orden de almacén: ".$idOrdenAlmacen, 
+					"OrdenAlmacen/".$pag,
+					"danger");
 			}
 		} else {
 			$this->mensaje(
 			"Error al borrar orden de almacén", 
 			"Error al borrar orden de almacén", 
 			"Error al borrar las piezas de orden de almacén: ".$idOrdenAlmacen, 
-			"ordenalmacen/".$pag,
+			"OrdenAlmacen/".$pag,
 			"danger");
 		}
 	}
@@ -283,14 +283,14 @@ class OrdenAlmacen extends Controlador
 				"Baja de la pieza del órden de almacén", 
 				"Baja de la pieza del órden de almacén", 
 				"Se borró correctamente la pieza del órden de almacén: ".$pieza, 
-				"ordenalmacen/mostrarOrdenAlmacen/".$idOrdenAlmacen, 
+				"OrdenAlmacen/mostrarOrdenAlmacen/".$idOrdenAlmacen, 
 				"success");
 			} else {
 				$this->mensaje(
 				"Baja de una orden de almacén", 
 				"Baja de una orden de almacén", 
 				"Error al borrar la pieza de orden de almacén: ".$idOrdenAlmacen, 
-				"ordenalmacen/".$pag,
+				"OrdenAlmacen/".$pag,
 				"danger");
 			}	
 		}
@@ -310,7 +310,7 @@ class OrdenAlmacen extends Controlador
 			"activo" => "ordenalmacen",
 			"pag" => [
 				"totalPaginas" => $totalPaginas,
-				"regresa" => "ordenalmacen",
+				"regresa" => "OrdenAlmacen",
 				"pagina" => $pagina
 			],
 			"menu" => true
@@ -324,9 +324,9 @@ class OrdenAlmacen extends Controlador
 		"Cancelar la órden de almacén", 
 		"Cancelar la órden de almacén", 
 		"¿Desea cancelar la órden de almacén? Se borrará definitivamente del sistema.", 
-		"ordenalmacen/mostrarOrdenAlmacen/".$idOrdenAlmacen, 
+		"OrdenAlmacen/mostrarOrdenAlmacen/".$idOrdenAlmacen, 
 		"success",
-		"ordenalmacen/borrarOrdenAlmacen/".$idOrdenAlmacen,
+		"OrdenAlmacen/borrarOrdenAlmacen/".$idOrdenAlmacen,
 		"danger",
 		"Cancelar la órden de almacén");
 	}

@@ -1,5 +1,5 @@
 <?php include_once("encabezado.php"); ?>
-  <form action="<?php print RUTA; ?>ordenAlmacen/altaOrdenAlmacenPieza/" method="POST">
+  <form action="<?php print RUTA; ?>OrdenAlmacen/altaOrdenAlmacenPieza/" method="POST">
   <div class="form-group text-left">
     <label for="idPieza">* Pieza:</label>
     <select class="form-control" name="idPieza" id="idPieza" 
@@ -28,7 +28,7 @@
     <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pag'])) { print $datos['pag']; } else { print "1"; } ?>">
 
       <input type="submit" value="Enviar" class="btn btn-success">
-      <a href="<?php print RUTA; ?>ordenalmacen" class="btn btn-info">Regresar</a>
+  <a href="<?php print RUTA; ?>OrdenAlmacen" class="btn btn-info">Regresar</a>
     </div>
   </form>
 <?php include_once("piepagina.php"); ?>

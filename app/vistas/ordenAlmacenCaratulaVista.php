@@ -21,8 +21,8 @@
       print "<td class='text-start'>$".number_format($datos["data"][$i]['costo'],2)."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['alta_dt']."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['estado']."</td>";
-      print "<td><a href='".RUTA."ordenAlmacen/desplegarOrdenAlmacen/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Mostrar</a></td>";
-      print "<td><a href='".RUTA."ordenAlmacen/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger ";
+  print "<td><a href='".RUTA."OrdenAlmacen/desplegarOrdenAlmacen/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Mostrar</a></td>";
+  print "<td><a href='".RUTA."OrdenAlmacen/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger ";
       if ($datos["data"][$i]["idEstado"]==ORDEN_FACTURADA) {
         print " disabled ";
       }
@@ -33,6 +33,6 @@
   </tbody>
   </table>
   <?php include_once("paginacion.php"); ?> 
-<a href="<?php print RUTA; ?>ordenAlmacen/alta" class="btn btn-success">
+<a href="<?php print RUTA; ?>OrdenAlmacen/alta" class="btn btn-success">
   Dar de alta una orden de almacén</a>
 <?php include_once("piepagina.php"); ?>					

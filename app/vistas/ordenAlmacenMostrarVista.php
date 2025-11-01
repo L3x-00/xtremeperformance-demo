@@ -22,7 +22,7 @@
       print "<td class='text-center'>".$datos["detalle"][$i]['cantidad']."</td>";
       print "<td class='text-end'>".number_format($datos["detalle"][$i]['costo'],2)."</td>";
       print "<td class='text-end'>".number_format($total,2)."</td>";
-      print "<td class='text-center'><a href='".RUTA."ordenAlmacen/borrarPieza/".$datos["detalle"][$i]["id"]."/".$datos["pag"]."' class='btn btn-danger'>Borrar</a></td>";
+  print "<td class='text-center'><a href='".RUTA."OrdenAlmacen/borrarPieza/".$datos["detalle"][$i]["id"]."/".$datos["pag"]."' class='btn btn-danger'>Borrar</a></td>";
       print "</tr>";
       $total_suma+= $total;
       $cantidad_suma+= $datos["detalle"][$i]['cantidad'];
@@ -39,11 +39,11 @@
     ?>
   </tbody>
   </table>
-  <a href="<?php print RUTA.'ordenAlmacen/anadeOrdenAlmacenPieza/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-success">
+  <a href="<?php print RUTA.'OrdenAlmacen/anadeOrdenAlmacenPieza/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-success">
   Añadir un producto</a>
-  <a href="<?php print RUTA.'ordenAlmacen/terminarOrdenAlmacen/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-success">
+  <a href="<?php print RUTA.'OrdenAlmacen/terminarOrdenAlmacen/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-success">
   Terminar la órden de almacén</a>
-  <a href="<?php print RUTA.'ordenAlmacen/cancelarOrdenAlmacen/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-danger">
+  <a href="<?php print RUTA.'OrdenAlmacen/cancelarOrdenAlmacen/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-danger">
   Cancelar la órden de almacén</a>
   </div>
 <?php include_once("piepagina.php"); ?>

@@ -36,9 +36,9 @@
   </tbody>
   </table>
   <?php if(isset($datos["baja"])){ ?>
-  <a href="<?php print RUTA.'ordenAlmacen/bajaLogica/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-danger">Borrar la orden de almacén</a>
+  <a href="<?php print RUTA.'OrdenAlmacen/bajaLogica/'.$datos['data']['id'].'/'.$datos['pag']; ?>" class="btn btn-danger">Borrar la orden de almacén</a>
   <?php } ?>
-  <a href="<?php print RUTA.'ordenAlmacen/'.$datos['pag']; ?>" class="btn btn-success">
+  <a href="<?php print RUTA.'OrdenAlmacen/'.$datos['pag']; ?>" class="btn btn-success">
   Regresar</a>
   <?php if(isset($datos["baja"])){ 
     print '<p><b>Advertencia: una vez borrado el registro, no podrá recuperar la información</b></p>';

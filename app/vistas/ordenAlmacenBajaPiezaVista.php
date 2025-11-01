@@ -1,5 +1,5 @@
 <?php include_once("encabezado.php"); ?>
-  <form action="<?php print RUTA; ?>ordenAlmacen/borrarOrdenAlmacenPieza/" method="POST">
+  <form action="<?php print RUTA; ?>OrdenAlmacen/borrarOrdenAlmacenPieza/" method="POST">
   
   <div class="form-group text-left">
       <label for="pieza">Pieza:</label>
@@ -17,7 +17,7 @@
     <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pag'])) { print $datos['pag']; } else { print "1"; } ?>">
 
       <input type="submit" value="Borrar pieza" class="btn btn-danger">
-      <a href="<?php print RUTA; ?>ordenalmacen" class="btn btn-danger">Regresar</a>
+  <a href="<?php print RUTA; ?>OrdenAlmacen" class="btn btn-danger">Regresar</a>
     </div>
   </form>
 <?php include_once("piepagina.php"); ?>
