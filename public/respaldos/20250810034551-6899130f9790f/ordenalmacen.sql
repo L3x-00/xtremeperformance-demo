@@ -1,0 +1,39 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+--
+-- Database: `taller`
+--
+
+
+
+CREATE TABLE `ordenalmacen` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idOrdenReparacion` int(11) NOT NULL,
+  `costo` int(11) NOT NULL,
+  `observacion` varchar(500) NOT NULL,
+  `baja` int(11) NOT NULL,
+  `alta_dt` datetime NOT NULL,
+  `baja_dt` datetime NOT NULL,
+  `cambio_dt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO ordenalmacen VALUES
+("1","1","300","Muy maltratada","0","2025-07-30 11:00:17","0000-00-00 00:00:00","0000-00-00 00:00:00"),
+("2","1","0","Segunda","1","2025-07-30 12:48:06","2025-07-30 12:48:33","0000-00-00 00:00:00"),
+("3","1","0","Faltaron buj&iacute;as","1","2025-07-30 15:05:36","2025-07-31 11:07:47","0000-00-00 00:00:00"),
+("4","1","300","Cuarta","0","2025-07-30 17:33:29","0000-00-00 00:00:00","0000-00-00 00:00:00"),
+("5","1","100","Quinta","0","2025-07-31 12:50:06","0000-00-00 00:00:00","0000-00-00 00:00:00"),
+("6","1","0","Muy da&ntilde;ada","0","2025-08-10 14:58:42","0000-00-00 00:00:00","0000-00-00 00:00:00"),
+("7","1","200","Muy da&ntilde;anada","0","2025-08-10 15:04:10","0000-00-00 00:00:00","0000-00-00 00:00:00");
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

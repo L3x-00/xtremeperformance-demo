@@ -1,0 +1,33 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+--
+-- Database: `taller`
+--
+
+
+
+CREATE TABLE `configuracion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `iva` float NOT NULL,
+  `razon` varchar(500) NOT NULL,
+  `direccion` varchar(500) NOT NULL,
+  `telefonos` varchar(200) NOT NULL,
+  `ruc` varchar(200) NOT NULL,
+  `correo` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO configuracion VALUES
+("1","16","Mi taller mecánico, XTREME PERFORMANCE","Jr Nemesio Raez 2241, Huancayo","
+998-980-547","10712027881","correo@taller.com.pe");
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
