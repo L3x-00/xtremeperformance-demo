@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title> - Mecánica Automotriz</title>
+    <title>Xtreme Performance - Mecánica Automotriz</title>
     <meta name="title" content="Xtreme Performance - Mecánica Automotriz" />
     <meta
       name="description"
