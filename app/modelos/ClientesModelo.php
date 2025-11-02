@@ -121,9 +121,14 @@ public function getId(string $id = ''): array
 
 	public function getCorreo(string $correo=""):array
 	{
-		//
-		$sql = "SELECT id FROM mecanicos WHERE correo='".$correo."' AND baja=0";
-		return $this->db->query($sql);
+        // Check if the email exists in clientes or usuarios (avoid duplicate emails)
+        if (empty($correo)) return [];
+        $sql = "SELECT id FROM clientes WHERE correo='".$correo."' AND baja=0";
+        $salida = $this->db->query($sql);
+        if (!empty($salida)) return $salida;
+        // If not found in clientes, check usuarios
+        $sql2 = "SELECT id FROM usuarios WHERE correo='".$correo."' AND baja=0";
+        return $this->db->query($sql2);
 	}
 
 	// C:\xampp\htdocs\taller\app\modelos\ClientesModelo.php

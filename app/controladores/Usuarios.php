@@ -26,7 +26,8 @@ class Usuarios extends Controlador
 	    if ($_SERVER['REQUEST_METHOD']=="POST") {
 	      //
 	      $id = $_POST['id'] ?? "";
-	      $tipoUsuario = Helper::cadena($_POST['tipoUsuario'] ?? "");
+		// Accept either 'tipoUsuario' (camelCase) or 'tipousuario' (lowercase from views)
+		$tipoUsuario = Helper::cadena($_POST['tipoUsuario'] ?? ($_POST['tipousuario'] ?? ""));
 	      $nombres = Helper::cadena($_POST['nombres'] ?? "");
 	      $apellidos = Helper::cadena($_POST['apellidos'] ?? "");
 	      $direccion = Helper::cadena($_POST['direccion'] ?? "");
@@ -62,17 +63,20 @@ class Usuarios extends Controlador
 	      if (empty($errores)) { 
 			// Crear arreglo de datos
 			//
+			// Build data array with both key variants so model (expects tipoUsuario)
+			// and views (use tipousuario) work consistently.
 			$data = [
 				"id" => $id,
-				"tipoUsuario"=>$tipoUsuario,
-				"nombres"=>$nombres,
-				"apellidos"=>$apellidos,
-				"direccion"=>$direccion,
-				"telefono"=>$telefono,
-				"correo"=>$correo,
-				"clave"=>Helper::generarClave(10),
-				"genero"=>$genero,
-				"estadoUsuario"=>USUARIO_INACTIVO
+				"tipoUsuario" => $tipoUsuario,
+				"tipousuario" => $tipoUsuario,
+				"nombres" => $nombres,
+				"apellidos" => $apellidos,
+				"direccion" => $direccion,
+				"telefono" => $telefono,
+				"correo" => $correo,
+				"clave" => Helper::generarClave(10),
+				"genero" => $genero,
+				"estadoUsuario" => USUARIO_INACTIVO
 			];     
 	        //Enviamos al modelo
 	        if(trim($id)===""){
