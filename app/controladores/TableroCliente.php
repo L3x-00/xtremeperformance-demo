@@ -15,6 +15,18 @@ class TableroCliente extends Controlador
 		if ($this->sesion->getLogin()) {
 			$this->modelo = $this->modelo("TableroClienteModelo");
 			$this->usuario = $this->sesion->getUsuario();
+			// Solo clientes pueden entrar aquí
+			$tipo = $this->usuario["tipoUsuario"] ?? null;
+			if ($tipo !== CLIENTE) {
+				if ($tipo === ADMON) {
+					header("location:".RUTA."Tablero");
+				} else if ($tipo === MECANICO) {
+					header("location:".RUTA."TableroMecanico");
+				} else {
+					header("location:".RUTA);
+				}
+				exit;
+			}
 		} else {
 			header("location:".RUTA);
 		}

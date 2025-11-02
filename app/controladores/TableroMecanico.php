@@ -15,6 +15,18 @@ class TableroMecanico extends Controlador
 		if ($this->sesion->getLogin()) {
 			$this->modelo = $this->modelo("TableroMecanicoModelo");
 			$this->usuario = $this->sesion->getUsuario();
+			// Solo mecánicos pueden entrar aquí
+			$tipo = $this->usuario["tipoUsuario"] ?? null;
+			if ($tipo !== MECANICO) {
+				if ($tipo === ADMON) {
+					header("location:".RUTA."Tablero");
+				} else if ($tipo === CLIENTE) {
+					header("location:".RUTA."TableroCliente");
+				} else {
+					header("location:".RUTA);
+				}
+				exit;
+			}
 		} else {
 			header("location:".RUTA);
 		}
