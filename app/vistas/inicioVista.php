@@ -86,18 +86,21 @@
           </ul>
         </nav>
 
-     <a href="<?php print RUTA; ?>login" class="btn btn-primary">
-  <span class="span">INICIAR SESIÓN</span>
-  </a>
-        <button
-          class="nav-toggle-btn"
-          aria-label="toggle menu"
-          data-nav-toggler
-        >
-          <span class="nav-toggle-icon icon-1"></span>
-          <span class="nav-toggle-icon icon-2"></span>
-          <span class="nav-toggle-icon icon-3"></span>
-        </button>
+        <div class="header-actions">
+          <a href="<?php print RUTA; ?>login" class="btn btn-primary">
+            <span class="span">INICIAR SESIÓN</span>
+          </a>
+          
+          <button
+            class="nav-toggle-btn"
+            aria-label="toggle menu"
+            data-nav-toggler
+          >
+            <span class="nav-toggle-icon icon-1"></span>
+            <span class="nav-toggle-icon icon-2"></span>
+            <span class="nav-toggle-icon icon-3"></span>
+          </button>
+        </div>
       </div>
     </header>
 
