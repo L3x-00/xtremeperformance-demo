@@ -388,29 +388,50 @@ body {
 
 /* Ajustes responsive para el botón */
 @media (max-width: 991px) {
-  .login-button {
-    position: fixed;
-    right: 80px;
-    font-size: 14px;
-    padding: 6px 12px !important;
-  }
-  
   .nav-toggle-btn {
     position: fixed;
     right: 20px;
     top: 20px;
+    z-index: 100;
   }
-}
 
-/* Aseguramos visibilidad en móvil */
-@media (max-width: 991px) {
+  .login-button {
+    position: fixed;
+    top: 20px;
+    right: 70px;
+    font-size: 14px;
+    padding: 6px 12px !important;
+    background-color: var(--international-orange-engineering);
+    z-index: 100;
+  }
+
   .header-actions {
     margin-left: auto;
   }
 
-  .login-button {
-    font-size: 14px;
-    padding: 6px 12px !important;
+  /* Ajustes para el logo y navegación en móvil */
+  .header-left {
+    width: 100%;
+  }
+
+  .navbar {
+    top: 70px;
+    right: 20px;
+    width: calc(100% - 40px);
+    max-width: 300px;
+    border-radius: 4px;
+  }
+
+  .logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+  }
+
+  .logo img {
+    max-height: 40px;
+    width: auto;
   }
 }
 
@@ -1001,11 +1022,21 @@ body {
     gap: 30px;
   }
 
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
   .navbar,
   .navbar.active {
     all: unset;
     display: block;
-    margin-inline-start: auto;
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    background: none;
+    width: auto;
   }
 
   .header-actions {
@@ -1019,6 +1050,8 @@ body {
     display: flex !important;
     font-size: var(--fs-5);
     padding: 12px 24px !important;
+    position: fixed;
+    right: 20px;
   }
 
   .navbar-list {

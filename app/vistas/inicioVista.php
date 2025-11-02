@@ -53,16 +53,16 @@
 
     <header class="header">
       <div class="container">
-        <div class="header-left">
-          <a href="index.html" class="logo">
-            <img
-              src="./public/img/LogoWhite.png"
-              width="128"
-              height="63"
-              alt="autofix home"
-            />
-          </a>
+        <a href="index.html" class="logo">
+          <img
+            src="./public/img/LogoWhite.png"
+            width="128"
+            height="63"
+            alt="autofix home"
+          />
+        </a>
 
+        <div class="header-left">
           <nav class="navbar" data-navbar>
             <ul class="navbar-list">
               <li>
