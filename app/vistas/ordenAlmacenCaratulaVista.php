@@ -18,7 +18,7 @@
       print "<tr>";
       print "<td class='text-start'>".$datos["data"][$i]['id']."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['vehiculo']."</td>";
-      print "<td class='text-start'>$".number_format($datos["data"][$i]['costo'],2)."</td>";
+  print "<td class='text-start'>S/ ".number_format($datos["data"][$i]['costo'],2)."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['alta_dt']."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['estado']."</td>";
   print "<td><a href='".RUTA."OrdenAlmacen/desplegarOrdenAlmacen/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Mostrar</a></td>";
