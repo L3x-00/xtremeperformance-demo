@@ -346,13 +346,6 @@ body {
   #HEADER
 \*-----------------------------------*/
 
-.header .btn {
-  display: flex; /* Mostrar el botón siempre */
-  padding: 12px 24px;
-  margin-left: 10px;
-  font-size: var(--fs-5);
-}
-
 .header {
   position: absolute;
   top: 0;
@@ -373,6 +366,30 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
+  order: 2;
+}
+
+/* Estilos específicos para el botón de login */
+.login-button {
+  display: flex !important;
+  align-items: center;
+  padding: 8px 16px !important;
+  margin-left: 10px;
+  font-size: var(--fs-5);
+  white-space: nowrap;
+  order: 2;
+}
+
+/* Aseguramos visibilidad en móvil */
+@media (max-width: 991px) {
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .login-button {
+    font-size: 14px;
+    padding: 6px 12px !important;
+  }
 }
 
 .logo img {
@@ -973,11 +990,13 @@ body {
     display: flex !important;
     align-items: center;
     gap: 15px;
-    margin-left: auto;
+    margin-left: 20px;
   }
 
-  .header .btn {
+  .login-button {
     display: flex !important;
+    font-size: var(--fs-5);
+    padding: 12px 24px !important;
   }
 
   .navbar-list {

@@ -87,10 +87,6 @@
         </nav>
 
         <div class="header-actions">
-          <a href="<?php print RUTA; ?>login" class="btn btn-primary">
-            <span class="span">INICIAR SESIÓN</span>
-          </a>
-          
           <button
             class="nav-toggle-btn"
             aria-label="toggle menu"
@@ -100,6 +96,10 @@
             <span class="nav-toggle-icon icon-2"></span>
             <span class="nav-toggle-icon icon-3"></span>
           </button>
+
+          <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
+            <span class="span">INICIAR SESIÓN</span>
+          </a>
         </div>
       </div>
     </header>
