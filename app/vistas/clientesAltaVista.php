@@ -28,7 +28,10 @@
 
     <div class="form-group text-left">
       <label for="ruc">RUC:</label>
-      <input type="text" name="ruc" id="ruc" class="form-control" value="<?php print isset($datos['data']['ruc'])?$datos['data']['ruc']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+      <div class="input-group">
+        <input type="text" name="ruc" id="ruc" class="form-control" value="<?php print isset($datos['data']['ruc'])?$datos['data']['ruc']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+        <button type="button" id="btnBuscarRuc" class="btn btn-outline-secondary">Buscar RUC</button>
+      </div>
     </div>
 
     <div class="form-group text-left">
@@ -66,4 +69,40 @@
       <?php } ?> 
     </div>
   </form>
+  <script>
+  (function(){
+    const btn = document.getElementById('btnBuscarRuc');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      const ruc = document.getElementById('ruc').value.trim();
+      if (!/^[0-9]{11}$/.test(ruc)) {
+        alert('Ingrese un RUC válido de 11 dígitos');
+        return;
+      }
+      btn.disabled = true;
+      btn.innerText = 'Buscando...';
+      const form = new FormData();
+      form.append('ruc', ruc);
+      fetch('<?php print RUTA; ?>Sunat/rucAjax', {
+        method: 'POST',
+        body: form,
+        credentials: 'same-origin'
+      }).then(r=>r.json()).then(data=>{
+        btn.disabled = false; btn.innerText = 'Buscar RUC';
+        if (!data) { alert('Respuesta vacía'); return; }
+        if (data.error) { alert(data.message || 'Error al consultar RUC'); return; }
+        // Map known fields to the form
+        const razon = data.razonSocial || data.nombre || data.razon_social || data['nombre_comercial'] || '';
+        const direccion = data.direccion || data.domicilio_fiscal || data['direccion'] || '';
+        const correo = '';
+        if (razon) document.getElementById('razonSocial').value = razon;
+        if (direccion) document.getElementById('direccion').value = direccion;
+        if (correo) document.getElementById('correo').value = correo;
+      }).catch(err=>{
+        btn.disabled = false; btn.innerText = 'Buscar RUC';
+        alert('Error en la petición: '+err.message);
+      });
+    });
+  })();
+  </script>
 <?php include_once("piepagina.php"); ?>

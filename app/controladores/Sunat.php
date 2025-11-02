@@ -41,6 +41,28 @@ class Sunat extends Controlador
         ];
         $this->vista('sunatRucVista', $datos);
     }
+
+    /**
+     * Endpoint AJAX: devuelve JSON con los datos del RUC.
+     */
+    public function rucAjax()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        // Requiere sesión como el método ruc
+        $this->sesion = new Sesion();
+        if (!$this->sesion->getLogin()) {
+            echo json_encode(['error' => true, 'message' => 'No autorizado']);
+            return;
+        }
+        $ruc = Helper::cadena($_POST['ruc'] ?? '');
+        if ($ruc === '' || !ctype_digit($ruc) || strlen($ruc) !== 11) {
+            echo json_encode(['error' => true, 'message' => 'RUC inválido']);
+            return;
+        }
+        require_once __DIR__ . '/../libs/SunatRuc.php';
+        $resultado = SunatRuc::consultar($ruc);
+        echo json_encode($resultado);
+    }
 }
 
 ?>
