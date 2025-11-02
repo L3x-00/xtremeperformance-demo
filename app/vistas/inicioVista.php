@@ -474,12 +474,12 @@
       <div class="footer-top section">
         <div class="container">
           <div class="footer-brand">
-            <a href="#" class="logo">
+            <a href="#" class="logo" aria-label="Xtreme Performance">
               <img
-                src="./public/img/logoWhite.png"
+                src="./public/img/LogoWhite.png"
                 width="128"
                 height="63"
-                alt="autofix home"
+                alt=""
               />
             </a>
 
