@@ -247,6 +247,13 @@ class OrdenReparacion extends Controlador
 
 	public function modificar(string $id,string $pagina="1"):void
 	{
+		// Si el formulario fue enviado mediante POST desde la vista de modificar,
+		// delegamos el procesamiento a alta() para reusar la misma lógica y
+		// mantener la URL /OrdenReparacion/modificar/{id}/{pagina} en caso de errores.
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$this->alta();
+			return;
+		}
 		//Leemos los datos de la tabla
 		$data = $this->modelo->getId($id);
 		$vehiculos = $this->modelo->getVehiculos();

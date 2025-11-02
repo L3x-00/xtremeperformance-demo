@@ -1,5 +1,13 @@
 <?php include_once("encabezado.php"); ?>
-  <form action="<?php print RUTA; ?>ordenReparacion/alta/" method="POST">
+  <?php
+    // Si estamos editando (data.id existe) enviamos el formulario a la ruta modificar
+    $formAction = RUTA.'OrdenReparacion/alta/';
+    if (isset($datos['data']['id']) && $datos['data']['id']!='') {
+      $pagina_hidden = isset($datos['pagina']) ? $datos['pagina'] : '1';
+      $formAction = RUTA.'OrdenReparacion/modificar/'.$datos['data']['id'].'/'.$pagina_hidden;
+    }
+  ?>
+  <form action="<?php print $formAction; ?>" method="POST">
 
   <div class="form-group text-left">
     <label for="idVehiculo">* Vehículo:</label>
@@ -167,12 +175,12 @@
       <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pagina'])) { print $datos['pagina']; } else { print "1"; } ?>">
       
       <?php if (isset($datos["baja"])) { ?>
-        <a href="<?php print RUTA; ?>ordenReparacion/bajaLogica/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger">Borrar</a>
-        <a href="<?php print RUTA.'ordenReparacion/'.$datos['pagina']; ?>" class="btn btn-danger">Regresar</a>
+        <a href="<?php print RUTA; ?>OrdenReparacion/bajaLogica/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger">Borrar</a>
+        <a href="<?php print RUTA.'OrdenReparacion/'.$datos['pagina']; ?>" class="btn btn-danger">Regresar</a>
         <p><b>Advertencia: una vez borrado el registro, no podrá recuperar la información.</b></p>
       <?php } else { ?>
       <input type="submit" value="Enviar" class="btn btn-success">
-      <a href="<?php print RUTA; ?>ordenReparacion" class="btn btn-info">Regresar</a>
+  <a href="<?php print RUTA; ?>OrdenReparacion" class="btn btn-info">Regresar</a>
       <?php } ?> 
     </div>
   </form>
