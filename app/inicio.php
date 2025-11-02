@@ -5,6 +5,20 @@ define("CLAVE","mimamamemimamucho");
 define('RUTA', '/./');
 define("TAMANO_PAGINA",6);
 define('PAGINAS_MAXIMAS',4);
+// URL absoluta del sitio para enlaces en correos
+if (!defined('SITE_URL')) {
+	define('SITE_URL', 'https://www.xtremeperformancepe.com/');
+}
+// Config correo básico (usar correos del mismo dominio para mejor entrega)
+if (!defined('MAIL_FROM')) {
+	define('MAIL_FROM', 'no-reply@xtremeperformancepe.com');
+}
+if (!defined('MAIL_FROM_NAME')) {
+	define('MAIL_FROM_NAME', 'Xtreme Performance');
+}
+if (!defined('MAIL_REPLY_TO')) {
+	define('MAIL_REPLY_TO', 'contacto@xtremeperformancepe.com');
+}
 //
 //Tipos Usuarios
 //

@@ -12,22 +12,22 @@ class Controlador
 		$salida = false;
 		if (!empty($data)) {
 			$id = Helper::encriptar($data["id"]);
-			//
-			$msg = "Entra a la siguiente liga para cambiar tu clave de acceso al sistema de control de mi taller mecánico...<br>";
-			$msg.= "<a href='".RUTA."login/cambiarclave/".$id."'>Cambiar tu clave de acceso</a>";
+			$link = rtrim(SITE_URL, '/')."/login/cambiarclave/".$id;
+			$msg = "Entra a la siguiente liga para cambiar tu clave de acceso al sistema de Xtreme Performance:<br>";
+			$msg.= "<a href='".$link."'>Cambiar tu clave de acceso</a><br><br>";
+			$msg.= "Si el enlace no funciona, copia y pega esta URL en tu navegador: ".$link;
 
+			$from = MAIL_FROM_NAME.' <'.MAIL_FROM.'>';
 			$headers = "MIME-Version: 1.0\r\n"; 
-			$headers.= "Content-type:text/html; charset=UTF-8\r\n"; 
-			$headers.= "From: Taller Mecanico\r\n"; 
-			$headers.= "Reply-to: ayuda@taller.com\r\n";
+			$headers.= "Content-type: text/html; charset=UTF-8\r\n"; 
+			$headers.= "From: $from\r\n"; 
+			$headers.= "Reply-To: ".MAIL_REPLY_TO."\r\n";
+			$headers.= "X-Mailer: PHP/".phpversion()."\r\n";
 
 			$asunto = "Cambiar clave de acceso";
-			// Intentar enviar correo; si el servidor no está configurado, no bloqueamos el flujo
-			$salida = @mail($data["correo"],$asunto,$msg, $headers);
-			if ($salida === false) {
-				// Como fallback, consideramos éxito lógico para no exponer configuración del servidor
-				$salida = true;
-			}
+			// Intentar enviar correo con envelope sender para mejorar entrega (SPF)
+			$extraParams = "-f".MAIL_FROM;
+			$salida = @mail($data["correo"],$asunto,$msg, $headers, $extraParams);
 		}
 		return $salida;
 	}
