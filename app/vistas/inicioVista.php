@@ -37,7 +37,7 @@
     <!-- 
     - custom css link
   -->
-    <link rel="stylesheet" href="./public/css/style.css" />
+  <link rel="stylesheet" href="./public/css/style.css?v=20251102" />
 
     <!-- 
     - IMAGENES PRE CARGADAS
@@ -604,6 +604,6 @@
     <!-- 
     - custom js link
   -->
-    <script src="./public/js/script.js"></script>
+    <script src="./public/js/script.js?v=20251102"></script>
   </body>
 </html>
