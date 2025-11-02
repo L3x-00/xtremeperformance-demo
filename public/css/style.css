@@ -388,25 +388,30 @@ body {
 
 /* Ajustes responsive para el botón */
 @media (max-width: 991px) {
+  .header {
+    padding: 15px 0;
+  }
+
   .nav-toggle-btn {
     position: fixed;
-    right: 20px;
-    top: 20px;
+    right: 15px;
+    top: 15px;
     z-index: 100;
   }
 
   .login-button {
-    position: fixed;
-    top: 20px;
-    right: 70px;
-    font-size: 14px;
+    position: fixed !important;
+    top: 15px !important;
+    right: 60px !important;
+    font-size: 13px !important;
     padding: 6px 12px !important;
-    background-color: var(--international-orange-engineering);
-    z-index: 100;
-  }
-
-  .header-actions {
-    margin-left: auto;
+    background-color: var(--international-orange-engineering) !important;
+    z-index: 100 !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin: 0 !important;
+    min-width: auto !important;
   }
 
   /* Ajustes para el logo y navegación en móvil */
@@ -424,14 +429,20 @@ body {
 
   .logo {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 15px;
+    left: 15px;
     z-index: 100;
   }
 
   .logo img {
-    max-height: 40px;
+    max-height: 35px;
     width: auto;
+  }
+
+  /* Aseguramos que el contenedor no oculte elementos fijos */
+  .header .container {
+    position: relative;
+    padding-top: 50px;
   }
 }
 
