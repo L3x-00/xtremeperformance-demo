@@ -21,6 +21,15 @@ class LoginModelo
         return false;
     }
 
+    public function actualizarClaveCliente(array $data = []): bool
+    {
+        if (!empty($data)) {
+            $sql = "UPDATE clientes SET clave=:clave WHERE id=:id";
+            return $this->db->queryNoSelect($sql, $data);
+        }
+        return false;
+    }
+
     public function actualizarLogin(string $id = '', string $tabla): bool
     {
         // Corregido para ser seguro

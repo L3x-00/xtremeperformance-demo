@@ -85,28 +85,32 @@ if (empty($errores)) {
     ];
 
     // 2. Comprobar si es un ALTA o una MODIFICACIÓN
-    if (trim($id) === "") {
-        // Es un ALTA: añadimos una clave nueva al paquete de datos
-        $data["clave"] = Helper::generarClave(10);
-        
-        if ($this->modelo->alta($data)) {
-            $this->mensaje(
-                "Alta de un cliente",
-                "Alta de un cliente",
-                "Se añadió correctamente el cliente: " . $nombres . " " . $apellidos,
-                "clientes/" . $pagina,
-                "success"
-            );
-        } else {
-            $this->mensaje(
-                "Error al añadir el cliente.",
-                "Error al añadir el cliente.",
-                "No se pudo añadir el cliente: " . $nombres . " " . $apellidos,
-                "clientes/" . $pagina,
-                "danger"
-            );
-        }
-    } else {
+	if (trim($id) === "") {
+		// Es un ALTA: generamos una clave temporal y luego enviamos activación para que la cambie
+		$data["clave"] = Helper::generarClave(10);
+		if ($this->modelo->alta($data)) {
+			// Obtener ID del nuevo cliente para el enlace de activación
+			$nuevo = $this->modelo->getCorreo($correo);
+			if (!empty($nuevo) && isset($nuevo['id'])) {
+				$this->enviarCorreoCliente(["id"=>$nuevo['id'], "correo"=>$correo]);
+			}
+			$this->mensaje(
+				"Alta de un cliente",
+				"Alta de un cliente",
+				"Se añadió correctamente el cliente: " . $nombres . " " . $apellidos . ". Enviamos un correo de activación para que cree su contraseña.",
+				"clientes/" . $pagina,
+				"success"
+			);
+		} else {
+			$this->mensaje(
+				"Error al añadir el cliente.",
+				"Error al añadir el cliente.",
+				"No se pudo añadir el cliente: " . $nombres . " " . $apellidos,
+				"clientes/" . $pagina,
+				"danger"
+			);
+		}
+	} else {
         // Es una MODIFICACIÓN: añadimos el ID al paquete de datos
         $data["id"] = $id;
 
