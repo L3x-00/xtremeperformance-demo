@@ -48,8 +48,31 @@ class OrdenReparacion extends Controlador
 	      //
 	      $pagina = $_POST['pagina'] ?? "1";
 
-	      //
-	      // Validamos la información
+				//
+				// Construimos el arreglo de datos con los valores enviados para poder
+				// reinyectar los valores en la vista en caso de errores de validación.
+				$data = [
+					"id" => $id,
+					"idVehiculo" => $idVehiculo,
+					"idMecanico" => $idMecanico,
+					"fechaIngreso" => $fechaIngreso,
+					"fechaSalida" => $fechaSalida,
+					"kilometraje" => $kilometraje,
+					"gato" => $gato,
+					"herramientas" => $herramientas,
+					"triangulos" => $triangulos,
+					"refaccion" => $refaccion,
+					"extintor" => $extintor,
+					"antena" => $antena,
+					"emblemas" => $emblemas,
+					"tapones" => $tapones,
+					"cables" => $cables,
+					"estereo" => $estereo,
+					"encendedor" => $encendedor,
+					"tapetes" => $tapetes
+				];
+
+				// Validamos la información
 	      // 
 	      $hoy = date("Y-m-d");
 	      $hoy = new DateTime($hoy);
@@ -91,29 +114,7 @@ class OrdenReparacion extends Controlador
 	      	array_push($errores,"El kilometraje no puede ser negativo.");
 	      }
 	      //
-	      if (empty($errores)) { 
-			// Crear arreglo de datos
-			//
-			$data = [
-				"id" => $id,
-				"idVehiculo"=>$idVehiculo,
-				"idMecanico"=>$idMecanico,
-				"fechaIngreso"=>$fechaIngreso,
-				"fechaSalida"=>$fechaSalida,
-				"kilometraje"=>$kilometraje,
-				"gato"=>$gato,
-				"herramientas" => $herramientas,
-				"triangulos"=>$triangulos,
-				"refaccion"=>$refaccion,
-				"extintor"=>$extintor,
-				"antena"=>$antena,
-				"emblemas"=>$emblemas,
-				"tapones"=>$tapones,
-				"cables"=>$cables,
-				"estereo"=>$estereo,
-				"encendedor"=>$encendedor,
-				"tapetes"=>$tapetes
-			];    
+		  if (empty($errores)) { 
 	        //Enviamos al modelo
 	        if(trim($id)===""){
 	          //Alta
