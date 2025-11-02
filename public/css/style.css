@@ -385,6 +385,10 @@ body {
   white-space: nowrap;
   z-index: 100;
 }
+/* Botón flotante específico para móvil (oculto por defecto) */
+.mobile-login-button {
+  display: none;
+}
 
 /* Ajustes responsive para el botón */
 @media (max-width: 991px) {
@@ -443,20 +447,25 @@ body {
   .header .container {
     position: relative;
     padding-top: 50px;
+  /* En móvil, ocultamos el botón de escritorio y mostramos el flotante */
+  .login-button {
+    display: none !important;
   }
-}
 
-.logo img {
-  width: 100px;
-}
-
-.nav-toggle-icon {
-  width: 30px;
-  height: 2px;
-  background-color: var(--white);
-  transition: var(--transition);
-}
-
+  .mobile-login-button {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 16px !important;
+    background-color: var(--international-orange-engineering) !important;
+    color: var(--white) !important;
+    border-radius: var(--radius-pill);
+    z-index: 9999 !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
 .nav-toggle-icon:not(:last-child) {
   margin-block-end: 7px;
 }

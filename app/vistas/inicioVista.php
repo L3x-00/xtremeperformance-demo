@@ -53,56 +53,64 @@
 
     <header class="header">
       <div class="container">
-        <a href="index.html" class="logo">
-          <img
-            src="./public/img/LogoWhite.png"
-            width="128"
-            height="63"
-            alt="autofix home"
-          />
-        </a>
+        <div class="header-top">
+          <a href="index.html" class="logo">
+            <img
+              src="./public/img/LogoWhite.png"
+              width="128"
+              height="63"
+              alt="autofix home"
+            />
+          </a>
 
-        <div class="header-left">
-          <nav class="navbar" data-navbar>
-            <ul class="navbar-list">
-              <li>
-                <a href="index.html" class="navbar-link">Inicio</a>
-              </li>
+          <div class="header-buttons">
+            <button
+              class="nav-toggle-btn"
+              aria-label="toggle menu"
+              data-nav-toggler
+            >
+              <span class="nav-toggle-icon icon-1"></span>
+              <span class="nav-toggle-icon icon-2"></span>
+              <span class="nav-toggle-icon icon-3"></span>
+            </button>
 
-              <li>
-                <a href="#nosotros" class="navbar-link">Sobre Nosotros</a>
-              </li>
-
-              <li>
-                <a href="#servicios" class="navbar-link">Servicios</a>
-              </li>
-
-              <li>
-                <a href="#proyectos" class="navbar-link">Nuestros Proyectos</a>
-              </li>
-
-              <li>
-                <a href="#contactanos" class="navbar-link">Contactáctanos</a>
-              </li>
-            </ul>
-          </nav>
+            <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
+              <span class="span">INICIAR SESIÓN</span>
+            </a>
+          </div>
         </div>
 
-        <button
-          class="nav-toggle-btn"
-          aria-label="toggle menu"
-          data-nav-toggler
-        >
-          <span class="nav-toggle-icon icon-1"></span>
-          <span class="nav-toggle-icon icon-2"></span>
-          <span class="nav-toggle-icon icon-3"></span>
-        </button>
+        <nav class="navbar" data-navbar>
+          <ul class="navbar-list">
+            <li>
+              <a href="index.html" class="navbar-link">Inicio</a>
+            </li>
 
-        <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
-          <span class="span">INICIAR SESIÓN</span>
-        </a>
+            <li>
+              <a href="#nosotros" class="navbar-link">Sobre Nosotros</a>
+            </li>
+
+            <li>
+              <a href="#servicios" class="navbar-link">Servicios</a>
+            </li>
+
+            <li>
+              <a href="#proyectos" class="navbar-link">Nuestros Proyectos</a>
+            </li>
+
+            <li>
+              <a href="#contactanos" class="navbar-link">Contactáctanos</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </header>
+
+    <!-- Botón flotante solo para móvil -->
+    <a href="<?php print RUTA; ?>login" class="btn mobile-login-button" aria-label="Iniciar sesión">
+      <span class="span">Iniciar sesión</span>
+      <span class="material-symbols-rounded" aria-hidden="true">login</span>
+    </a>
 
     <main>
       <article>
