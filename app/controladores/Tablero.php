@@ -61,7 +61,15 @@ class Tablero extends Controlador
 		$id = uniqid();
 		$tablas = $this->modelo->getTablas();
 		foreach ($tablas as $tabla) {
-			$this->modelo->respaldarTabla($tabla["Tables_in_taller"],$fecha,$id);
+			// SHOW TABLES returns an associative array with a key like
+			// 'Tables_in_<dbname>' which changes per server. Extract the
+			// table name by taking the first value of the row to be robust.
+			$nombreTabla = '';
+			$vals = array_values($tabla);
+			if (count($vals) > 0) $nombreTabla = $vals[0];
+			if ($nombreTabla!="") {
+				$this->modelo->respaldarTabla($nombreTabla,$fecha,$id);
+			}
 		}
 		$this->mensaje("Respaldo de base de datos",
 		"Respaldo de base de datos",
