@@ -36,8 +36,8 @@ class TableroModelo
 
 	public function getIngresosMensuales(int $meses = 6): array
 	{
-		$sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(costo) as total "+
-			   "FROM ordenalmacen WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) "+
+		$sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(costo) as total ".
+			   "FROM ordenalmacen WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) ".
 			   "GROUP BY ym ORDER BY ym ASC";
 		$rows = $this->db->querySelect($sql);
 		$labels = [];
