@@ -15,12 +15,25 @@
 	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
 		<?php
 			$brandHref = RUTA;
+			$tipo = null;
 			if (isset($datos["usuario"]["tipoUsuario"])) {
-				if ($datos["usuario"]["tipoUsuario"]==ADMON) {
+				$tipo = $datos["usuario"]["tipoUsuario"]; 
+			} else {
+				// Fallback: obtener tipo de usuario desde la sesión para vistas de mensaje u otras que no pasen $datos['usuario']
+				if (class_exists('Sesion')) {
+					$__ses = new Sesion();
+					if ($__ses->getLogin()) {
+						$__u = $__ses->getUsuario();
+						if (isset($__u['tipoUsuario'])) { $tipo = $__u['tipoUsuario']; }
+					}
+				}
+			}
+			if ($tipo!==null) {
+				if ($tipo==ADMON) {
 					$brandHref = RUTA.'Tablero';
-				} else if (defined('MECANICO') && $datos["usuario"]["tipoUsuario"]==MECANICO) {
+				} else if (defined('MECANICO') && $tipo==MECANICO) {
 					$brandHref = RUTA.'TableroMecanico';
-				} else if (defined('CLIENTE') && $datos["usuario"]["tipoUsuario"]==CLIENTE) {
+				} else if (defined('CLIENTE') && $tipo==CLIENTE) {
 					$brandHref = RUTA.'TableroCliente';
 				}
 			}
