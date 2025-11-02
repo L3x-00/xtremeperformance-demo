@@ -171,7 +171,7 @@ class OrdenReparacion extends Controlador
 		      "errores" => $errores,
 		      "vehiculos" => $vehiculos,
 		      "mecanicos" => $mecanicos,
-		      "pagina" => 1,
+			  "pagina" => (isset($pagina) ? $pagina : 1),
 		      "data" => $data
 		    ];
 		    $this->vista("ordenReparacionAltaVista",$datos);
