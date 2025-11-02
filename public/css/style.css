@@ -416,7 +416,7 @@ body {
     top: 70px;
     right: 20px;
     width: calc(100% - 40px);
-    max-width: 300px;
+    margin-inline-start: auto;
     border-radius: 4px;
   }
 
@@ -1063,12 +1063,14 @@ body {
     display: flex !important;
     font-size: var(--fs-5);
     padding: 12px 24px !important;
-    position: fixed;
-    right: 20px;
+    position: static; /* en escritorio que fluya con el layout */
+    margin-left: 20px;
+    white-space: nowrap;
   }
 
   .navbar-list {
     display: flex;
+    gap: 24px;
   }
 
   .navbar-link {

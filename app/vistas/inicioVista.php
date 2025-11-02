@@ -54,12 +54,12 @@
     <header class="header">
       <div class="container">
         <div class="header-top">
-          <a href="index.html" class="logo">
+          <a href="index.html" class="logo" aria-label="Ir al inicio">
             <img
               src="./public/img/LogoWhite.png"
               width="128"
               height="63"
-              alt="autofix home"
+              alt=""
             />
           </a>
 
@@ -73,10 +73,6 @@
               <span class="nav-toggle-icon icon-2"></span>
               <span class="nav-toggle-icon icon-3"></span>
             </button>
-
-            <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
-              <span class="span">INICIAR SESIÓN</span>
-            </a>
           </div>
         </div>
 
@@ -103,6 +99,11 @@
             </li>
           </ul>
         </nav>
+
+        <!-- Botón de login de escritorio, colocado después del menú -->
+        <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
+          <span class="span">INICIAR SESIÓN</span>
+        </a>
       </div>
     </header>
 
