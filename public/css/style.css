@@ -969,6 +969,17 @@ body {
     margin-inline-start: auto;
   }
 
+  .header-actions {
+    display: flex !important;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto;
+  }
+
+  .header .btn {
+    display: flex !important;
+  }
+
   .navbar-list {
     display: flex;
   }
