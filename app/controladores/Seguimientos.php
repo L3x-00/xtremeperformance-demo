@@ -83,7 +83,7 @@ class Seguimientos extends Controlador
 		          		"Error al añadir la orden de reparación.", 
 		          		"Error al añadir la orden de reparación.", 
 		          		"Error al modificar la orden de reparación.", 
-		          		"ordenreparacion/".$pagina,
+		          		"OrdenReparacion/".$pagina,
 		          		"danger"
 		          	);
 		          }

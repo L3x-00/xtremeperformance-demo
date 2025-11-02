@@ -130,26 +130,26 @@ class OrdenReparacion extends Controlador
 		          		"Error al añadir la orden de reparación.", 
 		          		"Error al añadir la orden de reparación.", 
 		          		"Error al modificar la orden de reparación.", 
-		          		"ordenreparacion/".$pagina,
+		          		"OrdenReparacion/".$pagina,
 		          		"danger"
 		          	);
 		          }
 	        } else {
 			  //Modificar
-			  if ($this->modelo->modificar($data)) {
+			if ($this->modelo->modificar($data)) {
 					$this->mensaje(
-							"Modificar la orden de reparación.", 
-							"Modificar la orden de reparación.", 
-							"Se modificó correctamente la orden de reparación.",
-							"ordenreparacion/".$pagina, 
-							"success"
-						);
+						"Modificar la orden de reparación.", 
+						"Modificar la orden de reparación.", 
+						"Se modificó correctamente la orden de reparación.",
+						"OrdenReparacion/".$pagina, 
+						"success"
+					);
 				} else {
 					$this->mensaje(
 						"Error al modificar el vehículo.", 
 						"Error al modificar el vehículo.", 
 						"Error al modificar el vehículo: ".$marca." ".$modelo, 
-						"ordenreparacion/".$pagina, 
+						"OrdenReparacion/".$pagina, 
 						"danger"
 					);
 				}
@@ -208,7 +208,7 @@ class OrdenReparacion extends Controlador
 					"Baja de una orden de reparación", 
 					"Baja de una orden de reparación", 
 					"Se borró correctamente la orden de reparación: ".$id, 
-					"ordenreparacion/".$pagina, 
+					"OrdenReparacion/".$pagina, 
 					"success"
 				);
 	        } else {
@@ -216,7 +216,7 @@ class OrdenReparacion extends Controlador
 	        		"Baja de una orden de reparación", 
 	        		"Baja de una orden de reparación", 
 	        		"Error al borrar la orden de reparación: ".$id, 
-	        		"ordenreparacion/".$pagina,
+					"OrdenReparacion/".$pagina,
 	        		"danger"
 	        	);
 	        }
@@ -236,10 +236,10 @@ class OrdenReparacion extends Controlador
 			"data"=>$data,
 			"activo" => "ordenreparacion",
 			"pag" => [
-				"totalPaginas" => $totalPaginas,
-				"regresa" => "ordenreparacion",
-				"pagina" => $pagina
-			],
+					"totalPaginas" => $totalPaginas,
+					"regresa" => "OrdenReparacion",
+					"pagina" => $pagina
+				],
 			"menu" => true
 		];
 		$this->vista("ordenReparacionCaratulaVista",$datos);

@@ -210,7 +210,7 @@ class OrdenAlmacen extends Controlador
 					"Baja de una orden de reparación", 
 					"Baja de una orden de reparación", 
 					"Error al borrar la orden de almacén: ".$id, 
-					"ordenreparacion/".$pagina,
+					"OrdenReparacion/".$pagina,
 					"danger");
 				}
 	        } 
