@@ -13,7 +13,19 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
-		<a href="<?php print RUTA; ?>" class="navbar-brand d-flex align-items-center">
+		<?php
+			$brandHref = RUTA;
+			if (isset($datos["usuario"]["tipoUsuario"])) {
+				if ($datos["usuario"]["tipoUsuario"]==ADMON) {
+					$brandHref = RUTA.'Tablero';
+				} else if (defined('MECANICO') && $datos["usuario"]["tipoUsuario"]==MECANICO) {
+					$brandHref = RUTA.'TableroMecanico';
+				} else if (defined('CLIENTE') && $datos["usuario"]["tipoUsuario"]==CLIENTE) {
+					$brandHref = RUTA.'TableroCliente';
+				}
+			}
+		?>
+		<a href="<?php print $brandHref; ?>" class="navbar-brand d-flex align-items-center">
 			<img src="./public/img/LogoGray.png" alt="Xtreme Performance" class="brand-logo" height="38">
 		</a>
 	<?php
