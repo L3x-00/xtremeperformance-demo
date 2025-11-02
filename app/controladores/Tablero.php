@@ -22,10 +22,10 @@ class Tablero extends Controlador
 				$__parts = explode('/', $__u);
 				if (isset($__parts[1])) { $requestedMethod = strtolower($__parts[1]); }
 			}
-			$allowPerfil = ($requestedMethod === 'perfil');
+			$allowOpen = in_array($requestedMethod, ['perfil','logout']);
 			// Solo administradores pueden entrar al resto de acciones del Tablero
 			$tipo = $this->usuario["tipoUsuario"] ?? null;
-			if (!$allowPerfil && $tipo !== ADMON) {
+			if (!$allowOpen && $tipo !== ADMON) {
 				if ($tipo === MECANICO) {
 					header("location:".RUTA."TableroMecanico");
 				} else if ($tipo === CLIENTE) {
