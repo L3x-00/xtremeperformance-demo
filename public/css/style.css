@@ -351,8 +351,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 40px 15px;
-  padding-inline-start: 40px;
+  padding: 20px 15px;
   z-index: 4;
 }
 
@@ -360,24 +359,47 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
+  position: relative;
 }
 
-.header-actions {
+.header-left {
   display: flex;
   align-items: center;
-  gap: 15px;
-  order: 2;
+  gap: 30px;
+}
+
+.nav-toggle-btn {
+  margin-left: auto;
 }
 
 /* Estilos específicos para el botón de login */
 .login-button {
+  position: fixed;
+  top: 20px;
+  right: 80px;
   display: flex !important;
   align-items: center;
   padding: 8px 16px !important;
-  margin-left: 10px;
   font-size: var(--fs-5);
   white-space: nowrap;
-  order: 2;
+  z-index: 100;
+}
+
+/* Ajustes responsive para el botón */
+@media (max-width: 991px) {
+  .login-button {
+    position: fixed;
+    right: 80px;
+    font-size: 14px;
+    padding: 6px 12px !important;
+  }
+  
+  .nav-toggle-btn {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+  }
 }
 
 /* Aseguramos visibilidad en móvil */
