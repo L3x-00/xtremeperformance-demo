@@ -15,9 +15,17 @@ class Tablero extends Controlador
 		if ($this->sesion->getLogin()) {
 			$this->modelo = $this->modelo("TableroModelo");
 			$this->usuario = $this->sesion->getUsuario();
-			// Solo administradores pueden entrar aquí
+			// Permitir acceso a /tablero/perfil para cualquier rol
+			$requestedMethod = null;
+			if (isset($_GET['url'])) {
+				$__u = rtrim($_GET['url'],"/\\");
+				$__parts = explode('/', $__u);
+				if (isset($__parts[1])) { $requestedMethod = strtolower($__parts[1]); }
+			}
+			$allowPerfil = ($requestedMethod === 'perfil');
+			// Solo administradores pueden entrar al resto de acciones del Tablero
 			$tipo = $this->usuario["tipoUsuario"] ?? null;
-			if ($tipo !== ADMON) {
+			if (!$allowPerfil && $tipo !== ADMON) {
 				if ($tipo === MECANICO) {
 					header("location:".RUTA."TableroMecanico");
 				} else if ($tipo === CLIENTE) {
