@@ -5,14 +5,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php if(defined('RUTA')){ echo "    <base href='".RUTA."'>\n"; } ?>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+	<link href="./public/css/admin.css?v=20251102" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="./public/img/favicon.png" type="image/svg+xml" />
 
 	<title>XTREME PERFORMANCE | <?php print $datos["titulo"]; ?></title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a href="#" class="navbar-brand">XTREME PERFORMANCE</a>
+	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
+		<a href="<?php print RUTA; ?>" class="navbar-brand d-flex align-items-center">
+			<img src="./public/img/LogoGray.png" alt="Xtreme Performance" class="brand-logo" height="38">
+		</a>
 	<?php
 		if (isset($datos["menu"]) && $datos["menu"]==true) {
 			if (isset($datos["usuario"]["tipoUsuario"]) && $datos["usuario"]["tipoUsuario"]==ADMON) {
