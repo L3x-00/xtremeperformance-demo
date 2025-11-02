@@ -66,8 +66,8 @@ class LoginModelo
         // 1. Usa JOIN para obtener el nombre del estado.
         // 2. Selecciona la columna correcta (ec.estado).
         // 3. Usa placeholders para ser segura.
-        $sql = "SELECT c.id, c.nombres, c.apellidos, c.razonSocial, c.direccion, c.telefono, c.ruc, c.correo, c.clave, ec.estado 
-                FROM clientes as c, estadoCliente as ec
+    $sql = "SELECT c.id, c.nombres, c.apellidos, c.razonSocial, c.direccion, c.telefono, c.ruc, c.correo, c.clave, ec.estado 
+        FROM clientes as c, estadocliente as ec
                 WHERE c.correo = :correo 
                 AND c.baja = 0 
                 AND c.id_estado_cliente = ec.id";
