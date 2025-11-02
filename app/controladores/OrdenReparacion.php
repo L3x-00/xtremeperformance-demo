@@ -87,25 +87,35 @@ class OrdenReparacion extends Controlador
 	      } else if(Helper::fecha($fechaIngreso)==false){
 	      	array_push($errores,"El formato de la fecha de ingreso no es correcto.");
 	      } else {
-	      	//Verifica únicamente si es alta
+	      	// Construimos DateTime y validamos que la fecha sea la fecha actual o
+	      	// pertenezca al año 2025, según la regla solicitada.
 	      	$fechaIngreso_dt = new DateTime($fechaIngreso);
-	      	if($id==""){
-		      	$diff = $hoy->diff($fechaIngreso_dt);
-		      	if ($diff->invert) {
-		      		array_push($errores,"La fecha de ingreso no puede ser menor al día de hoy.");
-		      	}
+	      	$yearIngreso = (int)$fechaIngreso_dt->format('Y');
+	      	$hoy_str = $hoy->format('Y-m-d');
+	      	$fechaIngreso_str = $fechaIngreso_dt->format('Y-m-d');
+	      	if ($yearIngreso !== 2025 && $fechaIngreso_str !== $hoy_str) {
+	      		array_push($errores,"La fecha de ingreso debe ser la fecha actual o una fecha del año 2025.");
 	      	}
 	      }
 
 	      if(empty($fechaSalida)){
-	        array_push($errores,"El año del vehículo es requerido.");
+	        array_push($errores,"La fecha de salida es requerida.");
 	      } else if(Helper::fecha($fechaSalida)==false){
 	      	array_push($errores,"El formato de la fecha de salida no es correcto.");
 	      } else {
+	      	// Validación similar: permitir solo la fecha actual o cualquier fecha del año 2025.
 	      	$fechaSalida_dt = new DateTime($fechaSalida);
-	      	$diff = $fechaIngreso_dt->diff($fechaSalida_dt);
-	      	if($diff->invert){
-	      		array_push($errores,"La fecha de salida no puede ser inferior a la fecha de ingreso.");
+	      	$yearSalida = (int)$fechaSalida_dt->format('Y');
+	      	$fechaSalida_str = $fechaSalida_dt->format('Y-m-d');
+	      	if ($yearSalida !== 2025 && $fechaSalida_str !== $hoy->format('Y-m-d')) {
+	      		array_push($errores,"La fecha de salida debe ser la fecha actual o una fecha del año 2025.");
+	      	}
+	      	// Si existe fechaIngreso_dt válida, verificamos que la salida no sea anterior.
+	      	if (isset($fechaIngreso_dt)) {
+	      		$diff = $fechaIngreso_dt->diff($fechaSalida_dt);
+	      		if($diff->invert){
+	      			array_push($errores,"La fecha de salida no puede ser inferior a la fecha de ingreso.");
+	      		}
 	      	}
 	      }
 	      if(empty($kilometraje)){
