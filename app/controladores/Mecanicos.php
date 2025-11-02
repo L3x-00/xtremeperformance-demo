@@ -58,6 +58,10 @@ class Mecanicos extends Controlador
 	      } else if(trim($id)==="" && $this->modelo->getCorreo($correo)!=false){
 	        array_push($errores,"El correo ya existe en la base de datos.");
 	      }
+	      // Teléfono Perú: si se proporciona, validar formato 9 dígitos iniciando en 9
+	      if ($telefono !== "" && !Helper::telefonoPE($telefono)) {
+	        array_push($errores, "El teléfono debe iniciar con 9 y tener 9 dígitos (Perú).");
+	      }
 	      //
 	      if (empty($errores)) { 
 			// Crear arreglo de datos

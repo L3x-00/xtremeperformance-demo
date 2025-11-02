@@ -23,7 +23,8 @@
 
     <div class="form-group text-left">
       <label for="telefono">Teléfono:</label>
-      <input type="text" name="telefono" id="telefono" class="form-control" value="<?php print isset($datos['data']['telefono'])?$datos['data']['telefono']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+      <input type="tel" name="telefono" id="telefono" class="form-control" placeholder="9XXXXXXXX" pattern="^9\d{8}$" minlength="9" maxlength="9" inputmode="numeric" value="<?php print isset($datos['data']['telefono'])?$datos['data']['telefono']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+      <small class="form-text text-muted">Si lo ingresa, debe iniciar con 9 y tener 9 dígitos (Perú).</small>
     </div>
 
     <div class="form-group text-left">

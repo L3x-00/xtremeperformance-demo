@@ -54,6 +54,12 @@ class Usuarios extends Controlador
 	      if($tipoUsuario=="void"){
 	        array_push($errores,"El tipo de usuario es obligatorio.");
 	      }
+          // Teléfono Perú: obligatorio y con formato 9 dígitos iniciando en 9
+          if (empty($telefono)) {
+            array_push($errores, "El teléfono del usuario es obligatorio.");
+          } elseif (!Helper::telefonoPE($telefono)) {
+            array_push($errores, "El teléfono debe iniciar con 9 y tener 9 dígitos (Perú).");
+          }
 	      if (Helper::correo($correo)==false) {
 	      	array_push($errores,"El correo no tiene un formato válido.");
 	      } else if(trim($id)==="" && $this->modelo->getCorreo($correo)!=false){

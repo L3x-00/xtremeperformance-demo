@@ -33,8 +33,9 @@
 	</div>
 
 	<div class="form-group text-start">
-		<label for="telefono">* Telefono del usuario:</label>
-		<input id="telefono" name="telefono" type="text" class="form-control" placeholder="Teléfono del usuario" required  value="<?php print isset($datos['data']['telefono'])?$datos['data']['telefono']:''; ?>" <?php if (isset($datos["baja"])){ print " disabled "; } ?>>
+		<label for="telefono">* Teléfono del usuario:</label>
+		<input id="telefono" name="telefono" type="tel" class="form-control" placeholder="9XXXXXXXX" pattern="^9\d{8}$" minlength="9" maxlength="9" inputmode="numeric" required value="<?php print isset($datos['data']['telefono'])?$datos['data']['telefono']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; } ?>>
+		<small class="form-text text-muted">Debe iniciar con 9 y tener 9 dígitos (Perú).</small>
 	</div>
 
 	<div class="form-group text-start">

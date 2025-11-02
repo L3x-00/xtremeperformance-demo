@@ -119,6 +119,18 @@ class Helper
       return $salida;
   }
 
+	/**
+	 * Valida teléfono móvil de Perú: debe iniciar con 9 y tener 9 dígitos en total.
+	 * Ejemplo válido: 9XXXXXXXX
+	 */
+	public static function telefonoPE(string $tel=""): bool
+	{
+		if ($tel === "") return false;
+		// Quitar espacios/blancos accidentales
+		$tel = preg_replace('/\s+/', '', $tel);
+		return (bool)preg_match('/^9\d{8}$/', $tel);
+	}
+
 	
 }
 
