@@ -45,15 +45,19 @@ class Login extends Controlador
 			}
 			if (empty($errores)) {
 				$data = $this->modelo->buscarCorreo($correo);
-				if (!$this->enviarCorreo($data)) {
-					$this->mensaje(
+				if (empty($data)) {
+					array_push($errores, "El correo no está registrado en el sistema.");
+				} else {
+					if ($this->enviarCorreo($data)) {
+						$this->mensaje(
 							"Cambio de clave de acceso",
 							"Cambio de clave de acceso",
 							"Se ha enviado un correo a <b>".$data["correo"]."</b> para que puedas cambiar tu clave de acceso. Cualquier duda te puedes comunicar con nosotros. No olvides revisar tu bandeja de spam.",
 							"login",
 							"warning");
-				} else {
-					array_push($errores, "Error al enviar el correo electrónico.");
+					} else {
+						array_push($errores, "Error al enviar el correo electrónico. Intente nuevamente más tarde.");
+					}
 				}
 			}
 		}
