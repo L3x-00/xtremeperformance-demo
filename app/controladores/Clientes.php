@@ -59,6 +59,10 @@ $estado = Helper::cadena($_POST['id_estado_cliente'] ?? "");
 					if ($telefono !== "" && !Helper::telefonoPE($telefono)) {
 						array_push($errores, "El teléfono debe iniciar con 9 y tener 9 dígitos (Perú).");
 					}
+							// RUC: si se proporciona, solo números y 11 dígitos
+							if ($ruc !== "" && !preg_match('/^\d{11}$/', $ruc)) {
+								array_push($errores, "El RUC debe contener solo números y tener 11 dígitos.");
+							}
 	      if (Helper::correo($correo)==false) {
 	      	array_push($errores,"El correo no tiene un formato válido.");
 	      } else if(trim($id)==="" && $this->modelo->getCorreo($correo)){

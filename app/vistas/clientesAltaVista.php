@@ -30,9 +30,10 @@
     <div class="form-group text-left">
       <label for="ruc">RUC:</label>
       <div class="input-group">
-        <input type="text" name="ruc" id="ruc" class="form-control" value="<?php print isset($datos['data']['ruc'])?$datos['data']['ruc']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+        <input type="text" name="ruc" id="ruc" class="form-control" placeholder="11 dígitos" pattern="^\d{11}$" minlength="11" maxlength="11" inputmode="numeric" value="<?php print isset($datos['data']['ruc'])?$datos['data']['ruc']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
         <button type="button" id="btnBuscarRuc" class="btn btn-outline-secondary">Buscar RUC</button>
       </div>
+      <small class="form-text text-muted">Si lo ingresas, debe contener solo números y 11 dígitos.</small>
     </div>
 
     <div class="form-group text-left">
