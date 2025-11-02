@@ -47,21 +47,31 @@ class Sunat extends Controlador
      */
     public function rucAjax()
     {
+        // Ensure we only output clean JSON and suppress accidental whitespace/output.
+        header_remove();
         header('Content-Type: application/json; charset=utf-8');
         // Requiere sesión como el método ruc
         $this->sesion = new Sesion();
         if (!$this->sesion->getLogin()) {
-            echo json_encode(['error' => true, 'message' => 'No autorizado']);
-            return;
+            // Clean any output buffers and return JSON
+            while (ob_get_level() > 0) ob_end_clean();
+            echo json_encode(['error' => true, 'message' => 'No autorizado'], JSON_UNESCAPED_UNICODE);
+            exit;
         }
         $ruc = Helper::cadena($_POST['ruc'] ?? '');
         if ($ruc === '' || !ctype_digit($ruc) || strlen($ruc) !== 11) {
-            echo json_encode(['error' => true, 'message' => 'RUC inválido']);
-            return;
+            while (ob_get_level() > 0) ob_end_clean();
+            echo json_encode(['error' => true, 'message' => 'RUC inválido'], JSON_UNESCAPED_UNICODE);
+            exit;
         }
         require_once __DIR__ . '/../libs/SunatRuc.php';
+        // Start a fresh output buffer to avoid stray output (warnings etc.)
+        ob_start();
         $resultado = SunatRuc::consultar($ruc);
-        echo json_encode($resultado);
+        // Clear any accidental output from libraries or warnings
+        if (ob_get_length() > 0) ob_clean();
+        echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+        exit;
     }
 }
 

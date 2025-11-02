@@ -87,9 +87,18 @@
         method: 'POST',
         body: form,
         credentials: 'same-origin'
-      }).then(r=>r.json()).then(data=>{
+      }).then(r=>r.text()).then(text=>{
         btn.disabled = false; btn.innerText = 'Buscar RUC';
-        if (!data) { alert('Respuesta vacía'); return; }
+        if (!text) { alert('Respuesta vacía'); return; }
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch(e) {
+          // Show raw response to help debugging
+          alert('Respuesta inválida del servidor:\n'+text);
+          console.error('JSON parse error:', e, text);
+          return;
+        }
         if (data.error) { alert(data.message || 'Error al consultar RUC'); return; }
         // Map known fields to the form
         const razon = data.razonSocial || data.nombre || data.razon_social || data['nombre_comercial'] || '';
