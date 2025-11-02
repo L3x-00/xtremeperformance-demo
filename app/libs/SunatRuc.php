@@ -26,9 +26,18 @@ class SunatRuc
         curl_close($ch);
 
         if ($resp === false || $http !== 200) {
+            // Mensajes más amables para el usuario final
+            if (in_array($http, [404, 422])) {
+                return [
+                    'error' => true,
+                    'message' => 'El RUC no existe o es inválido. Verifica que tenga 11 dígitos.'
+                ];
+            }
             return [
                 'error' => true,
-                'message' => 'No se pudo consultar el servicio externo'.($err?': '.$err:'').' (HTTP '.$http.')'
+                'message' => 'No se pudo consultar el servicio de RUC en este momento. Intenta nuevamente más tarde.',
+                'debug'   => ($err ? ('cURL: '.$err) : null),
+                'status'  => $http
             ];
         }
 
@@ -36,7 +45,7 @@ class SunatRuc
         if ($data === null) {
             return [
                 'error' => true,
-                'message' => 'Respuesta inválida del servicio RUC'
+                'message' => 'No pudimos procesar la respuesta del servicio RUC. Intenta nuevamente.'
             ];
         }
         return $data;
