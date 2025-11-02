@@ -100,6 +100,15 @@ body {
   --bs-table-accent-bg: #f3f6fa;
 }
 
+/* Sticky table headers inside responsive wrapper */
+.table-responsive thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--xp-charcoal);
+  color: #e8eaed;
+}
+
 /* Alerts */
 .alert-success { background-color: #e8f5e9; color: #1b5e20; border-color: #c8e6c9; }
 .alert-danger { background-color: #ffebee; color: #b71c1c; border-color: #ffcdd2; }

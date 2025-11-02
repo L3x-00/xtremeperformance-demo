@@ -11,6 +11,44 @@ class TableroModelo
 		$this->db = new MySQLdb();
 	}
 
+	public function getKpis(): array
+	{
+		$kpis = [
+			"ordenes_abiertas" => 0,
+			"ordenes_facturadas" => 0,
+			"ordenes_totales" => 0,
+			"ingresos_mes" => 0.0
+		];
+		// Ordenes abiertas
+		$r = $this->db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND estado=".ORDEN_ABIERTA);
+		$kpis["ordenes_abiertas"] = isset($r["c"]) ? intval($r["c"]) : 0;
+		// Ordenes facturadas
+		$r = $this->db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND estado=".ORDEN_FACTURADA);
+		$kpis["ordenes_facturadas"] = isset($r["c"]) ? intval($r["c"]) : 0;
+		// Ordenes totales
+		$r = $this->db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0");
+		$kpis["ordenes_totales"] = isset($r["c"]) ? intval($r["c"]) : 0;
+		// Ingresos del mes (Orden Almacén)
+		$r = $this->db->query("SELECT IFNULL(SUM(costo),0) AS s FROM ordenalmacen WHERE baja=0 AND DATE_FORMAT(alta_dt,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')");
+		$kpis["ingresos_mes"] = isset($r["s"]) ? floatval($r["s"]) : 0.0;
+		return $kpis;
+	}
+
+	public function getIngresosMensuales(int $meses = 6): array
+	{
+		$sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(costo) as total "+
+			   "FROM ordenalmacen WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) "+
+			   "GROUP BY ym ORDER BY ym ASC";
+		$rows = $this->db->querySelect($sql);
+		$labels = [];
+		$data = [];
+		foreach ($rows as $row) {
+			$labels[] = $row['ym'];
+			$data[] = floatval($row['total']);
+		}
+		return ["labels"=>$labels, "data"=>$data];
+	}
+
 	public function getTablas()
 	{
 		return $this->db->querySelect("SHOW TABLES");

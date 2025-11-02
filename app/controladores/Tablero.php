@@ -22,11 +22,13 @@ class Tablero extends Controlador
 
 	public function caratula()
 	{
+		$kpis = $this->modelo->getKpis();
+		$serie = $this->modelo->getIngresosMensuales(6);
 		$datos = [
 			"titulo" => "Sistema de taller mecánico",
 			"subtitulo" => $this->usuario["nombres"]." ".$this->usuario["apellidos"],
 			"usuario"=>$this->usuario,
-			"data"=>[],
+			"data"=>["kpis"=>$kpis, "serie"=>$serie],
 			"menu" => true
 		];
 		$this->vista("tableroCaratulaVista",$datos);

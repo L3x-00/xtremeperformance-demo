@@ -1,4 +1,7 @@
 <?php include_once("encabezado.php"); ?>
+  <div class="mb-2 d-flex justify-content-end">
+    <input type="search" id="filterOrdenAlmacen" class="form-control" style="max-width:320px" placeholder="Buscar en la tabla...">
+  </div>
   <div class="table-responsive">
   <table class="table table-striped table-hover align-middle" width="100%">
   <thead>
@@ -36,3 +39,18 @@
 <a href="<?php print RUTA; ?>OrdenAlmacen/alta" class="btn btn-success">
   Dar de alta una orden de almacén</a>
 <?php include_once("piepagina.php"); ?>					
+<script>
+(function(){
+  const input = document.getElementById('filterOrdenAlmacen');
+  const table = document.querySelector('table.table');
+  if (!input || !table) return;
+  const rows = Array.from(table.tBodies[0].rows);
+  input.addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    rows.forEach(tr => {
+      const text = tr.innerText.toLowerCase();
+      tr.style.display = text.indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>

@@ -1,6 +1,9 @@
 <?php include_once("encabezado.php"); ?>
+  <div class="mb-2 d-flex justify-content-end">
+    <input type="search" id="filterOrdenReparacion" class="form-control" style="max-width:320px" placeholder="Buscar en la tabla...">
+  </div>
   <div class="table-responsive">
-  <table class="table table-striped" width="100%">
+  <table class="table table-striped table-hover align-middle" width="100%">
   <thead>
     <tr>
     <th>id</th>
@@ -31,4 +34,19 @@
   <?php include_once("paginacion.php"); ?> 
 <a href="<?php print RUTA; ?>ordenReparacion/alta" class="btn btn-success">
   Dar de alta una orden de reparación</a>
-<?php include_once("piepagina.php"); ?>					
+<?php include_once("piepagina.php"); ?>
+<script>
+(function(){
+  const input = document.getElementById('filterOrdenReparacion');
+  const table = document.querySelector('table.table');
+  if (!input || !table) return;
+  const rows = Array.from(table.tBodies[0].rows);
+  input.addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    rows.forEach(tr => {
+      const text = tr.innerText.toLowerCase();
+      tr.style.display = text.indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
