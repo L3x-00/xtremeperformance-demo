@@ -15,6 +15,18 @@ class OrdenReparacion extends Controlador
 		if ($this->sesion->getLogin()) {
 			$this->modelo = $this->modelo("OrdenReparacionModelo");
 			$this->usuario = $this->sesion->getUsuario();
+			// Solo administradores pueden entrar aquí
+			$tipo = $this->usuario["tipoUsuario"] ?? null;
+			if ($tipo !== ADMON) {
+				if ($tipo === MECANICO) {
+					header("location:".RUTA."TableroMecanico");
+				} else if ($tipo === CLIENTE) {
+					header("location:".RUTA."TableroCliente");
+				} else {
+					header("location:".RUTA);
+				}
+				exit;
+			}
 		} else {
 			header("location:".RUTA);
 		}
