@@ -347,7 +347,10 @@ body {
 \*-----------------------------------*/
 
 .header .btn {
-  display: none;
+  display: flex; /* Mostrar el botón siempre */
+  padding: 12px 24px;
+  margin-left: 10px;
+  font-size: var(--fs-5);
 }
 
 .header {
@@ -988,7 +991,6 @@ body {
   }
 
   .header .btn {
-    display: flex;
     padding: 12px 24px;
     font-size: var(--fs-5);
   }
