@@ -196,7 +196,8 @@ p, span, div {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 42px;
+  min-width: 80px;
 }
 
 .theme-toggle-checkbox {
@@ -205,8 +206,8 @@ p, span, div {
 
 .theme-toggle-label {
   cursor: pointer;
-  width: 60px;
-  height: 28px;
+  width: 70px;
+  height: 30px;
   background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
   display: block;
   border-radius: 50px;
@@ -237,21 +238,21 @@ p, span, div {
 }
 
 .theme-icon-sun {
-  left: 6px;
+  left: 8px;
   opacity: 1;
   color: #fff700;
 }
 
 .theme-icon-moon {
-  right: 6px;
+  right: 8px;
   opacity: 0.7;
   color: #e6e6fa;
 }
 
 .theme-toggle-button {
   content: '';
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 50%;
   position: absolute;
@@ -287,7 +288,7 @@ p, span, div {
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-button {
-  transform: translateX(32px);
+  transform: translateX(38px);
   background: linear-gradient(135deg, #2c2c54 0%, #1a1a2e 100%);
 }
 
