@@ -168,6 +168,48 @@ public function modificar(array $data): bool
 		
 		return $this->db->querySelect($sql);
 	}
+
+	public function getEstadisticasCliente(string $id): array
+	{
+		$estadisticas = [];
+		
+		// Contar órdenes de reparación del cliente
+		$sql_ordenes = "SELECT COUNT(*) as total_ordenes, 
+						COALESCE(SUM(CASE WHEN fechaSalida IS NOT NULL THEN 1 ELSE 0 END), 0) as ordenes_completadas,
+						MAX(fechaIngreso) as ultima_visita
+						FROM ordenreparacion or_rep 
+						INNER JOIN vehiculos v ON or_rep.idVehiculo = v.id 
+						WHERE v.idCliente = :id";
+		
+		$resultado_ordenes = $this->db->querySelect($sql_ordenes, ['id' => $id]);
+		
+		if (!empty($resultado_ordenes)) {
+			$estadisticas['total_ordenes'] = $resultado_ordenes[0]['total_ordenes'] ?? 0;
+			$estadisticas['ordenes_completadas'] = $resultado_ordenes[0]['ordenes_completadas'] ?? 0;
+			$estadisticas['ultima_visita'] = $resultado_ordenes[0]['ultima_visita'] ?? 'Nunca';
+		} else {
+			$estadisticas['total_ordenes'] = 0;
+			$estadisticas['ordenes_completadas'] = 0;
+			$estadisticas['ultima_visita'] = 'Nunca';
+		}
+		
+		// Calcular gasto total (suma de costos de órdenes de almacén)
+		$sql_gasto = "SELECT COALESCE(SUM(oa.costo), 0) as gasto_total
+					  FROM ordenalmacen oa
+					  INNER JOIN ordenreparacion or_rep ON oa.idOrdenReparacion = or_rep.id
+					  INNER JOIN vehiculos v ON or_rep.idVehiculo = v.id
+					  WHERE v.idCliente = :id";
+		
+		$resultado_gasto = $this->db->querySelect($sql_gasto, ['id' => $id]);
+		$estadisticas['gasto_total'] = $resultado_gasto[0]['gasto_total'] ?? 0;
+		
+		// Contar vehículos del cliente
+		$sql_vehiculos = "SELECT COUNT(*) as total_vehiculos FROM vehiculos WHERE idCliente = :id AND baja = 0";
+		$resultado_vehiculos = $this->db->querySelect($sql_vehiculos, ['id' => $id]);
+		$estadisticas['total_vehiculos'] = $resultado_vehiculos[0]['total_vehiculos'] ?? 0;
+		
+		return $estadisticas;
+	}
 }
 
 ?>

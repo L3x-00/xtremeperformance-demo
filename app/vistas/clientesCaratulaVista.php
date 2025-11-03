@@ -273,30 +273,147 @@ function confirmDeleteClient(clientId, clientName, page) {
 
 // Ver detalles del cliente en modal
 function viewClientDetails(clientId) {
-  // Aquí harías una petición AJAX para obtener los detalles
-  // Por ahora mostramos un modal de ejemplo
-  const content = `
-    <div class="row">
-      <div class="col-md-6">
-        <h6><i class="fas fa-info-circle me-2"></i>Información General</h6>
-        <p><strong>ID:</strong> ${clientId}</p>
-        <p><strong>Fecha de registro:</strong> Cargando...</p>
-        <p><strong>Última modificación:</strong> Cargando...</p>
+  // Mostrar modal con loading inicialmente
+  const loadingContent = `
+    <div class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
-      <div class="col-md-6">
-        <h6><i class="fas fa-chart-bar me-2"></i>Estadísticas</h6>
-        <p><strong>Órdenes totales:</strong> Cargando...</p>
-        <p><strong>Gasto total:</strong> Cargando...</p>
-        <p><strong>Última visita:</strong> Cargando...</p>
-      </div>
-    </div>
-    <div class="alert alert-info mt-3">
-      <i class="fas fa-info-circle me-2"></i>
-      Para ver información completa, use el botón "Modificar"
+      <p class="mt-2 text-muted">Obteniendo información del cliente...</p>
     </div>
   `;
   
-  showDetailsModal(`Detalles del Cliente ID: ${clientId}`, content, 'modal-lg');
+  showDetailsModal(`Detalles del Cliente ID: ${clientId}`, loadingContent, 'modal-lg');
+  
+  // Hacer petición AJAX para obtener datos reales
+  fetch(`<?php echo RUTA; ?>clientes/detalles/${clientId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al obtener datos del cliente');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Formatear fechas
+      const fechaRegistro = data.cliente.alta_dt ? 
+        new Date(data.cliente.alta_dt).toLocaleDateString('es-ES', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        }) : 'No disponible';
+        
+      const fechaModificacion = data.cliente.cambio_dt ? 
+        new Date(data.cliente.cambio_dt).toLocaleDateString('es-ES', {
+          year: 'numeric', month: 'long', day: 'numeric', 
+          hour: '2-digit', minute: '2-digit'
+        }) : 'No modificado';
+        
+      const ultimaVisita = data.estadisticas.ultima_visita && data.estadisticas.ultima_visita !== 'Nunca' ?
+        new Date(data.estadisticas.ultima_visita).toLocaleDateString('es-ES', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        }) : 'Nunca';
+
+      // Actualizar contenido del modal con datos reales
+      const realContent = `
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card border-0 bg-light">
+              <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-info-circle me-2 text-primary"></i>Información General</h6>
+                <div class="row">
+                  <div class="col-sm-5"><strong>ID:</strong></div>
+                  <div class="col-sm-7">${data.cliente.id}</div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-5"><strong>Nombre completo:</strong></div>
+                  <div class="col-sm-7">${data.cliente.nombres} ${data.cliente.apellidos}</div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-5"><strong>Correo:</strong></div>
+                  <div class="col-sm-7">${data.cliente.correo || 'No especificado'}</div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-5"><strong>Teléfono:</strong></div>
+                  <div class="col-sm-7">${data.cliente.telefono || 'No especificado'}</div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-5"><strong>Fecha de registro:</strong></div>
+                  <div class="col-sm-7">${fechaRegistro}</div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-5"><strong>Última modificación:</strong></div>
+                  <div class="col-sm-7">${fechaModificacion}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 bg-light">
+              <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-chart-bar me-2 text-success"></i>Estadísticas</h6>
+                <div class="row">
+                  <div class="col-sm-6"><strong>Vehículos:</strong></div>
+                  <div class="col-sm-6">
+                    <span class="badge bg-info">${data.estadisticas.total_vehiculos}</span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-6"><strong>Órdenes totales:</strong></div>
+                  <div class="col-sm-6">
+                    <span class="badge bg-primary">${data.estadisticas.total_ordenes}</span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-6"><strong>Órdenes completadas:</strong></div>
+                  <div class="col-sm-6">
+                    <span class="badge bg-success">${data.estadisticas.ordenes_completadas}</span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-6"><strong>Gasto total:</strong></div>
+                  <div class="col-sm-6">
+                    <span class="badge bg-warning text-dark">S/ ${parseFloat(data.estadisticas.gasto_total).toFixed(2)}</span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-sm-6"><strong>Última visita:</strong></div>
+                  <div class="col-sm-6">${ultimaVisita}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 d-flex justify-content-end gap-2">
+          <a href="<?php echo RUTA; ?>clientes/modificar/${data.cliente.id}/1" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Modificar Cliente
+          </a>
+        </div>
+      `;
+      
+      // Actualizar el modal con el nuevo contenido
+      const modalBody = document.querySelector('.modal.show .modal-body');
+      if (modalBody) {
+        modalBody.innerHTML = realContent;
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const errorContent = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          <strong>Error al cargar los datos</strong><br>
+          No se pudieron obtener los detalles del cliente. Por favor, intente nuevamente.
+        </div>
+        <div class="text-center">
+          <button class="btn btn-outline-primary" onclick="viewClientDetails(${clientId})">
+            <i class="fas fa-redo me-2"></i>Reintentar
+          </button>
+        </div>
+      `;
+      
+      const modalBody = document.querySelector('.modal.show .modal-body');
+      if (modalBody) {
+        modalBody.innerHTML = errorContent;
+      }
+    });
 }
 
 // Las funciones de exportación ahora se manejan del lado del servidor

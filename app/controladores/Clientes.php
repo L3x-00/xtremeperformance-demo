@@ -366,5 +366,38 @@ if (empty($errores)) {
 		$pdf->Output('D', 'clientes_' . date('Y-m-d') . '.pdf');
 		exit;
 	}
+
+	public function detalles(string $id = ""): void
+	{
+		// Verificar que se proporcionó un ID válido
+		if (empty($id) || !is_numeric($id)) {
+			http_response_code(400);
+			echo json_encode(['error' => 'ID de cliente no válido']);
+			exit;
+		}
+
+		// Obtener datos básicos del cliente
+		$cliente = $this->modelo->getId($id);
+		
+		if (empty($cliente)) {
+			http_response_code(404);
+			echo json_encode(['error' => 'Cliente no encontrado']);
+			exit;
+		}
+
+		// Obtener estadísticas adicionales
+		$estadisticas = $this->modelo->getEstadisticasCliente($id);
+		
+		// Preparar respuesta JSON
+		$respuesta = [
+			'cliente' => $cliente,
+			'estadisticas' => $estadisticas
+		];
+
+		// Enviar respuesta JSON
+		header('Content-Type: application/json');
+		echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+		exit;
+	}
 }
 ?>
