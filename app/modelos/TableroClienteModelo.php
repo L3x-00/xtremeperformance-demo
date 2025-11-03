@@ -89,12 +89,13 @@ class TableroClienteModelo
 		$sql = "SELECT COUNT(*) AS c FROM clientes c, vehiculos v, ordenreparacion o WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0";
 		$row = $this->db->query($sql);
 		$kpis["totales"] = intval($row['c'] ?? 0);
-		// Gasto total (suma de ordenes de almacén asociadas)
-		$sql = "SELECT COALESCE(SUM(a.costo),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN ordenalmacen a ON a.idOrdenReparacion=o.id AND a.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0";
+		// Gasto total (suma desde tabla facturas que incluye materiales + mano de obra + otros + iva)
+		// Si no hay factura aún para una orden, esa orden no suma al gasto
+		$sql = "SELECT COALESCE(SUM(f.total),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN facturas f ON f.idOrdenReparacion=o.id AND f.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0";
 		$row = $this->db->query($sql);
 		$kpis["gasto_total"] = floatval($row['s'] ?? 0);
-		// Gasto del mes (por fecha de alta de orden de almacén)
-		$sql = "SELECT COALESCE(SUM(a.costo),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN ordenalmacen a ON a.idOrdenReparacion=o.id AND a.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0 AND MONTH(a.alta_dt)=MONTH(CURDATE()) AND YEAR(a.alta_dt)=YEAR(CURDATE())";
+		// Gasto del mes (por fecha de alta de factura)
+		$sql = "SELECT COALESCE(SUM(f.total),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN facturas f ON f.idOrdenReparacion=o.id AND f.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0 AND MONTH(f.alta_dt)=MONTH(CURDATE()) AND YEAR(f.alta_dt)=YEAR(CURDATE())";
 		$row = $this->db->query($sql);
 		$kpis["gasto_mes"] = floatval($row['s'] ?? 0);
 		return $kpis;
