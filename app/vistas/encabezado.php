@@ -95,6 +95,9 @@
 		};
 	</script>
 	
+	<!-- CSS Override para Toggle -->
+	<link href="<?php echo RUTA; ?>public/css/toggle-override.css?v=<?php echo time(); ?>" rel="stylesheet">
+	
 	<!-- Sistema de Toggle de Tema -->
 	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
 </head>
@@ -191,13 +194,13 @@
 		}
 		print "<ul class='nav navbar-nav ms-auto'>";
 			// Theme Toggle
-		print "<li class='nav-item me-3'>";
-		print "<div class='theme-toggle' style='display: flex; align-items: center;'>";
-		print "<input type='checkbox' class='theme-toggle-checkbox' id='theme-toggle' style='display: none;' />";
-		print "<label class='theme-toggle-label' for='theme-toggle' style='cursor: pointer; margin: 0;'>";
-		print "<i class='fas fa-sun theme-icon-sun'></i>";
+		print "<li class='nav-item me-4'>";
+		print "<div class='theme-toggle'>";
+		print "<input type='checkbox' class='theme-toggle-checkbox' id='theme-toggle' />";
+		print "<label class='theme-toggle-label' for='theme-toggle'>";
+		print "<i class='fas fa-sun theme-icon-sun' style='font-size: 18px !important;'></i>";
 		print "<span class='theme-toggle-button'></span>";
-		print "<i class='fas fa-moon theme-icon-moon'></i>";
+		print "<i class='fas fa-moon theme-icon-moon' style='font-size: 18px !important;'></i>";
 		print "</label>";
 		print "</div>";
 		print "<script>";
