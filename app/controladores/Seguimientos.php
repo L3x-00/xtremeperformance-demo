@@ -74,6 +74,17 @@ class Seguimientos extends Controlador
 					// Imagenes
 					//
 					if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
+						// Notificar al cliente que se añadió un seguimiento con fotos
+						try {
+							$salidasModelo = $this->modelo("SalidasModelo");
+							$ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
+							$asunto = "Nuevo seguimiento en tu orden #".$idOrdenReparacion;
+							$url = rtrim(SITE_URL,'/')."/";
+							$html = "<p>Hola ".htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8').",</p>".
+								"<p>Se ha añadido un nuevo seguimiento con imágenes a tu orden #".$idOrdenReparacion.".</p>".
+								"<p>Ingresa a tu panel para revisarlo:<br><a href='".$url."'>".$url."</a></p>";
+							$this->enviarCorreoPlano($ord['correo']??'', $asunto, $html);
+						} catch (\Throwable $e) { /* noop */ }
 						$this->mensaje(
 							"Alta del seguimiento de una orden de reparación.", 
 							"Alta del seguimiento de una orden de reparación.", 

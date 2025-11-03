@@ -244,6 +244,20 @@ class Salidas extends Controlador
 				$this->factura->AddPage();
 				$this->factura->cuerpoDocumento($piezas,$manoObra,$otro,$razonSocial["iva"],$observacion);
 				$this->factura->Output('D', 'factura_'.str_pad($factura, 5, "0", STR_PAD_LEFT).'.pdf');
+				// Notificación por correo al cliente (y copia a correo del taller) por cambio de estado
+				try {
+					$asunto = "Tu orden #".$data['id']." ha sido facturada";
+					$urlPanel = rtrim(SITE_URL,'/')."/";
+					$detalle = "<p>Hola ".htmlentities($data['nombres'].' '.$data['apellidos'], ENT_QUOTES, 'UTF-8').",</p>".
+						"<p>Tu orden de reparación #".$data['id']." ha sido facturada.</p>".
+						"<p><strong>Total:</strong> S/ ".number_format($total,2)."</p>".
+						"<p>Puedes ingresar al panel para ver el detalle y descargar tus documentos:<br>".
+						"<a href='".$urlPanel."'>".$urlPanel."</a></p>";
+					$this->enviarCorreoPlano($data['correo'], $asunto, $detalle);
+					if (!empty($razonSocial['correo'])) {
+						$this->enviarCorreoPlano($razonSocial['correo'], "[Copia] ".$asunto, $detalle);
+					}
+				} catch (\Throwable $e) { /* noop */ }
 				//
 				$this->mensaje(
 				"Impresión de una orden de reparación", 

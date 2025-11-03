@@ -80,6 +80,23 @@ class Controlador
 		return $salida;
 	}
 
+	// Correo genérico para notificaciones simples HTML
+	public function enviarCorreoPlano(string $para, string $asunto, string $html): bool
+	{
+		$salida = false;
+		if (filter_var($para, FILTER_VALIDATE_EMAIL)) {
+			$from = MAIL_FROM_NAME.' <'.MAIL_FROM.'>';
+			$headers = "MIME-Version: 1.0\r\n"; 
+			$headers.= "Content-type: text/html; charset=UTF-8\r\n"; 
+			$headers.= "From: $from\r\n"; 
+			$headers.= "Reply-To: ".MAIL_REPLY_TO."\r\n";
+			$headers.= "X-Mailer: PHP/".phpversion()."\r\n";
+			$extraParams = "-f".MAIL_FROM;
+			$salida = @mail($para,$asunto,$html, $headers, $extraParams);
+		}
+		return $salida;
+	}
+
 	public function modelo(string $modelo='')
 	{
 		if (file_exists("../app/modelos/".$modelo.".php")) {
