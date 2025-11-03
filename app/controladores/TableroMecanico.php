@@ -34,7 +34,7 @@ class TableroMecanico extends Controlador
 
 	public function caratula(string $pagina="1")
 	{
-		$num = $this->modelo->getNumRegistros("ordenReparacion",$this->usuario["id"]);
+		$num = $this->modelo->getNumRegistros("ordenreparacion",$this->usuario["id"]);
 		$inicio = ($pagina-1)*TAMANO_PAGINA;
 		$totalPaginas = ceil($num/TAMANO_PAGINA);
 		$data = $this->modelo->getTablaOrdenReparacion($inicio,TAMANO_PAGINA,$this->usuario["id"]);
