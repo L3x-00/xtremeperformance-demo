@@ -155,6 +155,19 @@ public function modificar(array $data): bool
     // Enviamos la consulta y los datos a la base de datos de forma segura
     return $this->db->queryNoSelect($sql, $data);
 }
+
+	public function getTodos(): array
+	{
+		// Consulta para obtener todos los clientes activos con su estado
+		$sql = "SELECT c.id, c.nombres, c.apellidos, c.telefono, c.correo, 
+				c.direccion, c.ruc, c.razonSocial, ec.estado 
+				FROM clientes c 
+				INNER JOIN estadocliente ec ON c.id_estado_cliente = ec.id 
+				WHERE c.baja = 0 
+				ORDER BY c.apellidos, c.nombres";
+		
+		return $this->db->querySelect($sql);
+	}
 }
 
 ?>

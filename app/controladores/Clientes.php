@@ -268,5 +268,103 @@ if (empty($errores)) {
 		];
 		$this->vista("clientesAltaVista",$datos);
 	}
+
+	public function exportarCsv(): void
+	{
+		// Obtener todos los datos de clientes
+		$data = $this->modelo->getTodos();
+		
+		// Configurar headers para descarga CSV
+		header('Content-Type: text/csv; charset=utf-8');
+		header('Content-Disposition: attachment; filename=clientes_' . date('Y-m-d') . '.csv');
+		header('Pragma: no-cache');
+		header('Expires: 0');
+		
+		// Crear output handle
+		$output = fopen('php://output', 'w');
+		
+		// BOM para UTF-8
+		fputs($output, chr(0xEF).chr(0xBB).chr(0xBF));
+		
+		// Headers del CSV
+		fputcsv($output, ['ID', 'Nombres', 'Apellidos', 'Telefono', 'Correo', 'Direccion', 'RUC', 'Razon Social', 'Estado'], ';');
+		
+		// Datos
+		foreach ($data as $row) {
+			fputcsv($output, [
+				$row['id'],
+				$row['nombres'],
+				$row['apellidos'],
+				$row['telefono'],
+				$row['correo'],
+				$row['direccion'],
+				$row['ruc'],
+				$row['razonSocial'],
+				$row['estado']
+			], ';');
+		}
+		
+		fclose($output);
+		exit;
+	}
+
+	public function exportarPdf(): void
+	{
+		// Obtener todos los datos
+		$data = $this->modelo->getTodos();
+		
+		// Inicializar FPDF
+		require_once('libs/fpdf.php');
+		
+		$pdf = new FPDF('L', 'mm', 'A4'); // Orientación horizontal
+		$pdf->AddPage();
+		
+		// Título
+		$pdf->SetFont('Arial', 'B', 16);
+		$pdf->Cell(0, 10, 'XTREME PERFORMANCE - LISTADO DE CLIENTES', 0, 1, 'C');
+		$pdf->Ln(5);
+		
+		// Fecha
+		$pdf->SetFont('Arial', '', 10);
+		$pdf->Cell(0, 6, 'Generado el: ' . date('d/m/Y H:i:s'), 0, 1, 'C');
+		$pdf->Ln(10);
+		
+		// Headers de tabla
+		$pdf->SetFont('Arial', 'B', 9);
+		$pdf->SetFillColor(200, 200, 200);
+		$pdf->Cell(15, 8, 'ID', 1, 0, 'C', true);
+		$pdf->Cell(40, 8, 'Nombres', 1, 0, 'C', true);
+		$pdf->Cell(40, 8, 'Apellidos', 1, 0, 'C', true);
+		$pdf->Cell(25, 8, 'Telefono', 1, 0, 'C', true);
+		$pdf->Cell(50, 8, 'Correo', 1, 0, 'C', true);
+		$pdf->Cell(30, 8, 'RUC', 1, 0, 'C', true);
+		$pdf->Cell(50, 8, 'Razon Social', 1, 0, 'C', true);
+		$pdf->Cell(20, 8, 'Estado', 1, 1, 'C', true);
+		
+		// Datos
+		$pdf->SetFont('Arial', '', 8);
+		$fill = false;
+		foreach ($data as $row) {
+			$pdf->Cell(15, 6, $row['id'], 1, 0, 'C', $fill);
+			$pdf->Cell(40, 6, substr($row['nombres'], 0, 25), 1, 0, 'L', $fill);
+			$pdf->Cell(40, 6, substr($row['apellidos'], 0, 25), 1, 0, 'L', $fill);
+			$pdf->Cell(25, 6, $row['telefono'], 1, 0, 'C', $fill);
+			$pdf->Cell(50, 6, substr($row['correo'], 0, 30), 1, 0, 'L', $fill);
+			$pdf->Cell(30, 6, $row['ruc'], 1, 0, 'C', $fill);
+			$pdf->Cell(50, 6, substr($row['razonSocial'], 0, 30), 1, 0, 'L', $fill);
+			$pdf->Cell(20, 6, substr($row['estado'], 0, 10), 1, 1, 'C', $fill);
+			$fill = !$fill;
+		}
+		
+		// Footer
+		$pdf->Ln(10);
+		$pdf->SetFont('Arial', 'I', 8);
+		$pdf->Cell(0, 6, 'Total de registros: ' . count($data), 0, 1, 'L');
+		$pdf->Cell(0, 6, 'Xtreme Performance - Sistema de Gestion Automotriz', 0, 1, 'C');
+		
+		// Output
+		$pdf->Output('D', 'clientes_' . date('Y-m-d') . '.pdf');
+		exit;
+	}
 }
 ?>
