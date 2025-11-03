@@ -14,6 +14,22 @@ class Login extends Controlador
 
 	public function caratula()
 	{
+		// Si ya hay sesión iniciada, redirigir al panel correspondiente
+		$this->sesion = new Sesion();
+		if ($this->sesion->getLogin()) {
+			$u = $this->sesion->getUsuario();
+			$tipo = $u["tipoUsuario"] ?? null;
+			if ($tipo === ADMON) {
+				header("location:".RUTA."Tablero");
+				exit;
+			} else if ($tipo === MECANICO) {
+				header("location:".RUTA."TableroMecanico");
+				exit;
+			} else if ($tipo === CLIENTE) {
+				header("location:".RUTA."TableroCliente");
+				exit;
+			}
+		}
 		$data = [];
 		if (isset($_COOKIE['datos'])) {
 			$datos_array = explode("|",$_COOKIE['datos']);
@@ -208,6 +224,7 @@ class Login extends Controlador
 							$this->sesion = new Sesion();
 							$this->sesion->iniciarLogin($data);
 							header("location:".RUTA."TableroMecanico");
+							exit;
 						}
 					} else {
 						$data = $this->modelo->buscarCorreoCliente($usuario);
@@ -218,6 +235,7 @@ class Login extends Controlador
 								$this->sesion = new Sesion();
 								$this->sesion->iniciarLogin($data);
 								header("location:".RUTA."TableroCliente");
+								exit;
 							}
 						}
 					}
@@ -233,6 +251,7 @@ class Login extends Controlador
 							$this->sesion->iniciarLogin($data);
 							if ($tipoUsuario==ADMON) {
 								header("location:".RUTA."Tablero");
+								exit;
 							} else if ($tipoUsuario==OPERADOR) {
 								Helper::mostrar("Bienvenido Operador");
 								//header("location:".RUTA."TableroOperador");

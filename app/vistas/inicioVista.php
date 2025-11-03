@@ -100,16 +100,32 @@
           </ul>
         </nav>
 
+        <?php
+          // Determinar a dónde debe apuntar el botón según sesión
+          $loginHref = RUTA.'login';
+          $loginText = 'INICIAR SESIÓN';
+          if (class_exists('Sesion')) {
+            $__s = new Sesion();
+            if ($__s->getLogin()) {
+              $__u = $__s->getUsuario();
+              $t = $__u['tipoUsuario'] ?? null;
+              if ($t === ADMON) { $loginHref = RUTA.'Tablero'; }
+              else if ($t === MECANICO) { $loginHref = RUTA.'TableroMecanico'; }
+              else if ($t === CLIENTE) { $loginHref = RUTA.'TableroCliente'; }
+              $loginText = 'IR AL PANEL';
+            }
+          }
+        ?>
         <!-- Botón de login de escritorio, colocado después del menú -->
-        <a href="<?php print RUTA; ?>login" class="btn btn-primary login-button">
-          <span class="span">INICIAR SESIÓN</span>
+        <a href="<?php print $loginHref; ?>" class="btn btn-primary login-button">
+          <span class="span"><?php print $loginText; ?></span>
         </a>
       </div>
     </header>
 
     <!-- Botón flotante solo para móvil -->
-    <a href="<?php print RUTA; ?>login" class="btn mobile-login-button" aria-label="Iniciar sesión">
-      <span class="span">Iniciar sesión</span>
+    <a href="<?php print $loginHref; ?>" class="btn mobile-login-button" aria-label="Iniciar sesión">
+      <span class="span"><?php print $loginText; ?></span>
       <span class="material-symbols-rounded" aria-hidden="true">login</span>
     </a>
 
