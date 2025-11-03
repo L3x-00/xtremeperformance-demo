@@ -100,6 +100,9 @@
 	
 	<!-- Sistema de Toggle de Tema -->
 	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
+	
+	<!-- SOLUCIÓN DEFINITIVA ANTI-SCROLL HORIZONTAL -->
+	<link href="<?php echo RUTA; ?>public/css/no-scroll-fix.css?v=<?php echo time(); ?>" rel="stylesheet">
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">

@@ -511,7 +511,9 @@ function addHoverEffects() {
         });
     });
 
-    // Efectos en filas de tabla
+    // Efectos en filas de tabla - DESHABILITADO para evitar scroll horizontal
+    // ELIMINADO: Los efectos de scale causan barra de desplazamiento horizontal
+    /*
     document.querySelectorAll('.table-hover tbody tr').forEach(row => {
         row.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.01)';
@@ -521,6 +523,7 @@ function addHoverEffects() {
             this.style.transform = 'scale(1)';
         });
     });
+    */
 }
 
 // Animación de contadores mejorada
