@@ -117,10 +117,10 @@
               echo "            class='btn btn-outline-danger microinteraction hover-grow' title='Eliminar cliente'>";
               echo "      <i class='fas fa-trash'></i>";
               echo "    </button>";
-              echo "    <button onclick='viewClientDetails(".$datos["data"][$i]["id"].")' ";
-              echo "            class='btn btn-outline-info microinteraction' title='Ver detalles'>";
-              echo "      <i class='fas fa-eye hover-float'></i>";
-              echo "    </button>";
+              echo "    <a href='".RUTA."clientes/modificar/".$datos["data"][$i]["id"]."/1' ";
+              echo "       class='btn btn-outline-success microinteraction' title='Ver/Editar cliente'>";
+              echo "      <i class='fas fa-eye'></i>";
+              echo "    </a>";
               echo "  </div>";
               echo "</td>";
               echo "</tr>";
@@ -271,186 +271,88 @@ function confirmDeleteClient(clientId, clientName, page) {
   });
 }
 
-// Ver detalles del cliente en modal
+// Ver detalles del cliente - VERSIÓN SIMPLE SIN AJAX (INSTANTÁNEA)
 function viewClientDetails(clientId) {
-  // Mostrar modal con loading inicialmente
-  const loadingContent = `
-    <div class="text-center py-4">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
+  // Buscar la fila del cliente en la tabla para obtener datos básicos
+  const row = document.querySelector(`tr[data-client-id="${clientId}"]`);
+  if (!row) {
+    showToast('error', 'No se encontraron datos del cliente en la tabla');
+    return;
+  }
+  
+  // Extraer datos básicos de la fila
+  const cells = row.querySelectorAll('td');
+  const clienteId = cells[0]?.textContent.trim() || clientId;
+  const nombreElement = cells[1]?.querySelector('.fw-semibold');
+  const nombreCompleto = nombreElement?.textContent.trim() || 'No disponible';
+  const razonSocial = cells[2]?.textContent.trim() || 'No especificada';
+  const estadoBadge = cells[3]?.querySelector('.badge');
+  const estado = estadoBadge?.textContent.trim() || 'Desconocido';
+  
+  // Crear contenido del modal con datos básicos (instantáneo)
+  const quickContent = `
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card border-0 bg-light">
+          <div class="card-body">
+            <h6 class="card-title">
+              <i class="fas fa-user-circle me-2 text-primary"></i>
+              Información Básica
+            </h6>
+            <div class="row mb-2">
+              <div class="col-sm-4"><strong>ID Cliente:</strong></div>
+              <div class="col-sm-8">
+                <span class="badge bg-secondary">${clienteId}</span>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-4"><strong>Nombre:</strong></div>
+              <div class="col-sm-8">${nombreCompleto}</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-4"><strong>Razón Social:</strong></div>
+              <div class="col-sm-8">${razonSocial}</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-4"><strong>Estado:</strong></div>
+              <div class="col-sm-8">
+                <span class="badge ${estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">${estado}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="mt-2 text-muted">Obteniendo información del cliente...</p>
-      <div class="progress mt-3" style="height: 4px;">
-        <div class="progress-bar progress-bar-animated" style="width: 100%"></div>
+      <div class="col-md-4">
+        <div class="card border-0 bg-primary text-white">
+          <div class="card-body text-center">
+            <i class="fas fa-info-circle fa-3x mb-3 opacity-50"></i>
+            <h6>Más Información</h6>
+            <p class="small">Para ver estadísticas detalladas, vehículos y historial completo, use el botón "Modificar"</p>
+            <a href="<?php echo RUTA; ?>clientes/modificar/${clienteId}/1" class="btn btn-light btn-sm">
+              <i class="fas fa-edit me-1"></i>Ver Detalles Completos
+            </a>
+          </div>
+        </div>
       </div>
+    </div>
+    
+    <div class="mt-4 d-flex justify-content-between">
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-info btn-sm" onclick="showToast('info', 'Función disponible próximamente', 'Vehículos del Cliente')">
+          <i class="fas fa-car me-1"></i>Ver Vehículos
+        </button>
+        <button class="btn btn-outline-success btn-sm" onclick="showToast('info', 'Función disponible próximamente', 'Historial de Órdenes')">
+          <i class="fas fa-history me-1"></i>Ver Historial
+        </button>
+      </div>
+      <a href="<?php echo RUTA; ?>clientes/modificar/${clienteId}/1" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Modificar Cliente
+      </a>
     </div>
   `;
   
-  showDetailsModal(`Detalles del Cliente ID: ${clientId}`, loadingContent, 'modal-lg');
-  
-  // Crear AbortController para timeout
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
-  
-  // Hacer petición AJAX optimizada
-  fetch(`<?php echo RUTA; ?>clientes/detalles/${clientId}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Cache-Control': 'no-cache'
-    },
-    signal: controller.signal
-  })
-    .then(response => {
-      clearTimeout(timeoutId);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Formatear fechas
-      const fechaRegistro = data.cliente.alta_dt ? 
-        new Date(data.cliente.alta_dt).toLocaleDateString('es-ES', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        }) : 'No disponible';
-        
-      const fechaModificacion = data.cliente.cambio_dt ? 
-        new Date(data.cliente.cambio_dt).toLocaleDateString('es-ES', {
-          year: 'numeric', month: 'long', day: 'numeric', 
-          hour: '2-digit', minute: '2-digit'
-        }) : 'No modificado';
-        
-      const ultimaVisita = data.estadisticas.ultima_visita && data.estadisticas.ultima_visita !== 'Nunca' ?
-        new Date(data.estadisticas.ultima_visita).toLocaleDateString('es-ES', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        }) : 'Nunca';
-
-      // Actualizar contenido del modal con datos reales
-      const realContent = `
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card border-0 bg-light">
-              <div class="card-body">
-                <h6 class="card-title"><i class="fas fa-info-circle me-2 text-primary"></i>Información General</h6>
-                <div class="row">
-                  <div class="col-sm-5"><strong>ID:</strong></div>
-                  <div class="col-sm-7">${data.cliente.id}</div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-5"><strong>Nombre completo:</strong></div>
-                  <div class="col-sm-7">${data.cliente.nombres} ${data.cliente.apellidos}</div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-5"><strong>Correo:</strong></div>
-                  <div class="col-sm-7">${data.cliente.correo || 'No especificado'}</div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-5"><strong>Teléfono:</strong></div>
-                  <div class="col-sm-7">${data.cliente.telefono || 'No especificado'}</div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-5"><strong>Fecha de registro:</strong></div>
-                  <div class="col-sm-7">${fechaRegistro}</div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-5"><strong>Última modificación:</strong></div>
-                  <div class="col-sm-7">${fechaModificacion}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="card border-0 bg-light">
-              <div class="card-body">
-                <h6 class="card-title"><i class="fas fa-chart-bar me-2 text-success"></i>Estadísticas</h6>
-                <div class="row">
-                  <div class="col-sm-6"><strong>Vehículos:</strong></div>
-                  <div class="col-sm-6">
-                    <span class="badge bg-info">${data.estadisticas.total_vehiculos}</span>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-6"><strong>Órdenes totales:</strong></div>
-                  <div class="col-sm-6">
-                    <span class="badge bg-primary">${data.estadisticas.total_ordenes}</span>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-6"><strong>Órdenes completadas:</strong></div>
-                  <div class="col-sm-6">
-                    <span class="badge bg-success">${data.estadisticas.ordenes_completadas}</span>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-6"><strong>Gasto total:</strong></div>
-                  <div class="col-sm-6">
-                    <span class="badge bg-warning text-dark">S/ ${parseFloat(data.estadisticas.gasto_total).toFixed(2)}</span>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-sm-6"><strong>Última visita:</strong></div>
-                  <div class="col-sm-6">${ultimaVisita}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-3 d-flex justify-content-end gap-2">
-          <a href="<?php echo RUTA; ?>clientes/modificar/${data.cliente.id}/1" class="btn btn-primary">
-            <i class="fas fa-edit me-2"></i>Modificar Cliente
-          </a>
-        </div>
-      `;
-      
-      // Actualizar el modal con el nuevo contenido
-      const modalBody = document.querySelector('.modal.show .modal-body');
-      if (modalBody) {
-        modalBody.innerHTML = realContent;
-      }
-    })
-    .catch(error => {
-      clearTimeout(timeoutId);
-      console.error('Error:', error);
-      
-      let errorMessage = 'No se pudieron obtener los detalles del cliente.';
-      let errorIcon = 'exclamation-triangle';
-      
-      if (error.name === 'AbortError') {
-        errorMessage = 'La petición tardó demasiado tiempo. El servidor puede estar ocupado.';
-        errorIcon = 'clock';
-      } else if (error.message.includes('HTTP 404')) {
-        errorMessage = 'Cliente no encontrado en la base de datos.';
-        errorIcon = 'user-times';
-      } else if (error.message.includes('HTTP 500')) {
-        errorMessage = 'Error interno del servidor. Contacte al administrador.';
-        errorIcon = 'server';
-      }
-      
-      const errorContent = `
-        <div class="alert alert-danger border-0">
-          <i class="fas fa-${errorIcon} me-2"></i>
-          <strong>Error al cargar los datos</strong><br>
-          ${errorMessage}
-          <small class="d-block mt-1 text-muted">
-            Error técnico: ${error.message}
-          </small>
-        </div>
-        <div class="text-center">
-          <button class="btn btn-outline-primary me-2" onclick="viewClientDetails(${clientId})">
-            <i class="fas fa-redo me-2"></i>Reintentar
-          </button>
-          <a href="<?php echo RUTA; ?>clientes/modificar/${clientId}/1" class="btn btn-primary">
-            <i class="fas fa-edit me-2"></i>Ver en Modificar
-          </a>
-        </div>
-      `;
-      
-      const modalBody = document.querySelector('.modal.show .modal-body');
-      if (modalBody) {
-        modalBody.innerHTML = errorContent;
-      }
-    });
+  // Mostrar modal instantáneamente con datos básicos
+  showDetailsModal(`Cliente: ${nombreCompleto}`, quickContent, 'modal-lg');
 }
 
 // Las funciones de exportación ahora se manejan del lado del servidor
