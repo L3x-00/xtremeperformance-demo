@@ -2,34 +2,34 @@
 	<div class="container my-3">
 		<div class="row g-3">
 			<div class="col-12 col-md-3">
-				<div class="card text-bg-light h-100">
+				<div class="card text-bg-light h-100 xp-kpi-card">
 					<div class="card-body">
-						<div class="small text-uppercase text-muted">Órdenes abiertas</div>
-						<div class="display-6 fw-bold"><?php print intval($datos['data']['kpis']['ordenes_abiertas']??0); ?></div>
+						<div class="small text-uppercase text-muted fw-semibold mb-1">Órdenes abiertas</div>
+						<div class="display-6 fw-bold text-primary"><?php print intval($datos['data']['kpis']['ordenes_abiertas']??0); ?></div>
 					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md-3">
-				<div class="card text-bg-light h-100">
+				<div class="card text-bg-light h-100 xp-kpi-card">
 					<div class="card-body">
-						<div class="small text-uppercase text-muted">Órdenes facturadas</div>
-						<div class="display-6 fw-bold"><?php print intval($datos['data']['kpis']['ordenes_facturadas']??0); ?></div>
+						<div class="small text-uppercase text-muted fw-semibold mb-1">Órdenes facturadas</div>
+						<div class="display-6 fw-bold text-success"><?php print intval($datos['data']['kpis']['ordenes_facturadas']??0); ?></div>
 					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md-3">
-				<div class="card text-bg-light h-100">
+				<div class="card text-bg-light h-100 xp-kpi-card">
 					<div class="card-body">
-						<div class="small text-uppercase text-muted">Órdenes totales</div>
-						<div class="display-6 fw-bold"><?php print intval($datos['data']['kpis']['ordenes_totales']??0); ?></div>
+						<div class="small text-uppercase text-muted fw-semibold mb-1">Órdenes totales</div>
+						<div class="display-6 fw-bold text-dark"><?php print intval($datos['data']['kpis']['ordenes_totales']??0); ?></div>
 					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md-3">
-				<div class="card text-bg-light h-100">
+				<div class="card text-bg-light h-100 xp-kpi-card">
 					<div class="card-body">
-						<div class="small text-uppercase text-muted">Ingresos mes (S/)</div>
-						<div class="display-6 fw-bold">S/ <?php print number_format(floatval($datos['data']['kpis']['ingresos_mes']??0),2); ?></div>
+						<div class="small text-uppercase text-muted fw-semibold mb-1">Ingresos mes (S/)</div>
+						<div class="display-6 fw-bold" style="color: var(--xp-red);">S/ <?php print number_format(floatval($datos['data']['kpis']['ingresos_mes']??0),2); ?></div>
 					</div>
 				</div>
 			</div>

@@ -2,34 +2,34 @@
  <div class="container my-3">
   <div class="row g-3 mb-3">
     <div class="col-12 col-md-3">
-      <div class="card text-bg-light h-100">
+      <div class="card text-bg-light h-100 xp-kpi-card">
         <div class="card-body">
-          <div class="small text-uppercase text-muted">Mis abiertas</div>
-          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['abiertas']??0); ?></div>
+          <div class="small text-uppercase text-muted fw-semibold mb-1">Mis abiertas</div>
+          <div class="display-6 fw-bold text-primary"><?php print intval($datos['kpis']['abiertas']??0); ?></div>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-3">
-      <div class="card text-bg-light h-100">
+      <div class="card text-bg-light h-100 xp-kpi-card">
         <div class="card-body">
-          <div class="small text-uppercase text-muted">Facturadas</div>
-          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['facturadas']??0); ?></div>
+          <div class="small text-uppercase text-muted fw-semibold mb-1">Facturadas</div>
+          <div class="display-6 fw-bold text-success"><?php print intval($datos['kpis']['facturadas']??0); ?></div>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-3">
-      <div class="card text-bg-light h-100">
+      <div class="card text-bg-light h-100 xp-kpi-card">
         <div class="card-body">
-          <div class="small text-uppercase text-muted">Asignadas</div>
-          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['totales']??0); ?></div>
+          <div class="small text-uppercase text-muted fw-semibold mb-1">Asignadas</div>
+          <div class="display-6 fw-bold text-dark"><?php print intval($datos['kpis']['totales']??0); ?></div>
         </div>
       </div>
     </div>
     <div class="col-12 col-md-3">
-      <div class="card text-bg-light h-100">
+      <div class="card text-bg-light h-100 xp-kpi-card">
         <div class="card-body">
-          <div class="small text-uppercase text-muted">Órdenes este mes</div>
-          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['este_mes']??0); ?></div>
+          <div class="small text-uppercase text-muted fw-semibold mb-1">Órdenes este mes</div>
+          <div class="display-6 fw-bold" style="color: var(--xp-red);"><?php print intval($datos['kpis']['este_mes']??0); ?></div>
         </div>
       </div>
     </div>
