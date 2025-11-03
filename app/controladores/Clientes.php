@@ -369,34 +369,54 @@ if (empty($errores)) {
 
 	public function detalles(string $id = ""): void
 	{
+		// Configurar headers de performance
+		header('Content-Type: application/json; charset=utf-8');
+		header('Cache-Control: private, max-age=300'); // Cache 5 minutos
+		
 		// Verificar que se proporcionó un ID válido
 		if (empty($id) || !is_numeric($id)) {
 			http_response_code(400);
-			echo json_encode(['error' => 'ID de cliente no válido']);
+			echo json_encode(['error' => 'ID de cliente no válido'], JSON_UNESCAPED_UNICODE);
 			exit;
 		}
 
-		// Obtener datos básicos del cliente
-		$cliente = $this->modelo->getId($id);
-		
-		if (empty($cliente)) {
-			http_response_code(404);
-			echo json_encode(['error' => 'Cliente no encontrado']);
-			exit;
+		try {
+			// Obtener datos básicos del cliente
+			$cliente = $this->modelo->getId($id);
+			
+			if (empty($cliente)) {
+				http_response_code(404);
+				echo json_encode(['error' => 'Cliente no encontrado'], JSON_UNESCAPED_UNICODE);
+				exit;
+			}
+
+			// Obtener estadísticas adicionales
+			$estadisticas = $this->modelo->getEstadisticasCliente($id);
+			
+			// Preparar respuesta JSON optimizada
+			$respuesta = [
+				'success' => true,
+				'cliente' => $cliente,
+				'estadisticas' => $estadisticas,
+				'timestamp' => time()
+			];
+
+			// Enviar respuesta JSON comprimida si es posible
+			if (function_exists('gzencode') && strpos($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') !== false) {
+				header('Content-Encoding: gzip');
+				echo gzencode(json_encode($respuesta, JSON_UNESCAPED_UNICODE));
+			} else {
+				echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
+			}
+			
+		} catch (Exception $e) {
+			http_response_code(500);
+			echo json_encode([
+				'error' => 'Error interno del servidor',
+				'message' => 'Contacte al administrador del sistema'
+			], JSON_UNESCAPED_UNICODE);
 		}
-
-		// Obtener estadísticas adicionales
-		$estadisticas = $this->modelo->getEstadisticasCliente($id);
 		
-		// Preparar respuesta JSON
-		$respuesta = [
-			'cliente' => $cliente,
-			'estadisticas' => $estadisticas
-		];
-
-		// Enviar respuesta JSON
-		header('Content-Type: application/json');
-		echo json_encode($respuesta, JSON_UNESCAPED_UNICODE);
 		exit;
 	}
 }

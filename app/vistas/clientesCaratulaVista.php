@@ -280,16 +280,31 @@ function viewClientDetails(clientId) {
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-2 text-muted">Obteniendo información del cliente...</p>
+      <div class="progress mt-3" style="height: 4px;">
+        <div class="progress-bar progress-bar-animated" style="width: 100%"></div>
+      </div>
     </div>
   `;
   
   showDetailsModal(`Detalles del Cliente ID: ${clientId}`, loadingContent, 'modal-lg');
   
-  // Hacer petición AJAX para obtener datos reales
-  fetch(`<?php echo RUTA; ?>clientes/detalles/${clientId}`)
+  // Crear AbortController para timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos timeout
+  
+  // Hacer petición AJAX optimizada
+  fetch(`<?php echo RUTA; ?>clientes/detalles/${clientId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Cache-Control': 'no-cache'
+    },
+    signal: controller.signal
+  })
     .then(response => {
+      clearTimeout(timeoutId);
       if (!response.ok) {
-        throw new Error('Error al obtener datos del cliente');
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       return response.json();
     })
@@ -395,17 +410,39 @@ function viewClientDetails(clientId) {
       }
     })
     .catch(error => {
+      clearTimeout(timeoutId);
       console.error('Error:', error);
+      
+      let errorMessage = 'No se pudieron obtener los detalles del cliente.';
+      let errorIcon = 'exclamation-triangle';
+      
+      if (error.name === 'AbortError') {
+        errorMessage = 'La petición tardó demasiado tiempo. El servidor puede estar ocupado.';
+        errorIcon = 'clock';
+      } else if (error.message.includes('HTTP 404')) {
+        errorMessage = 'Cliente no encontrado en la base de datos.';
+        errorIcon = 'user-times';
+      } else if (error.message.includes('HTTP 500')) {
+        errorMessage = 'Error interno del servidor. Contacte al administrador.';
+        errorIcon = 'server';
+      }
+      
       const errorContent = `
-        <div class="alert alert-danger">
-          <i class="fas fa-exclamation-triangle me-2"></i>
+        <div class="alert alert-danger border-0">
+          <i class="fas fa-${errorIcon} me-2"></i>
           <strong>Error al cargar los datos</strong><br>
-          No se pudieron obtener los detalles del cliente. Por favor, intente nuevamente.
+          ${errorMessage}
+          <small class="d-block mt-1 text-muted">
+            Error técnico: ${error.message}
+          </small>
         </div>
         <div class="text-center">
-          <button class="btn btn-outline-primary" onclick="viewClientDetails(${clientId})">
+          <button class="btn btn-outline-primary me-2" onclick="viewClientDetails(${clientId})">
             <i class="fas fa-redo me-2"></i>Reintentar
           </button>
+          <a href="<?php echo RUTA; ?>clientes/modificar/${clientId}/1" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Ver en Modificar
+          </a>
         </div>
       `;
       
