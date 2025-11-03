@@ -6,10 +6,93 @@
 	<?php if(defined('RUTA')){ echo "    <base href='".RUTA."'>\n"; } ?>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 	<link href="./public/css/admin.css?v=20251102" rel="stylesheet">
+	
+	<!-- Toast Notifications -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	
+	<!-- Font Awesome for Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+	
+	<!-- jQuery and Toastr -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	
+	<!-- Enhanced UI System -->
+	<script src="./public/js/enhanced-ui.js?v=<?php echo time(); ?>"></script>
+	
     <link rel="shortcut icon" href="./public/img/favicon.png" type="image/svg+xml" />
 
 	<title>XTREME PERFORMANCE | <?php print $datos["titulo"]; ?></title>
+
+	<!-- Notification System -->
+	<script>
+		// Configuración global de Toastr
+		$(document).ready(function() {
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": true,
+				"progressBar": true,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": true,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "4000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			};
+		});
+
+		// Funciones globales para notificaciones
+		window.showToast = function(type, message, title = '') {
+			switch(type) {
+				case 'success':
+					toastr.success(message, title || '✅ Éxito');
+					break;
+				case 'error':
+					toastr.error(message, title || '❌ Error');
+					break;
+				case 'warning':
+					toastr.warning(message, title || '⚠️ Advertencia');
+					break;
+				case 'info':
+					toastr.info(message, title || 'ℹ️ Información');
+					break;
+			}
+		};
+
+		// Función para mostrar notificación de operación exitosa
+		window.showSuccess = function(operation = 'Operación') {
+			showToast('success', operation + ' realizada correctamente');
+		};
+
+		// Función para mostrar error de validación
+		window.showValidationError = function(field = 'campo') {
+			showToast('error', 'Por favor verifica el ' + field + ' ingresado');
+		};
+
+		// Función para confirmar acciones destructivas
+		window.confirmAction = function(message, callback) {
+			toastr.warning(
+				message + '<br><br>' +
+				'<button type="button" class="btn btn-sm btn-success me-2" onclick="' + callback + '(); toastr.clear();">Confirmar</button>' +
+				'<button type="button" class="btn btn-sm btn-secondary" onclick="toastr.clear();">Cancelar</button>',
+				'⚠️ Confirmación requerida',
+				{
+					allowHtml: true,
+					timeOut: 0,
+					closeButton: false,
+					tapToDismiss: false
+				}
+			);
+		};
+	</script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
@@ -103,6 +186,15 @@
 			}
 		}
 		print "<ul class='nav navbar-nav ms-auto'>";
+			// Theme Toggle
+		print "<li class='nav-item me-2'>";
+		print "<div class='theme-toggle'>";
+		print "<input type='checkbox' class='theme-toggle-checkbox' id='theme-toggle' />";
+		print "<label class='theme-toggle-label' for='theme-toggle'>";
+		print "<span class='theme-toggle-button'></span>";
+		print "</label>";
+		print "</div>";
+		print "</li>";
 			//
 		print "<li class='nav-item'>";
 		print "<a href='".RUTA."tablero/perfil' class='nav-link'>";
