@@ -394,12 +394,18 @@ class Seguimientos extends Controlador
 	{
 		// No-op si no hay formulario de archivos
 		if (!isset($fotos_array['fotos'])) return true;
+		
+		// Validar y sanitizar rutas
+		$idOrdenReparacion = (int)$idOrdenReparacion;
+		$idSeguimiento = (int)$idSeguimiento;
+		if ($idOrdenReparacion <= 0 || $idSeguimiento <= 0) return false;
+		
 		$carpeta = 'fotos/'.$idOrdenReparacion."/".$idSeguimiento."/";
 		if (!file_exists($carpeta)) {
-			mkdir($carpeta, 0777, true);
+			mkdir($carpeta, 0755, true); // Permisos más seguros
 		}
 
-		// Aceptar tipos comunes
+		// Tipos MIME permitidos con validación estricta
 		$mimeToExt = [
 			'image/jpeg' => 'jpg',
 			'image/pjpeg' => 'jpg',
@@ -408,6 +414,10 @@ class Seguimientos extends Controlador
 			'image/gif' => 'gif',
 			'image/webp' => 'webp',
 		];
+		
+		// Límites de seguridad
+		$maxFileSize = 10 * 1024 * 1024; // 10MB máximo por archivo
+		$maxFiles = 10; // Máximo 10 archivos por seguimiento
 
 		// Rearmar arreglo múltiple
 		$files = [];
@@ -424,23 +434,62 @@ class Seguimientos extends Controlador
 		}
 
 		$subidos = 0;
+		$procesados = 0;
+		
 		foreach ($files as $archivo) {
+			// Límite de archivos
+			if ($procesados >= $maxFiles) break;
+			
 			// Saltar vacíos
 			if (empty($archivo['tmp_name']) || ($archivo['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
 				continue;
 			}
-			if (($archivo['size'] ?? 0) <= 0) continue;
-			if (($archivo['size'] ?? 0) > 40*1024*1024) continue; // >40MB, saltar
-			$mime = $archivo['type'] ?? '';
-			$ext = $mimeToExt[$mime] ?? null;
-			if ($ext === null) continue; // tipo no soportado
-			$nombre = uniqid('', true).'.'.$ext;
+			
+			$procesados++;
+			
+			// Validaciones de seguridad
+			$size = $archivo['size'] ?? 0;
+			if ($size <= 0 || $size > $maxFileSize) continue;
+			
+			// Validar MIME type tanto del navegador como del archivo real
+			$mimeReported = $archivo['type'] ?? '';
+			$mimeReal = mime_content_type($archivo['tmp_name']) ?: '';
+			
+			// Debe coincidir el MIME reportado y el real
+			if (!isset($mimeToExt[$mimeReported]) || !isset($mimeToExt[$mimeReal])) {
+				continue; // Tipo no soportado o no coincide
+			}
+			
+			// Verificar que sea realmente una imagen
+			$imageInfo = getimagesize($archivo['tmp_name']);
+			if ($imageInfo === false) continue; // No es imagen válida
+			
+			$ext = $mimeToExt[$mimeReal];
+			
+			// Generar nombre seguro
+			$nombre = 'img_' . time() . '_' . uniqid('', true) . '.' . $ext;
+			
+			// Validar que no contenga caracteres peligrosos
+			if (!preg_match('/^[a-zA-Z0-9._-]+$/', $nombre)) continue;
+			
+			$rutaCompleta = $carpeta . $nombre;
+			
+			// Verificar que la ruta no escape del directorio permitido
+			$rutaReal = realpath(dirname($rutaCompleta));
+			$carpetaReal = realpath($carpeta);
+			if ($rutaReal === false || strpos($rutaReal, $carpetaReal) !== 0) {
+				continue; // Path traversal attempt
+			}
+			
 			if (is_uploaded_file($archivo['tmp_name'])) {
-				if (move_uploaded_file($archivo['tmp_name'], $carpeta.$nombre)) {
+				if (move_uploaded_file($archivo['tmp_name'], $rutaCompleta)) {
+					// Establecer permisos seguros al archivo
+					chmod($rutaCompleta, 0644);
 					$subidos++;
 				}
 			}
 		}
+		
 		// Consideramos éxito si se subieron 0 o más (no forzamos error cuando no adjuntan)
 		return $subidos >= 0;
 	}

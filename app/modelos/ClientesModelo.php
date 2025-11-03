@@ -123,12 +123,12 @@ public function getId(string $id = ''): array
 	{
         // Check if the email exists in clientes or usuarios (avoid duplicate emails)
         if (empty($correo)) return [];
-        $sql = "SELECT id FROM clientes WHERE correo='".$correo."' AND baja=0";
-        $salida = $this->db->query($sql);
+        $sql = "SELECT id FROM clientes WHERE correo=? AND baja=0";
+        $salida = $this->db->query($sql, [$correo]);
         if (!empty($salida)) return $salida;
         // If not found in clientes, check usuarios
-        $sql2 = "SELECT id FROM usuarios WHERE correo='".$correo."' AND baja=0";
-        return $this->db->query($sql2);
+        $sql2 = "SELECT id FROM usuarios WHERE correo=? AND baja=0";
+        return $this->db->query($sql2, [$correo]);
 	}
 
 	// C:\xampp\htdocs\taller\app\modelos\ClientesModelo.php

@@ -62,8 +62,8 @@ class VehiculosModelo
 		$sql = "SELECT id, marca, modelo, color, ";
 		$sql.= "anio, placas, idCliente ";
 		$sql.= "FROM vehiculos ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getNumRegistros():int

@@ -1,26 +1,51 @@
 <?php
 /**
- *
+ * Clase de conexión a base de datos con configuración mejorada
  */
+require_once(__DIR__ . '/Config.php');
+
 class MySQLdb
 {
-    private $host = "localhost";
-    private $usuario = "u645180384_maxi";
-    private $clave = "Maxi.123@123";
-    private $db = "u645180384_taller";
-    private $puerto = "";
+    private $host;
+    private $usuario;
+    private $clave;
+    private $db;
+    private $puerto;
     private $conn;
 
     function __construct()
     {
+        // Cargar configuración desde .env o usar valores por defecto
+        Config::load();
+        
+        $this->host = Config::get('DB_HOST', 'localhost');
+        $this->usuario = Config::get('DB_USER', 'u645180384_maxi');
+        $this->clave = Config::get('DB_PASS', 'Maxi.123@123');
+        $this->db = Config::get('DB_NAME', 'u645180384_taller');
+        $this->puerto = Config::get('DB_PORT', '3306');
+        
         try {
+            $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->db . ';charset=utf8mb4';
+            if (!empty($this->puerto)) {
+                $dsn .= ';port=' . $this->puerto;
+            }
+            
             $this->conn = new PDO(
-                'mysql:host=' . $this->host . ';dbname=' . $this->db,
+                $dsn,
                 $this->usuario,
-                $this->clave
+                $this->clave,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::MYSQL_ATTR_FOUND_ROWS => true,
+                    PDO::ATTR_PERSISTENT => false
+                ]
             );
         } catch (Exception $e) {
-            die("No se pudo conectar: " . $e->getMessage());
+            // Log error securely instead of exposing details
+            error_log("Database connection failed: " . $e->getMessage());
+            die("Error de conexión a la base de datos. Contacte al administrador.");
         }
     }
 

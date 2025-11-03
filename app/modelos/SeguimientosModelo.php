@@ -40,8 +40,8 @@ class SeguimientosModelo
 		if(empty($id)) return [];
 		$sql = "SELECT id, idOrdenReparacion, fecha, observacion ";
 		$sql.= "FROM seguimientos ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getNumRegistros(string $tabla):int

@@ -118,8 +118,8 @@ class TableroModelo
 
 	public function getUsuarioId($id='')
 	{
-		$sql = "SELECT * FROM usuarios WHERE id=".$id." AND baja=0";
-		return $this->db->query($sql);
+		$sql = "SELECT * FROM usuarios WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 }
 

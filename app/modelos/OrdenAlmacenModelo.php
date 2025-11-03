@@ -92,8 +92,8 @@ class OrdenAlmacenModelo
 		if(empty($id)) return [];
 		$sql = "SELECT id, idOrdenReparacion, costo, observacion, alta_dt  ";
 		$sql.= "FROM ordenalmacen ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getOrdenAlmacenDetalle(string $idOrdenAlmacen=''):array
@@ -133,8 +133,8 @@ class OrdenAlmacenModelo
 		if(empty($id)) return [];
 		$sql = "SELECT  id, nombrePieza, stock, costo ";
 		$sql.= "FROM piezas ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getPiezaDetalle(string $id=''):array
@@ -143,10 +143,10 @@ class OrdenAlmacenModelo
 		$sql = "SELECT o.id, o.idOrdenAlmacen, o.idPieza, o.cantidad, o.costo, ";
 		$sql.= "p.nombrePieza, a.idOrdenReparacion ";
 		$sql.= "FROM ordenalmacendetalle as o, ordenalmacen as a, piezas as p ";
-		$sql.= "WHERE o.id='".$id."' AND ";
+		$sql.= "WHERE o.id=? AND ";
 		$sql.= "o.idOrdenAlmacen = a.id AND ";
 		$sql.= "o.idPieza = p.id";
-		return $this->db->query($sql);
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getNumRegistros():int

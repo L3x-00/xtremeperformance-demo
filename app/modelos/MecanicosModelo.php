@@ -58,8 +58,8 @@ class MecanicosModelo
 		if(empty($id)) return [];
 		$sql = "SELECT id, nombres, apellidos, telefono, ";
 		$sql.= "correo, clave, idTipoMecanico, estado FROM mecanicos ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getNumRegistros():int
@@ -100,8 +100,8 @@ class MecanicosModelo
 	public function getCorreo(string $correo=""):array
 	{
 		//
-		$sql = "SELECT id FROM mecanicos WHERE correo='".$correo."' AND baja=0";
-		return $this->db->query($sql);
+		$sql = "SELECT id FROM mecanicos WHERE correo=? AND baja=0";
+		return $this->db->query($sql, [$correo]);
 	}
 
 	public function modificar(array $data):bool

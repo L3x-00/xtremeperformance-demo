@@ -7,12 +7,26 @@ class Helper
 	
 	function __construct(){}
 
-	public static function cadena($cadena){
-		//
-		$buscar  = array('^', 'delete', 'drop','truncate','exec','system');
-		$reemplazar = array('-', 'dele*te', 'dr*op','truneca*te','ex*ec','syst*em');
-		$cadena = trim(str_replace($buscar, $reemplazar, $cadena));
-		$cadena = addslashes(htmlentities($cadena));
+	public static function cadena($cadena, $maxLength = 500){
+		if (!is_string($cadena)) return '';
+		
+		// Límite de longitud
+		if (strlen($cadena) > $maxLength) {
+			$cadena = substr($cadena, 0, $maxLength);
+		}
+		
+		// Limpiar caracteres de control peligrosos
+		$cadena = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $cadena);
+		
+		// Filtros básicos de seguridad SQL
+		$buscar  = array('^', 'delete', 'drop','truncate','exec','system', 'union', 'select', 'insert', 'update', '--', '/*', '*/', 'xp_', 'sp_');
+		$reemplazar = array('-', 'dele*te', 'dr*op','truneca*te','ex*ec','syst*em', 'uni*on', 'sele*ct', 'inse*rt', 'upda*te', '-*-', '/ *', '* /', 'x*p_', 's*p_');
+		$cadena = str_ireplace($buscar, $reemplazar, $cadena);
+		
+		// Trim y codificación HTML
+		$cadena = trim($cadena);
+		$cadena = htmlspecialchars($cadena, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		
 		return $cadena;
 	}
 
@@ -129,6 +143,64 @@ class Helper
 		// Quitar espacios/blancos accidentales
 		$tel = preg_replace('/\s+/', '', $tel);
 		return (bool)preg_match('/^9\d{8}$/', $tel);
+	}
+
+	/**
+	 * Valida entrada numérica con límites de seguridad
+	 */
+	public static function validarId($id, $min = 1, $max = PHP_INT_MAX): int
+	{
+		$id = filter_var($id, FILTER_VALIDATE_INT);
+		if ($id === false || $id < $min || $id > $max) {
+			return 0; // ID inválido
+		}
+		return $id;
+	}
+
+	/**
+	 * Limpia y valida texto libre con longitud máxima
+	 */
+	public static function textoLibre($texto, $maxLength = 1000): string
+	{
+		if (!is_string($texto)) return '';
+		
+		// Remover tags HTML/PHP
+		$texto = strip_tags($texto);
+		
+		// Límite de longitud
+		if (strlen($texto) > $maxLength) {
+			$texto = substr($texto, 0, $maxLength);
+		}
+		
+		// Limpiar caracteres de control
+		$texto = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $texto);
+		
+		return trim($texto);
+	}
+
+	/**
+	 * Validación mejorada de correos con filtros adicionales
+	 */
+	public static function correoSeguro($correo = ''): string
+	{
+		if (empty($correo)) return '';
+		
+		$correo = trim(strtolower($correo));
+		
+		// Validar formato básico
+		if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+			return '';
+		}
+		
+		// Verificar longitud razonable
+		if (strlen($correo) > 100) return '';
+		
+		// Verificar caracteres permitidos
+		if (!preg_match('/^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/', $correo)) {
+			return '';
+		}
+		
+		return $correo;
 	}
 
 	

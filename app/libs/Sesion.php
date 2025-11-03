@@ -9,6 +9,7 @@ class Sesion
 	
 	function __construct()
 	{
+		$this->configurarSesion();
 		@session_start();
 		if (isset($_SESSION['usuario'])) {
 			$this->usuario = $_SESSION['usuario'];
@@ -47,14 +48,42 @@ class Sesion
 					$params["secure"], $params["httponly"]
 				);
 			}
-			// Destruir la sesión y regenerar ID para evitar fijación
-			session_destroy();
-		}
-		@session_start();
-		session_regenerate_id(true);
+		// Destruir la sesión y regenerar ID para evitar fijación
+		session_destroy();
 	}
+	$this->configurarSesion();
+	@session_start();
+	session_regenerate_id(true);
+}
 
-	public function getLogin():bool
+/**
+ * Configura parámetros de seguridad para las sesiones
+ */
+private function configurarSesion(): void
+{
+	// Cargar configuración de seguridad
+	require_once(__DIR__ . '/Config.php');
+	Config::load();
+	
+	// Configurar parámetros de cookies de sesión
+	$secure = Config::get('SESSION_SECURE', 'false') === 'true';
+	$httponly = Config::get('SESSION_HTTPONLY', 'true') === 'true';
+	$samesite = Config::get('SESSION_SAMESITE', 'Strict');
+	
+	// Para desarrollo local, secure debe ser false si no hay HTTPS
+	if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+		$secure = false;
+	}
+	
+	// Configurar parámetros de sesión antes de iniciarla
+	if (session_status() === PHP_SESSION_NONE) {
+		ini_set('session.cookie_httponly', $httponly ? '1' : '0');
+		ini_set('session.cookie_secure', $secure ? '1' : '0');
+		ini_set('session.cookie_samesite', $samesite);
+		ini_set('session.use_only_cookies', '1');
+		ini_set('session.cookie_lifetime', '0'); // Cookie de sesión
+	}
+}	public function getLogin():bool
 	{
 		return $this->login;
 	}

@@ -27,9 +27,9 @@ class TableroMecanicoModelo
 		$sql.= "o.estado, CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo, ";
 		$sql.= "CONCAT(m.nombres,' ',m.apellidos) as mecanico, e.estado as edo ";
 		$sql.= "FROM ordenreparacion as o, vehiculos as v, mecanicos as m, estadoordenreparacion as e ";
-		$sql.= "WHERE o.id='".$id."' AND o.baja=0 AND o.estado=e.id AND ";
+		$sql.= "WHERE o.id=? AND o.baja=0 AND o.estado=e.id AND ";
 		$sql.= "o.idVehiculo=v.id AND o.idMecanico=m.id";
-		return $this->db->query($sql);
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getSeguimientoId(string $id=''):array
@@ -37,8 +37,8 @@ class TableroMecanicoModelo
 		if(empty($id)) return [];
 		$sql = "SELECT id, idOrdenReparacion, fecha, observacion ";
 		$sql.= "FROM seguimientos ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getPiezas(string $idOrdenReparacion=''):array
@@ -117,8 +117,8 @@ class TableroMecanicoModelo
 
 	public function getUsuarioId($id='')
 	{
-		$sql = "SELECT * FROM mecanicos WHERE id=".$id." AND baja=0";
-		return $this->db->query($sql);
+		$sql = "SELECT * FROM mecanicos WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 }
 

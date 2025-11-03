@@ -50,8 +50,8 @@ class UsuariosModelo
 		if(empty($id)) return [];
 		$sql = "SELECT id, tipousuario, nombres, apellidos, direccion, telefono, ";
 		$sql.= "correo, clave, genero, estadousuario FROM usuarios ";
-		$sql.= "WHERE id='".$id."' AND baja=0";
-		return $this->db->query($sql);
+		$sql.= "WHERE id=? AND baja=0";
+		return $this->db->query($sql, [$id]);
 	}
 
 	public function getNumRegistros():int
@@ -99,8 +99,8 @@ class UsuariosModelo
 	public function getCorreo(string $correo='')
 	{
 		if(empty($correo)) return false;
-		$sql = "SELECT id FROM usuarios WHERE correo='".$correo."' AND baja=0";
-		return $this->db->query($sql);
+		$sql = "SELECT id FROM usuarios WHERE correo=? AND baja=0";
+		return $this->db->query($sql, [$correo]);
 	}
 
 	public function modificar(array $data):bool
