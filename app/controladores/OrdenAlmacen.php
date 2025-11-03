@@ -332,21 +332,21 @@ class OrdenAlmacen extends Controlador
 
 	public function exportarCsv(): void
 	{
-		// Exporta las órdenes de almacén visibles en la carátula en CSV
+		// Exporta órdenes de almacén en CSV
 		$num = $this->modelo->getNumRegistros();
 		$rows = $this->modelo->getTabla(0, $num);
 		header('Content-Type: text/csv; charset=UTF-8');
 		header('Content-Disposition: attachment; filename="ordenes_almacen.csv"');
-		echo "\xEF\xBB\xBF"; // BOM para Excel
+		echo "\xEF\xBB\xBF"; // BOM Excel
 		$out = fopen('php://output', 'w');
-		fputcsv($out, ['ID', 'Orden Reparación', 'Costo (S/)', 'Fecha', 'Estado']);
+		fputcsv($out, ['ID', 'Orden Reparación / Vehículo', 'Costo (S/)', 'Fecha', 'Estado']);
 		foreach ($rows as $r) {
 			fputcsv($out, [
 				$r['id'] ?? '',
-				$r['vehiculo'] ?? '',
+				html_entity_decode($r['vehiculo'] ?? '', ENT_QUOTES, 'UTF-8'),
 				number_format(floatval($r['costo'] ?? 0), 2, '.', ''),
 				$r['alta_dt'] ?? '',
-				$r['estado'] ?? '',
+				html_entity_decode($r['estado'] ?? '', ENT_QUOTES, 'UTF-8'),
 			]);
 		}
 		fclose($out);
@@ -355,28 +355,30 @@ class OrdenAlmacen extends Controlador
 
 	public function exportarPdf(): void
 	{
-		// Exporta las órdenes de almacén visibles en la carátula en PDF
+		// Exporta órdenes de almacén en PDF
 		$num = $this->modelo->getNumRegistros();
 		$rows = $this->modelo->getTabla(0, $num);
-		$headers = ['ID', 'Orden Reparación', 'Costo (S/)', 'Fecha', 'Estado'];
+		$headers = ['ID', 'Orden Reparación / Vehículo', 'Costo (S/)', 'Fecha', 'Estado'];
 		$data = [];
 		foreach ($rows as $r) {
 			$data[] = [
 				$r['id'] ?? '',
-				$r['vehiculo'] ?? '',
-				number_format(floatval($r['costo'] ?? 0), 2),
+				html_entity_decode($r['vehiculo'] ?? '', ENT_QUOTES, 'UTF-8'),
+				number_format(floatval($r['costo'] ?? 0), 2, '.', ''),
 				$r['alta_dt'] ?? '',
-				$r['estado'] ?? '',
+				html_entity_decode($r['estado'] ?? '', ENT_QUOTES, 'UTF-8'),
 			];
 		}
-		$pdf = new ReporteTabla('L'); // Horizontal
+		$pdf = new ReporteTabla('L');
 		$pdf->AliasNbPages();
-		$pdf->setTitulos('Órdenes de almacén', 'Listado');
+		$pdf->setTitulos('Órdenes de almacén', 'Listado general');
 		$pdf->AddPage();
 		$pdf->Tabla($headers, $data);
 		$pdf->Output('D', 'ordenes_almacen.pdf');
 		exit;
 	}
+
+
 
 	public function cancelarOrdenAlmacen(string $idOrdenAlmacen=''):void
 	{

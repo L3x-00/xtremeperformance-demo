@@ -25,10 +25,12 @@ class ReporteTabla extends FPDF
             $this->Image($logo, 10, 8, 30);
         }
         $this->SetFont('Arial','B',12);
-        $this->Cell(0,6,utf8_decode($this->titulo),0,1,'R');
+        $t = html_entity_decode($this->titulo ?? '', ENT_QUOTES, 'UTF-8');
+        $this->Cell(0,6,utf8_decode($t),0,1,'R');
         if ($this->subtitulo) {
             $this->SetFont('Arial','',10);
-            $this->Cell(0,5,utf8_decode($this->subtitulo),0,1,'R');
+            $st = html_entity_decode($this->subtitulo ?? '', ENT_QUOTES, 'UTF-8');
+            $this->Cell(0,5,utf8_decode($st),0,1,'R');
         }
         $this->Ln(5);
     }
@@ -47,7 +49,8 @@ class ReporteTabla extends FPDF
         $this->SetFillColor(230, 230, 230);
         $this->SetFont('Arial','B',9);
         foreach ($headers as $h) {
-            $this->Cell(40,7,utf8_decode($h),1,0,'C',true);
+            $hh = html_entity_decode((string)$h, ENT_QUOTES, 'UTF-8');
+            $this->Cell(40,7,utf8_decode($hh),1,0,'C',true);
         }
         $this->Ln();
         // Filas
@@ -55,6 +58,7 @@ class ReporteTabla extends FPDF
         foreach ($rows as $r) {
             foreach ($r as $c) {
                 $val = is_string($c) ? $c : (string)$c;
+                $val = html_entity_decode($val, ENT_QUOTES, 'UTF-8');
                 $this->Cell(40,6,utf8_decode($val),1);
             }
             $this->Ln();

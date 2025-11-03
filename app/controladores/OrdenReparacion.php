@@ -281,7 +281,7 @@ class OrdenReparacion extends Controlador
 		foreach ($rows as $r) {
 			fputcsv($out, [
 				$r['id'] ?? '',
-				$r['vehiculo'] ?? '',
+				html_entity_decode($r['vehiculo'] ?? '', ENT_QUOTES, 'UTF-8'),
 				$r['fechaIngreso'] ?? '',
 				$r['fechaSalida'] ?? '',
 			]);
@@ -300,7 +300,7 @@ class OrdenReparacion extends Controlador
 		foreach ($rows as $r) {
 			$data[] = [
 				$r['id'] ?? '',
-				$r['vehiculo'] ?? '',
+				html_entity_decode($r['vehiculo'] ?? '', ENT_QUOTES, 'UTF-8'),
 				$r['fechaIngreso'] ?? '',
 				$r['fechaSalida'] ?? '',
 			];
