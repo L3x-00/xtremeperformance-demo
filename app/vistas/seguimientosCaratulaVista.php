@@ -18,7 +18,8 @@
       print "<td class='text-start'>".$datos["data"][$i]['vehiculo']."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['fechaIngreso']."</td>";
       print "<td class='text-start'>".$datos["data"][$i]['fechaSalida']."</td>";
-      print "<td><a href='".RUTA."seguimientos/seguimiento/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Seguimiento</a></td>";
+  // Ir siempre a la página 1 del listado de seguimientos de esa orden
+  print "<td><a href='".RUTA."seguimientos/seguimiento/".$datos["data"][$i]["id"]."/1' class='btn btn-warning'>Seguimiento</a></td>";
       print "</tr>";
     }
     ?>

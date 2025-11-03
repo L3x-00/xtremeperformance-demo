@@ -89,7 +89,7 @@ class Seguimientos extends Controlador
 							"Alta del seguimiento de una orden de reparación.", 
 							"Alta del seguimiento de una orden de reparación.", 
 							"Se añadió correctamente el seguimiento a la orden de reparación.", 
-							"seguimientos/".$pagina, 
+							"seguimientos/seguimiento/".$idOrdenReparacion."/1", 
 							"success"
 						);
 					} else {
@@ -118,7 +118,7 @@ class Seguimientos extends Controlador
 							"Modificación del seguimiento de una orden de reparación.", 
 							"Modificación del seguimiento de una orden de reparación.", 
 							"Se modificó correctamente el seguimiento a la orden de reparación.", 
-							"seguimientos/".$pagina, 
+							"seguimientos/seguimiento/".$idOrdenReparacion."/1", 
 							"success"
 						);
 					} else {
