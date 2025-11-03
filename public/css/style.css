@@ -2456,6 +2456,29 @@ body {
   box-shadow: var(--shadow-light);
 }
 
+/* Prevenir overflow en contenedores de tablas */
+.table-responsive {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 .table thead th {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   border: none;
@@ -2676,15 +2699,54 @@ body {
   animation: rotate 1s linear infinite;
 }
 
-/* Mejoras en tablas con hover */
+/* Mejoras en tablas con hover - Sin overflow */
 .table-hover tbody tr {
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .table-hover tbody tr:hover {
   background-color: var(--bg-secondary);
-  transform: scale(1.01);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  z-index: 1;
+}
+
+/* Asegurar que no haya overflow horizontal */
+.table-responsive {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+/* Ocultar scrollbar cuando no se necesita */
+.table-responsive:not(:hover)::-webkit-scrollbar {
+  display: none;
+}
+
+.table-responsive:hover::-webkit-scrollbar {
+  display: block;
+}
+
+/* Prevenir overflow en contenedores padre */
+.card-body {
+  overflow-x: hidden;
+}
+
+.container-fluid {
+  overflow-x: hidden;
+}
+
+/* Asegurar que las filas no causen overflow */
+.table tbody tr {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Mejorar el hover sin causar desplazamiento */
+.table-hover tbody tr {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Efectos en formularios */

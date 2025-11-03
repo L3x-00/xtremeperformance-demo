@@ -139,8 +139,8 @@
     margin-right: 10px !important;
 }
 
-/* Debug: borde temporal para verificar posición */
+/* Estilo final del toggle - sin debug */
 .theme-toggle {
-    border: 2px solid red !important;
-    background: rgba(255, 0, 0, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(0, 0, 0, 0.1) !important;
 }
