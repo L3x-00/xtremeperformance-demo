@@ -334,38 +334,63 @@ function initThemeSystem() {
     console.log('🎨 Tema guardado:', savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
     
-    // Actualizar estado del toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    console.log('🔘 Toggle encontrado:', !!themeToggle);
+    // Buscar el toggle con más opciones
+    const themeToggle = document.getElementById('theme-toggle') || 
+                       document.querySelector('.theme-toggle-checkbox') ||
+                       document.querySelector('input[type="checkbox"]');
+    console.log('🔘 Toggle encontrado:', !!themeToggle, themeToggle?.id);
     
     if (themeToggle) {
         themeToggle.checked = savedTheme === 'dark';
         console.log('✅ Toggle configurado, modo dark:', savedTheme === 'dark');
         
-        // Escuchar cambios en el toggle
-        themeToggle.addEventListener('change', function() {
-            const theme = this.checked ? 'dark' : 'light';
-            console.log('🔄 Cambiando tema a:', theme);
-            
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            
-            // Mostrar notificación si la función existe
-            if (typeof showToast === 'function') {
-                showToast(
-                    theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado',
-                    'info'
-                );
-            } else {
-                console.log('📢 Tema cambiado a:', theme);
-            }
-        });
+        // Remover listeners existentes
+        themeToggle.removeEventListener('change', handleThemeChange);
+        themeToggle.removeEventListener('click', handleThemeChange);
+        
+        // Agregar event listeners
+        themeToggle.addEventListener('change', handleThemeChange);
+        themeToggle.addEventListener('click', handleThemeChange);
+        
+        // También escuchar clicks en el label
+        const label = document.querySelector('.theme-toggle-label');
+        if (label) {
+            label.addEventListener('click', function(e) {
+                console.log('👆 Click en label detectado');
+                // El click en el label debería activar automáticamente el checkbox
+            });
+        }
     } else {
-        console.warn('⚠️ No se encontró el toggle de tema (#theme-toggle)');
+        console.warn('⚠️ No se encontró el toggle de tema');
+        // Intentar de nuevo después de un delay
+        setTimeout(initThemeSystem, 500);
     }
     
     // Aplicar el tema inmediatamente
     document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+}
+
+// Función separada para manejar el cambio de tema
+function handleThemeChange(event) {
+    const themeToggle = event.target;
+    const theme = themeToggle.checked ? 'dark' : 'light';
+    console.log('🔄 Cambiando tema a:', theme);
+    
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    
+    // Mostrar notificación
+    if (typeof showToast === 'function') {
+        showToast(
+            theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado',
+            'info'
+        );
+    } else if (typeof toastr !== 'undefined') {
+        toastr.info(theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado');
+    } else {
+        console.log('📢 Tema cambiado a:', theme);
+        alert(theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado');
+    }
 }
 
 // Inicializar sistema de temas cuando el DOM esté listo
@@ -379,6 +404,27 @@ if (document.readyState === 'loading') {
 $(document).ready(function() {
     setTimeout(initThemeSystem, 100); // Pequeño delay para asegurar que todo esté cargado
     setTimeout(initMicrointeractions, 200); // Inicializar microinteracciones después
+    
+    // Inicialización adicional para el toggle
+    setTimeout(function() {
+        console.log('🔧 Inicialización adicional del toggle...');
+        const toggle = document.getElementById('theme-toggle');
+        if (toggle && !toggle.hasAttribute('data-initialized')) {
+            console.log('🔄 Configurando toggle manualmente...');
+            toggle.setAttribute('data-initialized', 'true');
+            
+            toggle.onclick = function() {
+                console.log('👆 Click manual detectado en toggle');
+                const newTheme = this.checked ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                if (typeof toastr !== 'undefined') {
+                    toastr.info(newTheme === 'dark' ? '🌙 Modo oscuro' : '☀️ Modo claro');
+                }
+            };
+        }
+    }, 500);
 });
 
 // ===== MICROINTERACCIONES Y ANIMACIONES =====

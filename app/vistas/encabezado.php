@@ -93,6 +93,9 @@
 			);
 		};
 	</script>
+	
+	<!-- Sistema de Toggle de Tema -->
+	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
@@ -196,6 +199,24 @@
 		print "<i class='fas fa-moon theme-icon-moon'></i>";
 		print "</label>";
 		print "</div>";
+		print "<script>";
+		print "document.addEventListener('DOMContentLoaded', function() {";
+		print "  const toggle = document.getElementById('theme-toggle');";
+		print "  const savedTheme = localStorage.getItem('theme') || 'light';";
+		print "  document.documentElement.setAttribute('data-theme', savedTheme);";
+		print "  if (toggle) {";
+		print "    toggle.checked = savedTheme === 'dark';";
+		print "    toggle.addEventListener('change', function() {";
+		print "      const theme = this.checked ? 'dark' : 'light';";
+		print "      document.documentElement.setAttribute('data-theme', theme);";
+		print "      localStorage.setItem('theme', theme);";
+		print "      if (typeof toastr !== 'undefined') {";
+		print "        toastr.info(theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado');";
+		print "      }";
+		print "    });";
+		print "  }";
+		print "});";
+		print "</script>";
 		print "</li>";
 			//
 		print "<li class='nav-item'>";

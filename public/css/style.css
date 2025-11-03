@@ -186,7 +186,9 @@ body {
   position: relative;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .theme-toggle-label:hover {
@@ -196,23 +198,27 @@ body {
 
 .theme-icon-sun,
 .theme-icon-moon {
-  font-size: 12px;
+  font-size: 14px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 4;
   transition: all 0.3s ease;
   color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
 }
 
 .theme-icon-sun {
   left: 6px;
   opacity: 1;
+  color: #fff700;
 }
 
 .theme-icon-moon {
   right: 6px;
-  opacity: 0.5;
+  opacity: 0.7;
+  color: #e6e6fa;
 }
 
 .theme-toggle-button {
@@ -235,11 +241,14 @@ body {
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-sun {
-  opacity: 0.5;
+  opacity: 0.4;
+  color: #ffeb3b;
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-moon {
   opacity: 1;
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-button {
@@ -250,11 +259,13 @@ body {
 /* Asegurar que el toggle funcione correctamente */
 .navbar .theme-toggle {
   margin-top: 0 !important;
+  z-index: 1000;
 }
 
 .nav-item .theme-toggle {
   display: flex !important;
   align-items: center !important;
+  position: relative !important;
 }
 
 /* Prevenir conflictos con Bootstrap */
@@ -262,6 +273,27 @@ body {
   opacity: 0 !important;
   position: absolute !important;
   left: -9999px !important;
+}
+
+/* Hacer el toggle más visible */
+.theme-toggle-label {
+  position: relative !important;
+  z-index: 1001 !important;
+  min-width: 60px !important;
+  min-height: 28px !important;
+}
+
+/* Asegurar que el toggle sea completamente clickeable */
+.theme-toggle {
+  position: relative !important;
+}
+
+.theme-toggle-label {
+  pointer-events: all !important;
+}
+
+.theme-toggle-checkbox {
+  pointer-events: none !important;
 }
 
 /* Elementos adicionales para modo oscuro */
