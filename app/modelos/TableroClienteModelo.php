@@ -73,6 +73,33 @@ class TableroClienteModelo
 		return $this->db->querySelect($sql);
 	}
 
+	public function getKpis(string $idCliente): array
+	{
+		$kpis = [
+			"activas" => 0,
+			"totales" => 0,
+			"gasto_total" => 0.0,
+			"gasto_mes" => 0.0,
+		];
+		// Activas (abiertas)
+		$sql = "SELECT COUNT(*) AS c FROM clientes c, vehiculos v, ordenreparacion o WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0 AND o.estado=".ORDEN_ABIERTA;
+		$row = $this->db->query($sql);
+		$kpis["activas"] = intval($row['c'] ?? 0);
+		// Totales
+		$sql = "SELECT COUNT(*) AS c FROM clientes c, vehiculos v, ordenreparacion o WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0";
+		$row = $this->db->query($sql);
+		$kpis["totales"] = intval($row['c'] ?? 0);
+		// Gasto total (suma de ordenes de almacén asociadas)
+		$sql = "SELECT COALESCE(SUM(a.costo),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN ordenalmacen a ON a.idOrdenReparacion=o.id AND a.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0";
+		$row = $this->db->query($sql);
+		$kpis["gasto_total"] = floatval($row['s'] ?? 0);
+		// Gasto del mes (por fecha de alta de orden de almacén)
+		$sql = "SELECT COALESCE(SUM(a.costo),0) AS s FROM clientes c, vehiculos v, ordenreparacion o LEFT JOIN ordenalmacen a ON a.idOrdenReparacion=o.id AND a.baja=0 WHERE c.id=".$idCliente." AND v.idCliente=c.id AND o.idVehiculo=v.id AND o.baja=0 AND MONTH(a.alta_dt)=MONTH(CURDATE()) AND YEAR(a.alta_dt)=YEAR(CURDATE())";
+		$row = $this->db->query($sql);
+		$kpis["gasto_mes"] = floatval($row['s'] ?? 0);
+		return $kpis;
+	}
+
 	public function setUsuario($id, $nombres, $apellidos, $clave)
 	{
 		$sql = "UPDATE clientes SET ";

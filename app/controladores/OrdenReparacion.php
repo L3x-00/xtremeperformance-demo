@@ -268,6 +268,52 @@ class OrdenReparacion extends Controlador
 		$this->vista("ordenReparacionCaratulaVista",$datos);
 	}
 
+	public function exportarCsv(): void
+	{
+		// Exporta las órdenes de reparación (abiertas) visibles en la carátula en CSV
+		$num = $this->modelo->getNumRegistros();
+		$rows = $this->modelo->getTabla(0, $num);
+		header('Content-Type: text/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename="ordenes_reparacion.csv"');
+		echo "\xEF\xBB\xBF"; // BOM para Excel
+		$out = fopen('php://output', 'w');
+		fputcsv($out, ['ID', 'Vehículo', 'Fecha Ingreso', 'Fecha Salida']);
+		foreach ($rows as $r) {
+			fputcsv($out, [
+				$r['id'] ?? '',
+				$r['vehiculo'] ?? '',
+				$r['fechaIngreso'] ?? '',
+				$r['fechaSalida'] ?? '',
+			]);
+		}
+		fclose($out);
+		exit;
+	}
+
+	public function exportarPdf(): void
+	{
+		// Exporta las órdenes de reparación (abiertas) visibles en la carátula en PDF
+		$num = $this->modelo->getNumRegistros();
+		$rows = $this->modelo->getTabla(0, $num);
+		$headers = ['ID', 'Vehículo', 'Fecha Ingreso', 'Fecha Salida'];
+		$data = [];
+		foreach ($rows as $r) {
+			$data[] = [
+				$r['id'] ?? '',
+				$r['vehiculo'] ?? '',
+				$r['fechaIngreso'] ?? '',
+				$r['fechaSalida'] ?? '',
+			];
+		}
+		$pdf = new ReporteTabla('L'); // Horizontal para más columnas
+		$pdf->AliasNbPages();
+		$pdf->setTitulos('Órdenes de reparación', 'Listado de órdenes abiertas');
+		$pdf->AddPage();
+		$pdf->Tabla($headers, $data);
+		$pdf->Output('D', 'ordenes_reparacion.pdf');
+		exit;
+	}
+
 	public function modificar(string $id,string $pagina="1"):void
 	{
 		// Si el formulario fue enviado mediante POST desde la vista de modificar,

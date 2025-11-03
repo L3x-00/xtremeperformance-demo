@@ -76,6 +76,33 @@ class TableroMecanicoModelo
 		return $this->db->querySelect($sql);
 	}
 
+	public function getKpis(string $idMecanico): array
+	{
+		$kpis = [
+			"abiertas" => 0,
+			"facturadas" => 0,
+			"totales" => 0,
+			"este_mes" => 0,
+		];
+		// Abiertas
+		$sql = "SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND idMecanico=".$idMecanico." AND estado=".ORDEN_ABIERTA;
+		$row = $this->db->query($sql);
+		$kpis["abiertas"] = intval($row['c'] ?? 0);
+		// Facturadas
+		$sql = "SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND idMecanico=".$idMecanico." AND estado=".ORDEN_FACTURADA;
+		$row = $this->db->query($sql);
+		$kpis["facturadas"] = intval($row['c'] ?? 0);
+		// Totales
+		$sql = "SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND idMecanico=".$idMecanico;
+		$row = $this->db->query($sql);
+		$kpis["totales"] = intval($row['c'] ?? 0);
+		// Este mes por fechaIngreso
+		$sql = "SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND idMecanico=".$idMecanico." AND MONTH(fechaIngreso)=MONTH(CURDATE()) AND YEAR(fechaIngreso)=YEAR(CURDATE())";
+		$row = $this->db->query($sql);
+		$kpis["este_mes"] = intval($row['c'] ?? 0);
+		return $kpis;
+	}
+
 	public function setUsuario($id, $nombres, $apellidos, $clave)
 	{
 		$sql = "UPDATE mecanicos SET ";

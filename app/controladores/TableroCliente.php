@@ -35,11 +35,13 @@ class TableroCliente extends Controlador
 	public function caratula(string $pagina="1")
 	{
 		$data = $this->modelo->getTablaOrdenReparacion($this->usuario["id"]);
+		$kpis = $this->modelo->getKpis($this->usuario["id"]);
 		$datos = [
 			"titulo" => "Órdenes de reparación",
 			"subtitulo" => "Órdenes de reparación: ".$this->usuario["nombres"]." ".$this->usuario["apellidos"],
 			"usuario"=>$this->usuario,
 			"data"=>$data,
+			"kpis"=>$kpis,
 			"menu" => false
 		];
 		$this->vista("tableroClienteCaratulaVista",$datos);

@@ -1,5 +1,9 @@
 <?php include_once("encabezado.php"); ?>
-  <div class="mb-2 d-flex justify-content-end">
+  <div class="mb-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="btn-group" role="group" aria-label="Exportar">
+      <a class="btn btn-outline-secondary" href="<?php print RUTA; ?>ordenReparacion/exportarCsv">Exportar CSV</a>
+      <a class="btn btn-outline-secondary" href="<?php print RUTA; ?>ordenReparacion/exportarPdf">Exportar PDF</a>
+    </div>
     <input type="search" id="filterOrdenReparacion" class="form-control" style="max-width:320px" placeholder="Buscar en la tabla...">
   </div>
   <div class="table-responsive">

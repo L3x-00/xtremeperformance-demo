@@ -1,5 +1,40 @@
 <?php include_once("encabezado.php"); ?>
- <div class="table-responsive">
+ <div class="container my-3">
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-3">
+      <div class="card text-bg-light h-100">
+        <div class="card-body">
+          <div class="small text-uppercase text-muted">Órdenes activas</div>
+          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['activas']??0); ?></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="card text-bg-light h-100">
+        <div class="card-body">
+          <div class="small text-uppercase text-muted">Órdenes totales</div>
+          <div class="display-6 fw-bold"><?php print intval($datos['kpis']['totales']??0); ?></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="card text-bg-light h-100">
+        <div class="card-body">
+          <div class="small text-uppercase text-muted">Gasto total (S/)</div>
+          <div class="display-6 fw-bold">S/ <?php print number_format(floatval($datos['kpis']['gasto_total']??0),2); ?></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="card text-bg-light h-100">
+        <div class="card-body">
+          <div class="small text-uppercase text-muted">Gasto este mes (S/)</div>
+          <div class="display-6 fw-bold">S/ <?php print number_format(floatval($datos['kpis']['gasto_mes']??0),2); ?></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
   <table class="table table-striped" width="100%">
   <thead>
     <tr>
@@ -27,4 +62,5 @@
   </tbody>
   </table>
   </div> 
-<?php include_once("piepagina.php"); ?>					
+ </div>
+<?php include_once("piepagina.php"); ?>

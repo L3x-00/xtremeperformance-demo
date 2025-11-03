@@ -38,11 +38,13 @@ class TableroMecanico extends Controlador
 		$inicio = ($pagina-1)*TAMANO_PAGINA;
 		$totalPaginas = ceil($num/TAMANO_PAGINA);
 		$data = $this->modelo->getTablaOrdenReparacion($inicio,TAMANO_PAGINA,$this->usuario["id"]);
+		$kpis = $this->modelo->getKpis($this->usuario["id"]);
 		$datos = [
 			"titulo" => "Órdenes de reparación",
 			"subtitulo" => "Órdenes de reparación",
 			"usuario"=>$this->usuario,
 			"data"=>$data,
+			"kpis"=>$kpis,
 			"activo" => "salidas",
 			"pag" => [
 				"totalPaginas" => $totalPaginas,

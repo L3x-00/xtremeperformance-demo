@@ -330,6 +330,54 @@ class OrdenAlmacen extends Controlador
 		$this->vista("ordenAlmacenCaratulaVista",$datos);
 	}
 
+	public function exportarCsv(): void
+	{
+		// Exporta las órdenes de almacén visibles en la carátula en CSV
+		$num = $this->modelo->getNumRegistros();
+		$rows = $this->modelo->getTabla(0, $num);
+		header('Content-Type: text/csv; charset=UTF-8');
+		header('Content-Disposition: attachment; filename="ordenes_almacen.csv"');
+		echo "\xEF\xBB\xBF"; // BOM para Excel
+		$out = fopen('php://output', 'w');
+		fputcsv($out, ['ID', 'Orden Reparación', 'Costo (S/)', 'Fecha', 'Estado']);
+		foreach ($rows as $r) {
+			fputcsv($out, [
+				$r['id'] ?? '',
+				$r['vehiculo'] ?? '',
+				number_format(floatval($r['costo'] ?? 0), 2, '.', ''),
+				$r['alta_dt'] ?? '',
+				$r['estado'] ?? '',
+			]);
+		}
+		fclose($out);
+		exit;
+	}
+
+	public function exportarPdf(): void
+	{
+		// Exporta las órdenes de almacén visibles en la carátula en PDF
+		$num = $this->modelo->getNumRegistros();
+		$rows = $this->modelo->getTabla(0, $num);
+		$headers = ['ID', 'Orden Reparación', 'Costo (S/)', 'Fecha', 'Estado'];
+		$data = [];
+		foreach ($rows as $r) {
+			$data[] = [
+				$r['id'] ?? '',
+				$r['vehiculo'] ?? '',
+				number_format(floatval($r['costo'] ?? 0), 2),
+				$r['alta_dt'] ?? '',
+				$r['estado'] ?? '',
+			];
+		}
+		$pdf = new ReporteTabla('L'); // Horizontal
+		$pdf->AliasNbPages();
+		$pdf->setTitulos('Órdenes de almacén', 'Listado');
+		$pdf->AddPage();
+		$pdf->Tabla($headers, $data);
+		$pdf->Output('D', 'ordenes_almacen.pdf');
+		exit;
+	}
+
 	public function cancelarOrdenAlmacen(string $idOrdenAlmacen=''):void
 	{
 		$this->mensaje(
