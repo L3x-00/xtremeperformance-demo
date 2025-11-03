@@ -196,8 +196,9 @@ p, span, div {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 42px;
-  min-width: 80px;
+  height: 45px;
+  min-width: 100px;
+  padding: 5px;
 }
 
 .theme-toggle-checkbox {
@@ -206,15 +207,15 @@ p, span, div {
 
 .theme-toggle-label {
   cursor: pointer;
-  width: 70px;
-  height: 30px;
+  width: 90px;
+  height: 35px;
   background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
   display: block;
   border-radius: 50px;
   position: relative;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.4);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -226,42 +227,43 @@ p, span, div {
 
 .theme-icon-sun,
 .theme-icon-moon {
-  font-size: 14px;
+  font-size: 16px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 4;
   transition: all 0.3s ease;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-  font-weight: bold;
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .theme-icon-sun {
-  left: 8px;
+  left: 12px;
   opacity: 1;
-  color: #fff700;
+  color: #ffff00;
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .theme-icon-moon {
-  right: 8px;
-  opacity: 0.7;
-  color: #e6e6fa;
+  right: 12px;
+  opacity: 0.8;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .theme-toggle-button {
   content: '';
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 50%;
   position: absolute;
-  top: 1px;
-  left: 1px;
+  top: 2px;
+  left: 2px;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  z-index: 3;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  border: 2px solid rgba(255, 255, 255, 0.9);
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label {
@@ -269,16 +271,17 @@ p, span, div {
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-sun {
-  opacity: 0.3 !important;
+  opacity: 0.4 !important;
   color: #ffeb3b !important;
-  transform: translateY(-50%) scale(0.8);
+  transform: translateY(-50%) scale(0.85);
+  text-shadow: 0 0 4px rgba(255, 235, 59, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8) !important;
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-moon {
   opacity: 1 !important;
   color: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
-  transform: translateY(-50%) scale(1.1);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 1), 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+  transform: translateY(-50%) scale(1.15);
 }
 
 /* Animaciones para los iconos */
@@ -288,7 +291,7 @@ p, span, div {
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-button {
-  transform: translateX(38px);
+  transform: translateX(54px);
   background: linear-gradient(135deg, #2c2c54 0%, #1a1a2e 100%);
 }
 
@@ -322,6 +325,9 @@ p, span, div {
 /* Asegurar que el toggle sea completamente clickeable */
 .theme-toggle {
   position: relative !important;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
 }
 
 .theme-toggle-label {
@@ -330,6 +336,19 @@ p, span, div {
 
 .theme-toggle-checkbox {
   pointer-events: none !important;
+}
+
+/* Mejorar visibilidad en modo claro */
+[data-theme="light"] .theme-icon-sun,
+body:not([data-theme="dark"]) .theme-icon-sun {
+  color: #ff6b00 !important;
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="light"] .theme-icon-moon,
+body:not([data-theme="dark"]) .theme-icon-moon {
+  color: #e0e0e0 !important;
+  text-shadow: 0 0 6px rgba(224, 224, 224, 0.6), 0 2px 4px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Estilos específicos para modo oscuro activo */
