@@ -28,16 +28,17 @@ class TableroModelo
 		// Ordenes totales
 		$r = $this->db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0");
 		$kpis["ordenes_totales"] = isset($r["c"]) ? intval($r["c"]) : 0;
-		// Ingresos del mes (Orden Almacén)
-		$r = $this->db->query("SELECT IFNULL(SUM(costo),0) AS s FROM ordenalmacen WHERE baja=0 AND DATE_FORMAT(alta_dt,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')");
+		// Ingresos del mes (desde facturas: incluye materiales + mano de obra + otros + IVA)
+		$r = $this->db->query("SELECT IFNULL(SUM(total),0) AS s FROM facturas WHERE baja=0 AND DATE_FORMAT(alta_dt,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')");
 		$kpis["ingresos_mes"] = isset($r["s"]) ? floatval($r["s"]) : 0.0;
 		return $kpis;
 	}
 
 	public function getIngresosMensuales(int $meses = 6): array
 	{
-		$sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(costo) as total ".
-			   "FROM ordenalmacen WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) ".
+		// Ahora usa la tabla facturas para incluir el total real (materiales + mano de obra + otros + IVA)
+		$sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(total) as total ".
+			   "FROM facturas WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) ".
 			   "GROUP BY ym ORDER BY ym ASC";
 		$rows = $this->db->querySelect($sql);
 		$labels = [];
