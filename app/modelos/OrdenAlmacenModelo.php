@@ -108,9 +108,13 @@ class OrdenAlmacenModelo
 
 	public function getOrdenesReparacion()
 	{
-		$sql = "SELECT o.id, v.id, ";
-		$sql.= "CONCAT(v.marca,' ',v.modelo,' ',v.color,' ',v.anio) as auto ";
-		$sql.= "FROM ordenreparacion as o, vehiculos as v ";
+		// Importante: alias distintos para evitar colisión de nombres de columna (id)
+		// Si se seleccionan dos columnas 'id' sin alias, el último 'id' (v.id) puede
+		// sobreescribir al primero (o.id) en el arreglo asociativo de PHP, provocando
+		// que se envíe el id del vehículo en lugar del id de la orden.
+		$sql = "SELECT o.id AS id, v.id AS idVehiculo, ";
+		$sql.= "CONCAT(v.marca,' ',v.modelo,' ',v.color,' ',v.anio) AS auto ";
+		$sql.= "FROM ordenreparacion AS o, vehiculos AS v ";
 		$sql.= "WHERE o.baja=0 AND o.estado=".ORDEN_ABIERTA;
 		$sql.= " AND o.idVehiculo=v.id";
 		return $this->db->querySelect($sql);

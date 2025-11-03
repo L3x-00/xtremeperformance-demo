@@ -86,7 +86,7 @@ class OrdenAlmacen extends Controlador
 					"Error al crear la orden de almacén.", 
 					"Error al crear la orden de almacén.", 
 					"Error al crear la orden de almacén: ".$idOrdenAlmacen, 
-					"ordenAlmacen/".$pagina, 
+					"ordenAlmacen/".$pag, 
 					"danger"
 				);
 			}

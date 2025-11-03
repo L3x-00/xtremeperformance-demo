@@ -12,9 +12,11 @@ class Imprimir extends fpdf
 	function __construct(string $razonSocial,string $cliente, string $vehiculo)
 	{
 		parent::__construct(); //super
-		$this->razonSocial = $razonSocial;
-        $this->cliente = $cliente;
-        $this->vehiculo = $vehiculo;
+        // Normalizamos textos: decodificamos entidades HTML para que tildes y eñes se
+        // rendericen correctamente al convertir a ISO-8859-1 por FPDF
+        $this->razonSocial = html_entity_decode($razonSocial, ENT_QUOTES, 'UTF-8');
+        $this->cliente     = html_entity_decode($cliente, ENT_QUOTES, 'UTF-8');
+        $this->vehiculo    = html_entity_decode($vehiculo, ENT_QUOTES, 'UTF-8');
 	}
 
 	// Cabecera de página
@@ -64,7 +66,7 @@ class Imprimir extends fpdf
         $materiales = 0;
         for ($i=0; $i < count($piezas) ; $i++) { 
             /*----------  Detalles de la tabla  ----------*/
-            $this->Cell(80,7,iconv("UTF-8", "ISO-8859-1",$piezas[$i]["nombrePieza"]),'L',0,'C');
+            $this->Cell(80,7,iconv("UTF-8", "ISO-8859-1", html_entity_decode($piezas[$i]["nombrePieza"] ?? '', ENT_QUOTES, 'UTF-8')),'L',0,'C');
             $this->Cell(15,7,iconv("UTF-8", "ISO-8859-1",$piezas[$i]["cantidad"]),'L',0,'C');
             $this->Cell(25,7,iconv("UTF-8", "ISO-8859-1",number_format($piezas[$i]["costo"],2)),'L',0,'C');
             $this->Cell(29,7,iconv("UTF-8", "ISO-8859-1",""),'L',0,'R');
@@ -115,7 +117,7 @@ class Imprimir extends fpdf
         $this->SetFont('Arial','',9);
 
         $this->SetTextColor(39,39,51);
-        $this->MultiCell(0,9,iconv("UTF-8", "ISO-8859-1",$observacion),0,'C',false);
+    $this->MultiCell(0,9,iconv("UTF-8", "ISO-8859-1", html_entity_decode($observacion ?? '', ENT_QUOTES, 'UTF-8')),0,'C',false);
         $this->MultiCell(0,9,iconv("UTF-8", "ISO-8859-1","Cualquier duda o reclamación es indispensable presentar este documento."),0,'C',false);
 
 	}
