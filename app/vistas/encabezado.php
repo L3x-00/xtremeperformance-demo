@@ -105,7 +105,7 @@
 	<link href="<?php echo RUTA; ?>public/css/no-scroll-fix.css?v=<?php echo time(); ?>" rel="stylesheet">
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark admin-navbar shadow-sm">
+	<nav class="navbar navbar-expand-lg navbar-dark admin-navbar shadow-sm">
 		<?php
 			$brandHref = RUTA;
 			$tipo = null;
@@ -131,13 +131,22 @@
 				}
 			}
 		?>
-		<a href="<?php print $brandHref; ?>" class="navbar-brand d-flex align-items-center">
-			<img src="./public/img/LogoGray.png" alt="Xtreme Performance" class="brand-logo" height="38">
-		</a>
+		<div class="container-fluid">
+			<a href="<?php print $brandHref; ?>" class="navbar-brand d-flex align-items-center">
+				<img src="./public/img/LogoGray.png" alt="Xtreme Performance" class="brand-logo" height="38">
+			</a>
+			
+			<!-- Botón hamburger para móvil -->
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			<div class="collapse navbar-collapse" id="navbarNav">
 	<?php
 		if (isset($datos["menu"]) && $datos["menu"]==true) {
 			if (isset($datos["usuario"]["tipoUsuario"]) && $datos["usuario"]["tipoUsuario"]==ADMON) {
-				print "<ul class='navbar-nav mr-auto mt-2 mt-lg-0'>";
+				print "<ul class='navbar-nav me-auto'>";
 				//
 				print "<li class='nav-item'>";
 				print "<a href='".RUTA."salidas' class='nav-link ";
@@ -265,6 +274,8 @@
       	print "</a></li>";
 	    print "</ul>";
 	?>
+			</div><!-- /navbar-collapse -->
+		</div><!-- /container-fluid -->
 	</nav>
 	<div class="container-fluid">
 		<div class="row content">

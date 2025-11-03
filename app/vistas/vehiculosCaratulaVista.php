@@ -17,13 +17,13 @@
     <?php
     for($i=0; $i<count($datos['data']); $i++){
       print "<tr>";
-      print "<td class='text-left'>".$datos["data"][$i]['id']."</td>";
-      print "<td class='text-left'>".$datos["data"][$i]['marca']."</td>";
-      print "<td class='text-left'>".$datos["data"][$i]['modelo']."</td>";
-      print "<td class='text-left'>".$datos["data"][$i]['anio']."</td>";
-      print "<td class='text-left'>".$datos["data"][$i]['placas']."</td>";
-      print "<td><a href='".RUTA."vehiculos/modificar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-info'>Modificar</a></td>";
-      print "<td><a href='".RUTA."vehiculos/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger'>Borrar</a></td>";
+      print "<td class='text-left' data-label='ID'>".$datos["data"][$i]['id']."</td>";
+      print "<td class='text-left' data-label='Marca'>".$datos["data"][$i]['marca']."</td>";
+      print "<td class='text-left' data-label='Modelo'>".$datos["data"][$i]['modelo']."</td>";
+      print "<td class='text-left' data-label='Año'>".$datos["data"][$i]['anio']."</td>";
+      print "<td class='text-left' data-label='Placas'>".$datos["data"][$i]['placas']."</td>";
+      print "<td data-label='Modificar'><a href='".RUTA."vehiculos/modificar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-info'>Modificar</a></td>";
+      print "<td data-label='Borrar'><a href='".RUTA."vehiculos/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger'>Borrar</a></td>";
       print "</tr>";
     }
     ?>
