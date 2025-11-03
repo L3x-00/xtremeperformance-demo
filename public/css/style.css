@@ -2699,17 +2699,14 @@ body {
   animation: rotate 1s linear infinite;
 }
 
-/* Mejoras en tablas con hover - Sin overflow */
+/* Mejoras en tablas con hover - SIN barra de desplazamiento */
 .table-hover tbody tr {
-  transition: all 0.2s ease;
-  position: relative;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .table-hover tbody tr:hover {
   background-color: var(--bg-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-  z-index: 1;
+  box-shadow: inset 0 0 0 1px rgba(0, 123, 255, 0.2);
 }
 
 /* Asegurar que no haya overflow horizontal */
@@ -2727,42 +2724,65 @@ body {
   display: block;
 }
 
-/* Prevenir overflow en contenedores padre */
-.card-body {
-  overflow-x: hidden;
+/* ELIMINAR COMPLETAMENTE scrollbar horizontal */
+* {
+  overflow-x: hidden !important;
 }
 
-.container-fluid {
-  overflow-x: hidden;
+*::-webkit-scrollbar:horizontal {
+  display: none !important;
 }
 
-/* Asegurar que las filas no causen overflow */
-.table tbody tr {
-  max-width: 100%;
-  overflow: hidden;
+body, html {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
 }
 
-/* Mejorar el hover sin causar desplazamiento */
-.table-hover tbody tr {
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.container, .container-fluid {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
 }
 
-/* Efectos en formularios */
+.card, .card-body {
+  overflow-x: hidden !important;
+}
+
+.table-responsive {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+.table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Eliminar transforms que causen overflow */
+.table tbody tr,
+.table tbody tr:hover {
+  transform: none !important;
+  will-change: auto !important;
+}
+
+/* Solo permitir cambios de color y sombra interna */
+.table-hover tbody tr:hover {
+  transform: none !important;
+  scale: none !important;
+}
+
+/* Efectos en formularios - SIN transform que cause overflow */
 .form-floating .form-control:focus ~ label,
 .form-floating .form-control:not(:placeholder-shown) ~ label {
-  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  font-size: 0.85em;
   color: var(--primary);
 }
 
 .form-control {
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .form-control:focus {
-  transform: scale(1.02);
-  box-shadow: 0 0 0 0.2rem rgba(var(--primary), 0.25), 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Badges animados */
