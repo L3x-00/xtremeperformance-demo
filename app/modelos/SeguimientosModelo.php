@@ -51,6 +51,13 @@ class SeguimientosModelo
 		return $salida["COUNT(*)"];
 	}
 
+	public function getNumSeguimientosPorOrden(string $idOrdenReparacion): int
+	{
+		$sql = "SELECT COUNT(*) FROM seguimientos WHERE baja=0 AND idOrdenReparacion=".$idOrdenReparacion;
+		$salida = $this->db->query($sql);
+		return intval($salida["COUNT(*)"] ?? 0);
+	}
+
 	public function getTablaOrdenReparacion(int $inicio=1, int $tamano=0):array
 	{
 		$sql = "SELECT o.id, o.idVehiculo, o.fechaIngreso, o.fechaSalida, ";

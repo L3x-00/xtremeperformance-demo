@@ -367,7 +367,8 @@ class Seguimientos extends Controlador
 
 	public function seguimiento(string $idOrdenReparacion, string $pagina="1"):void
 	{
-		$num = $this->modelo->getNumRegistros("seguimientos");
+		// Paginación debe considerar solo seguimientos de la orden indicada
+		$num = $this->modelo->getNumSeguimientosPorOrden($idOrdenReparacion);
 		$inicio = ($pagina-1)*TAMANO_PAGINA;
 		$totalPaginas = ceil($num/TAMANO_PAGINA);
 		$data = $this->modelo->getTablaSeguimiento($inicio,TAMANO_PAGINA,$idOrdenReparacion);
@@ -381,7 +382,7 @@ class Seguimientos extends Controlador
 			"idOrdenReparacion"=>$idOrdenReparacion,
 			"pag" => [
 				"totalPaginas" => $totalPaginas,
-				"regresa" => "seguimientos",
+				"regresa" => "seguimientos/seguimiento/".$idOrdenReparacion,
 				"pagina" => $pagina
 			],
 			"menu" => true
