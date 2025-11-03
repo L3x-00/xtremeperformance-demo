@@ -2490,12 +2490,12 @@ body {
 }
 
 .table tbody tr {
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .table tbody tr:hover {
   background-color: rgba(198, 40, 40, 0.05);
-  transform: scale(1.01);
+  /* ELIMINADO: transform: scale(1.01); - Causaba scroll horizontal */
 }
 
 .table tbody td {
@@ -2707,6 +2707,7 @@ body {
 .table-hover tbody tr:hover {
   background-color: var(--bg-secondary);
   box-shadow: inset 0 0 0 1px rgba(0, 123, 255, 0.2);
+  /* NO transform o scale - evita scroll horizontal */
 }
 
 /* Asegurar que no haya overflow horizontal */
@@ -2755,6 +2756,18 @@ body, html {
 .table {
   width: 100% !important;
   max-width: 100% !important;
+}
+
+/* ELIMINAR CUALQUIER TRANSFORM EN TABLAS */
+.table tr, 
+.table tbody tr, 
+.table-hover tbody tr,
+.table tr:hover,
+.table tbody tr:hover,
+.table-hover tbody tr:hover {
+  transform: none !important;
+  scale: none !important;
+  will-change: auto !important;
 }
 
 /* Eliminar transforms que causen overflow */
