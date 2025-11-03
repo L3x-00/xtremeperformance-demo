@@ -6,6 +6,7 @@
 	<?php if(defined('RUTA')){ echo "    <base href='".RUTA."'>\n"; } ?>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 	<link href="./public/css/admin.css?v=20251102" rel="stylesheet">
+	<link href="<?php echo RUTA; ?>public/css/dark-theme-override.css?v=<?php echo time(); ?>" rel="stylesheet">
 	
 	<!-- Toast Notifications -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -200,22 +201,44 @@
 		print "</label>";
 		print "</div>";
 		print "<script>";
-		print "document.addEventListener('DOMContentLoaded', function() {";
-		print "  const toggle = document.getElementById('theme-toggle');";
+		print "(function() {";
+		print "  // Aplicar tema inmediatamente";
 		print "  const savedTheme = localStorage.getItem('theme') || 'light';";
 		print "  document.documentElement.setAttribute('data-theme', savedTheme);";
-		print "  if (toggle) {";
-		print "    toggle.checked = savedTheme === 'dark';";
-		print "    toggle.addEventListener('change', function() {";
-		print "      const theme = this.checked ? 'dark' : 'light';";
-		print "      document.documentElement.setAttribute('data-theme', theme);";
-		print "      localStorage.setItem('theme', theme);";
-		print "      if (typeof toastr !== 'undefined') {";
-		print "        toastr.info(theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado');";
-		print "      }";
-		print "    });";
+		print "  document.body.setAttribute('data-theme', savedTheme);";
+		print "  document.body.className += ' theme-' + savedTheme;";
+		print "  ";
+		print "  if (savedTheme === 'dark') {";
+		print "    document.body.style.backgroundColor = '#1a1a1a';";
+		print "    document.body.style.color = '#ffffff';";
 		print "  }";
-		print "});";
+		print "  ";
+		print "  document.addEventListener('DOMContentLoaded', function() {";
+		print "    const toggle = document.getElementById('theme-toggle');";
+		print "    if (toggle) {";
+		print "      toggle.checked = savedTheme === 'dark';";
+		print "      toggle.addEventListener('change', function() {";
+		print "        const theme = this.checked ? 'dark' : 'light';";
+		print "        document.documentElement.setAttribute('data-theme', theme);";
+		print "        document.body.setAttribute('data-theme', theme);";
+		print "        document.body.className = document.body.className.replace(/theme-\\w+/g, '') + ' theme-' + theme;";
+		print "        localStorage.setItem('theme', theme);";
+		print "        ";
+		print "        if (theme === 'dark') {";
+		print "          document.body.style.backgroundColor = '#1a1a1a';";
+		print "          document.body.style.color = '#ffffff';";
+		print "        } else {";
+		print "          document.body.style.backgroundColor = '#ffffff';";
+		print "          document.body.style.color = '#212529';";
+		print "        }";
+		print "        ";
+		print "        if (typeof toastr !== 'undefined') {";
+		print "          toastr.info(theme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado');";
+		print "        }";
+		print "      });";
+		print "    }";
+		print "  });";
+		print "})();";
 		print "</script>";
 		print "</li>";
 			//

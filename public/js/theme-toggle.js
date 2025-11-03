@@ -9,7 +9,18 @@ function initializeTheme() {
     
     // Cargar tema guardado
     const savedTheme = localStorage.getItem('theme') || 'light';
+    
+    // Aplicar tema inmediatamente
     document.documentElement.setAttribute('data-theme', savedTheme);
+    document.body.setAttribute('data-theme', savedTheme);
+    document.body.className = document.body.className.replace(/theme-\w+/g, '') + ` theme-${savedTheme}`;
+    
+    // Aplicar estilos directos como fallback
+    if (savedTheme === 'dark') {
+        document.body.style.backgroundColor = '#1a1a1a';
+        document.body.style.color = '#ffffff';
+    }
+    
     console.log('💾 Tema cargado:', savedTheme);
     
     // Encontrar el toggle
@@ -47,9 +58,25 @@ function handleThemeChange(isDark) {
     const theme = isDark ? 'dark' : 'light';
     console.log('🔄 Cambiando tema a:', theme);
     
-    // Aplicar tema
+    // Aplicar tema a múltiples elementos
     document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+    document.body.className = document.body.className.replace(/theme-\w+/g, '') + ` theme-${theme}`;
+    
+    // Guardar en localStorage
     localStorage.setItem('theme', theme);
+    
+    // Forzar recálculo de estilos
+    document.body.offsetHeight;
+    
+    // Aplicar estilos directamente como fallback
+    if (theme === 'dark') {
+        document.body.style.backgroundColor = '#1a1a1a';
+        document.body.style.color = '#ffffff';
+    } else {
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#212529';
+    }
     
     // Mostrar notificación
     showThemeNotification(theme);
@@ -59,6 +86,8 @@ function handleThemeChange(isDark) {
     setTimeout(() => {
         document.body.style.transition = '';
     }, 300);
+    
+    console.log('✅ Tema aplicado. HTML data-theme:', document.documentElement.getAttribute('data-theme'));
 }
 
 // Función para mostrar notificación

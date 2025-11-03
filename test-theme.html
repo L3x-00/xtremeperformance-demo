@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
     <link href="public/css/style.css" rel="stylesheet">
+    <link href="public/css/dark-theme-override.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navbar -->
@@ -315,6 +316,10 @@
                         <button type="button" class="btn btn-warning" onclick="demonstrateLoading(this)">
                             <i class="fas fa-spinner me-1"></i>Loading Demo
                         </button>
+                        <br><br>
+                        <button type="button" class="btn btn-outline-primary" onclick="forceToggleTheme()">
+                            <i class="fas fa-adjust me-1"></i>Force Toggle Theme (Debug)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -376,6 +381,41 @@
             }
             
             showToast(newTheme === 'dark' ? '🌙 Modo oscuro activado' : '☀️ Modo claro activado', 'info');
+        }
+
+        // Función de debug más agresiva
+        function forceToggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            console.log('🔧 Force toggle:', currentTheme, '->', newTheme);
+            
+            // Aplicar en todos los lugares posibles
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.body.setAttribute('data-theme', newTheme);
+            document.body.classList.remove('theme-light', 'theme-dark');
+            document.body.classList.add('theme-' + newTheme);
+            
+            // Aplicar estilos directos
+            if (newTheme === 'dark') {
+                document.body.style.cssText = 'background-color: #1a1a1a !important; color: #ffffff !important; transition: all 0.3s ease;';
+                document.querySelector('.container')?.setAttribute('style', 'background-color: #1a1a1a !important; color: #ffffff !important;');
+            } else {
+                document.body.style.cssText = 'background-color: #ffffff !important; color: #212529 !important; transition: all 0.3s ease;';
+                document.querySelector('.container')?.setAttribute('style', 'background-color: #ffffff !important; color: #212529 !important;');
+            }
+            
+            // Actualizar toggle
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                toggle.checked = newTheme === 'dark';
+            }
+            
+            // Guardar y notificar
+            localStorage.setItem('theme', newTheme);
+            showToast('🔧 Force ' + (newTheme === 'dark' ? 'DARK' : 'LIGHT') + ' mode applied!', 'success');
+            
+            console.log('✅ Theme forced to:', newTheme);
         }
 
         // Toggle skeleton demo

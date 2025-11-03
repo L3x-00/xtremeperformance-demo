@@ -115,17 +115,44 @@
 
 /* Aplicar variables a elementos globales */
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  transition: var(--transition);
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.container-fluid {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 .card {
-  background-color: var(--bg-card);
-  border-color: var(--border-color);
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 2px 4px var(--shadow) !important;
+  transition: all 0.3s ease;
+}
+
+/* Aplicar a contenedores específicos del sistema */
+.content {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Headers y títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary) !important;
+}
+
+/* Párrafos y texto */
+p, span, div {
   color: var(--text-primary);
-  box-shadow: 0 2px 4px var(--shadow);
-  transition: var(--transition);
+}
+
+/* Elementos con clases específicas del sistema */
+.admin-navbar {
+  background-color: var(--bg-card) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 
 .card:hover {
@@ -241,14 +268,22 @@ body {
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-sun {
-  opacity: 0.4;
-  color: #ffeb3b;
+  opacity: 0.3 !important;
+  color: #ffeb3b !important;
+  transform: translateY(-50%) scale(0.8);
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-icon-moon {
-  opacity: 1;
-  color: #ffffff;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  opacity: 1 !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Animaciones para los iconos */
+.theme-icon-sun,
+.theme-icon-moon {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-button {
@@ -294,6 +329,66 @@ body {
 
 .theme-toggle-checkbox {
   pointer-events: none !important;
+}
+
+/* Estilos específicos para modo oscuro activo */
+[data-theme="dark"] body,
+body[data-theme="dark"],
+body.theme-dark {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .container-fluid,
+body[data-theme="dark"] .container-fluid,
+body.theme-dark .container-fluid {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .card,
+body[data-theme="dark"] .card,
+body.theme-dark .card {
+  background-color: #252525 !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
+}
+
+[data-theme="dark"] .navbar,
+body[data-theme="dark"] .navbar,
+body.theme-dark .navbar {
+  background-color: #252525 !important;
+  border-bottom-color: #404040 !important;
+}
+
+[data-theme="dark"] .table,
+body[data-theme="dark"] .table,
+body.theme-dark .table {
+  background-color: #252525 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .table th,
+body[data-theme="dark"] .table th,
+body.theme-dark .table th {
+  background-color: #2d2d2d !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
+}
+
+[data-theme="dark"] .table td,
+body[data-theme="dark"] .table td,
+body.theme-dark .table td {
+  border-color: #404040 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .form-control,
+body[data-theme="dark"] .form-control,
+body.theme-dark .form-control {
+  background-color: #252525 !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
 }
 
 /* Elementos adicionales para modo oscuro */
@@ -419,6 +514,17 @@ html {
   font-family: var(--ff-mulish);
   font-size: 10px;
   scroll-behavior: smooth;
+}
+
+/* Asegurar que el modo oscuro funcione desde la carga */
+html[data-theme="dark"] {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] body {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
 body {
