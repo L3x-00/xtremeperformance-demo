@@ -54,7 +54,7 @@
   <div class="card">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" id="clientsTable">
+        <table class="table table-hover align-middle mb-0 microinteraction" id="clientsTable">
           <thead>
             <tr>
               <th class="text-center" style="width: 80px;">
@@ -103,18 +103,18 @@
               echo "  </span>";
               echo "</td>";
               echo "<td class='text-center'>";
-              echo "  <div class='btn-group btn-group-sm' role='group'>";
+              echo "  <div class='btn-group btn-group-sm animate-in-right' role='group'>";
               echo "    <a href='".RUTA."clientes/modificar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' ";
-              echo "       class='btn btn-outline-primary' title='Modificar cliente'>";
+              echo "       class='btn btn-outline-primary microinteraction hover-lift' title='Modificar cliente'>";
               echo "      <i class='fas fa-edit'></i>";
               echo "    </a>";
               echo "    <button onclick='confirmDeleteClient(".$datos["data"][$i]["id"].", \"".$datos["data"][$i]["nombre"]."\", ".$datos["pag"]["pagina"].")' ";
-              echo "            class='btn btn-outline-danger' title='Eliminar cliente'>";
+              echo "            class='btn btn-outline-danger microinteraction hover-grow' title='Eliminar cliente'>";
               echo "      <i class='fas fa-trash'></i>";
               echo "    </button>";
               echo "    <button onclick='viewClientDetails(".$datos["data"][$i]["id"].")' ";
-              echo "            class='btn btn-outline-info' title='Ver detalles'>";
-              echo "      <i class='fas fa-eye'></i>";
+              echo "            class='btn btn-outline-info microinteraction' title='Ver detalles'>";
+              echo "      <i class='fas fa-eye hover-float'></i>";
               echo "    </button>";
               echo "  </div>";
               echo "</td>";
@@ -152,22 +152,50 @@ document.getElementById('statusFilter').addEventListener('change', function() {
   filterTableByStatus(statusFilter);
 });
 
-// Función de filtrado
+// Función de filtrado con microinteracciones
 function filterTable(searchTerm) {
   const rows = document.querySelectorAll('#clientsTable tbody tr');
+  const table = document.getElementById('clientsTable');
   
-  rows.forEach(row => {
-    const text = row.textContent.toLowerCase();
-    if (text.includes(searchTerm)) {
+  // Si hay búsqueda, mostrar skeleton brevemente
+  if (searchTerm.length > 0) {
+    table.style.opacity = '0.7';
+    
+    setTimeout(() => {
+      let visibleCount = 0;
+      
+      rows.forEach((row, index) => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          row.style.display = '';
+          row.classList.add('animate-in');
+          setTimeout(() => row.style.transform = 'translateX(0)', index * 50);
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+          row.classList.remove('animate-in');
+        }
+      });
+      
+      table.style.opacity = '1';
+      updateResultsCount();
+      
+      // Mostrar notificación de resultados
+      if (visibleCount === 0) {
+        showFloatingNotification('No se encontraron clientes', 'warning', 2000);
+      } else if (visibleCount < rows.length) {
+        showFloatingNotification(`${visibleCount} cliente(s) encontrado(s)`, 'info', 2000);
+      }
+    }, 200);
+  } else {
+    // Mostrar todos inmediatamente
+    rows.forEach((row, index) => {
       row.style.display = '';
-      row.classList.add('fade-in');
-    } else {
-      row.style.display = 'none';
-      row.classList.remove('fade-in');
-    }
-  });
-  
-  updateResultsCount();
+      row.classList.add('animate-in');
+      setTimeout(() => row.style.transform = 'translateX(0)', index * 30);
+    });
+    updateResultsCount();
+  }
 }
 
 // Filtrar por estado
@@ -214,17 +242,27 @@ function updateResultsCount() {
   }
 }
 
-// Confirmar eliminación con modal personalizado
+// Confirmar eliminación con modal personalizado y efectos
 function confirmDeleteClient(clientId, clientName, page) {
-  const message = `¿Está seguro que desea eliminar al cliente <strong>${clientName}</strong>?`;
+  const message = `¿Está seguro que desea eliminar al cliente <strong>${clientName}</strong>?<br><small class="text-muted">Esta acción no se puede deshacer</small>`;
   
   confirmDelete(message, function() {
-    // Mostrar loading en el botón
-    const button = document.querySelector(`tr[data-client-id="${clientId}"] .btn-outline-danger`);
-    showLoading(button);
+    // Mostrar loading en el botón y fila
+    const row = document.querySelector(`tr[data-client-id="${clientId}"]`);
+    const button = row.querySelector('.btn-outline-danger');
     
-    // Redirigir para eliminar
-    window.location.href = `<?php echo RUTA; ?>clientes/borrar/${clientId}/${page}`;
+    // Efectos visuales
+    setButtonLoading(button, true);
+    row.style.opacity = '0.6';
+    row.style.transform = 'scale(0.98)';
+    
+    // Mostrar notificación de proceso
+    showFloatingNotification('Eliminando cliente...', 'warning', 2000);
+    
+    // Simular proceso y redirigir
+    setTimeout(() => {
+      window.location.href = `<?php echo RUTA; ?>clientes/borrar/${clientId}/${page}`;
+    }, 1000);
   });
 }
 

@@ -19,11 +19,13 @@
             
             <div class="navbar-nav ms-auto">
                 <!-- Theme Toggle -->
-                <div class="nav-item me-2">
-                    <div class="theme-toggle">
-                        <input type="checkbox" class="theme-toggle-checkbox" id="theme-toggle" />
-                        <label class="theme-toggle-label" for="theme-toggle">
+                <div class="nav-item me-3">
+                    <div class="theme-toggle" style="display: flex; align-items: center;">
+                        <input type="checkbox" class="theme-toggle-checkbox" id="theme-toggle" style="display: none;" />
+                        <label class="theme-toggle-label" for="theme-toggle" style="cursor: pointer; margin: 0;">
+                            <i class="fas fa-sun theme-icon-sun"></i>
                             <span class="theme-toggle-button"></span>
+                            <i class="fas fa-moon theme-icon-moon"></i>
                         </label>
                     </div>
                 </div>
@@ -160,6 +162,84 @@
             </div>
         </div>
 
+        <!-- Microinteractions Demo -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-magic me-2 hover-float"></i>Demostración de Microinteracciones
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card hover-grow">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-car fa-2x text-primary mb-2 icon-pulse"></i>
+                                        <h6>Hover Grow</h6>
+                                        <p class="text-muted small">Pasa el mouse por encima</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card hover-lift">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-wrench fa-2x text-success mb-2 hover-float"></i>
+                                        <h6>Hover Lift</h6>
+                                        <p class="text-muted small">Efecto de elevación</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card hover-rotate">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-cogs fa-2x text-warning mb-2 icon-spin"></i>
+                                        <h6>Hover Rotate</h6>
+                                        <p class="text-muted small">Rotación sutil</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card pulse-notification">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-bell fa-2x text-info mb-2"></i>
+                                        <h6>Pulse Effect</h6>
+                                        <p class="text-muted small">Efecto de pulso</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="animated-hr my-4">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Progreso Animado:</h6>
+                                <div class="progress mb-3" style="height: 20px;">
+                                    <div class="progress-bar" id="demo-progress" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="animateProgress('#demo-progress', 75)">
+                                    <i class="fas fa-play me-1"></i>Animar Progreso
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Loading Skeleton Demo:</h6>
+                                <div id="skeleton-demo">
+                                    <div class="skeleton skeleton-text mb-2"></div>
+                                    <div class="skeleton skeleton-text mb-2"></div>
+                                    <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="toggleSkeleton()">
+                                    <i class="fas fa-eye me-1"></i>Toggle Skeleton
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Form Example -->
         <div class="row mt-4">
             <div class="col-md-6">
@@ -222,8 +302,14 @@
                             <li>✅ Notificaciones al cambiar tema</li>
                         </ul>
                         
-                        <button type="button" class="btn btn-success" onclick="showToast('¡Modo oscuro es genial!', 'success')">
+                        <button type="button" class="btn btn-success me-2" onclick="showToast('¡Modo oscuro es genial!', 'success')">
                             <i class="fas fa-thumbs-up me-1"></i>Me Gusta
+                        </button>
+                        <button type="button" class="btn btn-info me-2" onclick="showFloatingNotification('Notificación flotante!', 'info')">
+                            <i class="fas fa-bell me-1"></i>Notificación
+                        </button>
+                        <button type="button" class="btn btn-warning" onclick="demonstrateLoading(this)">
+                            <i class="fas fa-spinner me-1"></i>Loading Demo
                         </button>
                     </div>
                 </div>
@@ -260,6 +346,38 @@
                 });
             });
         });
+
+        // Función para demostrar loading en botones
+        function demonstrateLoading(button) {
+            setButtonLoading(button, true);
+            
+            setTimeout(() => {
+                setButtonLoading(button, false);
+                showFloatingNotification('¡Proceso completado!', 'success');
+            }, 2000);
+        }
+
+        // Toggle skeleton demo
+        let skeletonVisible = true;
+        function toggleSkeleton() {
+            const skeletonDemo = document.getElementById('skeleton-demo');
+            
+            if (skeletonVisible) {
+                skeletonDemo.innerHTML = `
+                    <p><strong>Contenido Real:</strong></p>
+                    <p>Este es el contenido que aparece después de cargar los datos.</p>
+                    <p>Las microinteracciones mejoran la experiencia del usuario.</p>
+                `;
+                skeletonVisible = false;
+            } else {
+                skeletonDemo.innerHTML = `
+                    <div class="skeleton skeleton-text mb-2"></div>
+                    <div class="skeleton skeleton-text mb-2"></div>
+                    <div class="skeleton skeleton-text" style="width: 60%;"></div>
+                `;
+                skeletonVisible = true;
+            }
+        }
     </script>
 </body>
 </html>
