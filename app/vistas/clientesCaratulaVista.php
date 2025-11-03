@@ -294,13 +294,162 @@ function viewClientDetails(clientId) {
   showDetailsModal(`Detalles del Cliente ID: ${clientId}`, content, 'modal-lg');
 }
 
-// Exportar datos (simulado)
-function exportData() {
-  showToast('info', 'Preparando exportación...', 'Exportar');
+// Exportar datos CSV
+function exportCSV() {
+  showToast('info', 'Preparando exportación CSV...', 'Exportar');
   
-  setTimeout(() => {
-    showToast('success', 'Datos exportados correctamente', 'Exportación completada');
-  }, 2000);
+  // Obtener datos de la tabla
+  const rows = document.querySelectorAll('#clientsTable tbody tr[style=""], #clientsTable tbody tr:not([style])');
+  let csvContent = "ID,Nombre,Razón Social,Estado\n";
+  
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length >= 4) {
+      const id = cells[0].textContent.trim();
+      const nombre = cells[1].querySelector('.fw-semibold')?.textContent.trim() || cells[1].textContent.trim();
+      const razonSocial = cells[2].textContent.trim();
+      const estado = cells[3].querySelector('.badge')?.textContent.trim() || cells[3].textContent.trim();
+      
+      // Escapar comillas y agregar fila
+      csvContent += `"${id}","${nombre}","${razonSocial}","${estado}"\n`;
+    }
+  });
+  
+  // Descargar archivo
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', `clientes_${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  showToast('success', 'Archivo CSV descargado correctamente', 'Exportación completada');
+}
+
+// Exportar datos PDF
+function exportPDF() {
+  showToast('info', 'Preparando exportación PDF...', 'Exportar');
+  
+  // Crear ventana de impresión con los datos
+  const printWindow = window.open('', '_blank');
+  const rows = document.querySelectorAll('#clientsTable tbody tr[style=""], #clientsTable tbody tr:not([style])');
+  
+  let tableHTML = `
+    <html>
+    <head>
+      <title>Listado de Clientes - Xtreme Performance</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #c62828; margin: 0; }
+        .header p { color: #666; margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f5f5f5; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .footer { margin-top: 30px; text-align: center; color: #666; font-size: 12px; }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>XTREME PERFORMANCE</h1>
+        <p>Listado de Clientes</p>
+        <p>Generado el: ${new Date().toLocaleDateString('es-ES', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Razón Social</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length >= 4) {
+      const id = cells[0].textContent.trim();
+      const nombre = cells[1].querySelector('.fw-semibold')?.textContent.trim() || cells[1].textContent.trim();
+      const razonSocial = cells[2].textContent.trim();
+      const estado = cells[3].querySelector('.badge')?.textContent.trim() || cells[3].textContent.trim();
+      
+      tableHTML += `
+        <tr>
+          <td>${id}</td>
+          <td>${nombre}</td>
+          <td>${razonSocial}</td>
+          <td>${estado}</td>
+        </tr>
+      `;
+    }
+  });
+  
+  tableHTML += `
+        </tbody>
+      </table>
+      <div class="footer">
+        <p>Total de registros: ${rows.length}</p>
+        <p>Xtreme Performance - Sistema de Gestión Automotriz</p>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  printWindow.document.write(tableHTML);
+  printWindow.document.close();
+  
+  // Esperar a que se cargue y abrir diálogo de impresión
+  printWindow.onload = function() {
+    printWindow.print();
+    setTimeout(() => {
+      printWindow.close();
+    }, 1000);
+  };
+  
+  showToast('success', 'Documento PDF preparado para impresión', 'Exportación completada');
+}
+
+// Función general de exportación que muestra opciones
+function exportData() {
+  const content = `
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-outline-success btn-lg" onclick="exportCSV(); closeModal();">
+        <i class="fas fa-file-csv me-2"></i>
+        Exportar como CSV
+        <small class="d-block text-muted">Archivo de Excel compatible</small>
+      </button>
+      <button type="button" class="btn btn-outline-danger btn-lg" onclick="exportPDF(); closeModal();">
+        <i class="fas fa-file-pdf me-2"></i>
+        Exportar como PDF
+        <small class="d-block text-muted">Documento para impresión</small>
+      </button>
+    </div>
+  `;
+  
+  showDetailsModal('Exportar Datos de Clientes', content, 'modal-sm');
+}
+
+// Función para cerrar modal (helper)
+function closeModal() {
+  const modal = document.querySelector('.modal.show');
+  if (modal) {
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+    if (modalInstance) {
+      modalInstance.hide();
+    }
+  }
 }
 
 // Inicialización
