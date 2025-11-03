@@ -30,6 +30,15 @@ class LoginModelo
         return false;
     }
 
+    public function actualizarClaveMecanico(array $data = []): bool
+    {
+        if (!empty($data)) {
+            $sql = "UPDATE mecanicos SET clave=:clave WHERE id=:id";
+            return $this->db->queryNoSelect($sql, $data);
+        }
+        return false;
+    }
+
     public function actualizarLogin(string $id = '', string $tabla): bool
     {
         // Corregido para ser seguro

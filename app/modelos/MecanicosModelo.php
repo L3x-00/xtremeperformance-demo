@@ -11,7 +11,7 @@ class MecanicosModelo
 		$this->db = new MySQLdb();
 	}
 
-	public function alta(array $data=[]):bool
+	public function alta(array $data=[])
 	{
 		$sql = "INSERT INTO mecanicos VALUES(0,"; //1. id 
 		$sql.= "'".$data['nombres']."', "; 		//2. nombre
@@ -27,7 +27,10 @@ class MecanicosModelo
 		$sql.= "NOW(), ";               //11. fecha alta
 		$sql.= "'', ";                  //12. fecha baja 
 		$sql.= "'')";                   //13. fecha cambio
-		return $this->db->queryNoSelect($sql);
+		if ($this->db->queryNoSelect($sql)) {
+			return $this->db->lastInsertId();
+		}
+		return 0;
 	}
 
 	public function bajaLogica(string $id):bool

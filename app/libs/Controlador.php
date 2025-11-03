@@ -56,6 +56,30 @@ class Controlador
 		return $salida;
 	}
 
+	public function enviarCorreoMecanico(array $data=[]):bool
+	{
+		$salida = false;
+		if (!empty($data)) {
+			$id = Helper::encriptar($data["id"]);
+			$link = rtrim(SITE_URL, '/')."/login/cambiarclavemecanico/".$id;
+			$msg = "Has sido registrado como mecánico en Xtreme Performance. Para activar tu acceso, crea tu contraseña en el siguiente enlace:<br>";
+			$msg.= "<a href='".$link."'>Crear mi contraseña</a><br><br>";
+			$msg.= "Si el enlace no funciona, copia y pega esta URL en tu navegador: ".$link;
+
+			$from = MAIL_FROM_NAME.' <'.MAIL_FROM.'>';
+			$headers = "MIME-Version: 1.0\r\n"; 
+			$headers.= "Content-type: text/html; charset=UTF-8\r\n"; 
+			$headers.= "From: $from\r\n"; 
+			$headers.= "Reply-To: ".MAIL_REPLY_TO."\r\n";
+			$headers.= "X-Mailer: PHP/".phpversion()."\r\n";
+
+			$asunto = "Activación de acceso (mecánico)";
+			$extraParams = "-f".MAIL_FROM;
+			$salida = @mail($data["correo"],$asunto,$msg, $headers, $extraParams);
+		}
+		return $salida;
+	}
+
 	public function modelo(string $modelo='')
 	{
 		if (file_exists("../app/modelos/".$modelo.".php")) {

@@ -90,20 +90,32 @@ class Mecanicos extends Controlador
 			];     
 	        //Enviamos al modelo
 	        if(trim($id)===""){
-	          //Alta
-				if ($this->modelo->alta($data)) {
-					$this->mensaje(
+	          //Alta: enviar email de activación para que el mecánico cree su contraseña
+				$idNuevo = $this->modelo->alta($data);
+				if ($idNuevo) {
+					// Enviar correo de activación
+					if ($this->enviarCorreoMecanico(["id"=>$idNuevo, "correo"=>$correo])) {
+						$this->mensaje(
 							"Alta de un mecánico", 
 							"Alta de un mecánico", 
-							"Se añadió correctamente el mecánico: ".$nombres." ".$apellidos, 
+							"Se añadió correctamente el mecánico: ".$nombres." ".$apellidos.". Se envió un correo de activación para que cree su contraseña.", 
 							"mecanicos/".$pagina, 
 							"success"
-					);
+						);
+					} else {
+						$this->mensaje(
+							"Error al enviar correo de activación.", 
+							"Error al enviar correo de activación.", 
+							"El mecánico fue creado pero no se pudo enviar el correo de activación. Favor de intentarlo nuevamente.", 
+							"mecanicos/".$pagina,
+							"warning"
+						);
+					}
 		          } else {
 		          	$this->mensaje(
 		          		"Error al añadir el mecánico.", 
 		          		"Error al añadir el mecánico.", 
-		          		"Error al modificar el mecánico: ".$nombres." ".$apellidos, 
+		          		"Error al añadir el mecánico: ".$nombres." ".$apellidos, 
 		          		"mecanicos/".$pagina,
 		          		"danger"
 		          	);

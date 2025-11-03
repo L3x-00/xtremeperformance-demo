@@ -187,6 +187,53 @@ class Login extends Controlador
 		$this->vista("loginCambiarClienteVista",$datos);
 	}
 
+	public function cambiarClaveMecanico(string $id=''):void
+	{
+		$id=Helper::desencriptar($id);
+		$errores=[];
+		if ($_SERVER['REQUEST_METHOD']=="POST") {
+			$clave1 = $_POST['clave']??"";
+			$clave2 = $_POST['verifica']??"";
+			$id = $_POST['id']??"";
+			if (empty($clave1)) { array_push($errores,"La clave de acceso es requerida."); }
+			if (empty($clave2)) { array_push($errores,"La clave de acceso de verificación es requerida."); }
+			if ($clave1!=$clave2) { array_push($errores,"Las claves de acceso no coinciden."); }
+			if (count($errores)==0) {
+				// Nota: para mecánicos la clave se almacena en texto plano según el diseño actual
+				$data = ["clave"=>$clave1, "id"=>$id];
+				if ($this->modelo->actualizarClaveMecanico($data)) {
+					$this->mensaje(
+					"Activación de acceso",
+					"Activación de acceso",
+					"Tu contraseña fue creada correctamente. Ya puedes iniciar sesión.",
+					"login",
+					"success");
+				} else {
+					$this->mensaje(
+					"Activación de acceso",
+					"Activación de acceso",
+					"Ocurrió un error al guardar tu contraseña. Intenta más tarde.",
+					"login",
+					"danger");
+				}
+			}
+		} else if ($id=="error") {
+			$this->mensaje(
+			"Activación de acceso",
+			"Activación de acceso",
+			"El enlace no es válido. Intenta solicitar uno nuevo.",
+			"login",
+			"danger");
+		}
+		$datos = [
+			"titulo" => "Crear contraseña",
+			"subtitulo" => "Crear contraseña",
+			"errores" => $errores,
+			"data" => $id
+		];
+		$this->vista("loginCambiarMecanicoVista",$datos);
+	}
+
 	public function verificar()
 	{
 		$errores=[];

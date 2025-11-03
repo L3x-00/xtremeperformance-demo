@@ -89,5 +89,10 @@ class MySQLdb
     {
         return $this->db;
     }
+
+    public function lastInsertId()
+    {
+        return $this->conn->lastInsertId();
+    }
 }
 ?>
