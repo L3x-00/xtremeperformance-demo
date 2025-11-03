@@ -79,8 +79,8 @@
               $statusIcon = $datos["data"][$i]['estado'] == 'Activo' ? 'check-circle' : 'times-circle';
               
               echo "<tr data-client-id='".$datos["data"][$i]['id']."'>";
-              echo "<td class='text-center fw-bold'>".$datos["data"][$i]['id']."</td>";
-              echo "<td>";
+              echo "<td class='text-center fw-bold' data-label='ID'>".$datos["data"][$i]['id']."</td>";
+              echo "<td data-label='Nombre'>";
               echo "  <div class='d-flex align-items-center'>";
               echo "    <div class='avatar-circle me-2'>";
               echo "      <i class='fas fa-user'></i>";
@@ -91,18 +91,18 @@
               echo "    </div>";
               echo "  </div>";
               echo "</td>";
-              echo "<td>";
+              echo "<td data-label='Razón Social'>";
               echo "  <span class='text-truncate d-block' style='max-width: 200px;' title='".$datos["data"][$i]['razonSocial']."'>";
               echo "    ".$datos["data"][$i]['razonSocial'];
               echo "  </span>";
               echo "</td>";
-              echo "<td class='text-center'>";
+              echo "<td class='text-center' data-label='Estado'>";
               echo "  <span class='badge bg-{$statusClass}'>";
               echo "    <i class='fas fa-{$statusIcon} me-1'></i>";
               echo "    ".$datos["data"][$i]['estado'];
               echo "  </span>";
               echo "</td>";
-              echo "<td class='text-center'>";
+              echo "<td class='text-center' data-label='Acciones'>";
               echo "  <div class='btn-group btn-group-sm animate-in-right' role='group'>";
               echo "    <a href='".RUTA."clientes/modificar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' ";
               echo "       class='btn btn-outline-primary microinteraction hover-lift' title='Modificar cliente'>";

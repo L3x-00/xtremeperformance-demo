@@ -16,12 +16,12 @@
     <?php
     for($i=0; $i<count($datos['data']); $i++){
       print "<tr>";
-      print "<td class='text-start'>".$datos["data"][$i]['id']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['vehiculo']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['fechaIngreso']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['fechaSalida']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['estado']."</td>";
-      print "<td><a href='".RUTA."salidas/salida/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning";
+      print "<td class='text-start' data-label='ID'>".$datos["data"][$i]['id']."</td>";
+      print "<td class='text-start' data-label='Vehículo'>".$datos["data"][$i]['vehiculo']."</td>";
+      print "<td class='text-start' data-label='Fecha Ingreso'>".$datos["data"][$i]['fechaIngreso']."</td>";
+      print "<td class='text-start' data-label='Fecha Salida'>".$datos["data"][$i]['fechaSalida']."</td>";
+      print "<td class='text-start' data-label='Estado'>".$datos["data"][$i]['estado']."</td>";
+      print "<td data-label='Salida'><a href='".RUTA."salidas/salida/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning";
       if ($datos["data"][$i]['edo']==ORDEN_FACTURADA) {
         print " disabled";
       }

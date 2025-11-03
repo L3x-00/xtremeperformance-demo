@@ -23,13 +23,13 @@
     <?php
     for($i=0; $i<count($datos['data']); $i++){
       print "<tr>";
-      print "<td class='text-start'>".$datos["data"][$i]['id']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['vehiculo']."</td>";
-  print "<td class='text-start'>S/ ".number_format($datos["data"][$i]['costo'],2)."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['alta_dt']."</td>";
-      print "<td class='text-start'>".$datos["data"][$i]['estado']."</td>";
-  print "<td><a href='".RUTA."OrdenAlmacen/desplegarOrdenAlmacen/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Mostrar</a></td>";
-  print "<td><a href='".RUTA."OrdenAlmacen/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger ";
+      print "<td class='text-start' data-label='ID'>".$datos["data"][$i]['id']."</td>";
+      print "<td class='text-start' data-label='Orden Reparación'>".$datos["data"][$i]['vehiculo']."</td>";
+  print "<td class='text-start' data-label='Costo'>S/ ".number_format($datos["data"][$i]['costo'],2)."</td>";
+      print "<td class='text-start' data-label='Fecha'>".$datos["data"][$i]['alta_dt']."</td>";
+      print "<td class='text-start' data-label='Estado'>".$datos["data"][$i]['estado']."</td>";
+  print "<td data-label='Mostrar'><a href='".RUTA."OrdenAlmacen/desplegarOrdenAlmacen/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-warning'>Mostrar</a></td>";
+  print "<td data-label='Borrar'><a href='".RUTA."OrdenAlmacen/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' class='btn btn-danger ";
       if ($datos["data"][$i]["idEstado"]==ORDEN_FACTURADA) {
         print " disabled ";
       }
