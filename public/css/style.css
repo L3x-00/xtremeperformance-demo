@@ -2489,13 +2489,13 @@ body {
   padding: 1rem 0.75rem;
 }
 
+/* COMPLETAMENTE ELIMINADO - NO hover effects en tablas */
 .table tbody tr {
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  /* Sin transiciones que puedan causar scroll */
 }
 
 .table tbody tr:hover {
-  background-color: rgba(198, 40, 40, 0.05);
-  /* ELIMINADO: transform: scale(1.01); - Causaba scroll horizontal */
+  /* Sin efectos hover que cambien dimensiones */
 }
 
 .table tbody td {
@@ -2699,15 +2699,13 @@ body {
   animation: rotate 1s linear infinite;
 }
 
-/* Mejoras en tablas con hover - SIN barra de desplazamiento */
+/* COMPLETAMENTE DESHABILITADO - hover effects en tablas */
 .table-hover tbody tr {
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  /* Sin transiciones */
 }
 
 .table-hover tbody tr:hover {
-  background-color: var(--bg-secondary);
-  box-shadow: inset 0 0 0 1px rgba(0, 123, 255, 0.2);
-  /* NO transform o scale - evita scroll horizontal */
+  /* Sin efectos hover */
 }
 
 /* Asegurar que no haya overflow horizontal */
@@ -2758,16 +2756,55 @@ body, html {
   max-width: 100% !important;
 }
 
-/* ELIMINAR CUALQUIER TRANSFORM EN TABLAS */
+/* FORZAR: NO efectos hover en tablas - Evitar scroll horizontal */
+.table-responsive {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.table {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+/* ELIMINAR CUALQUIER EFECTO EN FILAS DE TABLA */
 .table tr, 
 .table tbody tr, 
 .table-hover tbody tr,
+.table-striped tbody tr,
 .table tr:hover,
 .table tbody tr:hover,
-.table-hover tbody tr:hover {
+.table-hover tbody tr:hover,
+.table-striped tbody tr:hover,
+.table-striped tr:hover {
   transform: none !important;
   scale: none !important;
   will-change: auto !important;
+  transition: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+  border-left: inherit !important;
+  border-right: inherit !important;
+  outline: none !important;
+  margin: 0 !important;
+  padding-left: inherit !important;
+  padding-right: inherit !important;
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+  background-color: inherit !important;
+}
+
+/* FORZAR que bootstrap NO aplique efectos */
+.table-striped > tbody > tr:nth-of-type(odd):hover,
+.table-striped > tbody > tr:nth-of-type(even):hover,
+.table-hover > tbody > tr:hover {
+  background-color: inherit !important;
+  transform: none !important;
+  transition: none !important;
 }
 
 /* Eliminar transforms que causen overflow */
