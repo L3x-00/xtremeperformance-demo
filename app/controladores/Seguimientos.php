@@ -392,50 +392,57 @@ class Seguimientos extends Controlador
 
 	public function subirImagenes($fotos_array,$idOrdenReparacion,$idSeguimiento ):bool
 	{
-		$salida = true;
-		if($fotos_array['fotos']){
-			$tipos_array = ["image/jpeg","image/gif","image/png"];
-			$carpeta = 'fotos/'.$idOrdenReparacion."/".$idSeguimiento."/";
-			if (!file_exists($carpeta)) {
-				mkdir($carpeta, 0777, true);
+		// No-op si no hay formulario de archivos
+		if (!isset($fotos_array['fotos'])) return true;
+		$carpeta = 'fotos/'.$idOrdenReparacion."/".$idSeguimiento."/";
+		if (!file_exists($carpeta)) {
+			mkdir($carpeta, 0777, true);
+		}
+
+		// Aceptar tipos comunes
+		$mimeToExt = [
+			'image/jpeg' => 'jpg',
+			'image/pjpeg' => 'jpg',
+			'image/jpg' => 'jpg',
+			'image/png' => 'png',
+			'image/gif' => 'gif',
+			'image/webp' => 'webp',
+		];
+
+		// Rearmar arreglo múltiple
+		$files = [];
+		$names = $fotos_array['fotos']['name'] ?? [];
+		$count = is_array($names) ? count($names) : 0;
+		if ($count === 0) return true; // nada seleccionado
+		$keys = array_keys($fotos_array['fotos']);
+		for ($i=0; $i<$count; $i++) {
+			$one = [];
+			foreach ($keys as $k) {
+				$one[$k] = $fotos_array['fotos'][$k][$i] ?? null;
 			}
-			//
-			$archivos_array = [];
-			$archivos_num = count($fotos_array['fotos']['name']);
-			$archivos_keys = array_keys($fotos_array['fotos']);
-			//
-			for ($i=0; $i<$archivos_num; $i++) {
-				foreach ($archivos_keys as $key) {
-					$archivos_array[$i][$key] = $fotos_array['fotos'][$key][$i];
+			$files[] = $one;
+		}
+
+		$subidos = 0;
+		foreach ($files as $archivo) {
+			// Saltar vacíos
+			if (empty($archivo['tmp_name']) || ($archivo['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+				continue;
+			}
+			if (($archivo['size'] ?? 0) <= 0) continue;
+			if (($archivo['size'] ?? 0) > 40*1024*1024) continue; // >40MB, saltar
+			$mime = $archivo['type'] ?? '';
+			$ext = $mimeToExt[$mime] ?? null;
+			if ($ext === null) continue; // tipo no soportado
+			$nombre = uniqid('', true).'.'.$ext;
+			if (is_uploaded_file($archivo['tmp_name'])) {
+				if (move_uploaded_file($archivo['tmp_name'], $carpeta.$nombre)) {
+					$subidos++;
 				}
 			}
-			//
-			foreach ($archivos_array as $archivo) {
-				$nombre = uniqid();
-				$extension =$archivo['type'];
-				if ($archivo['size']<40*1024*1024) {
-					if (in_array($extension, $tipos_array)) {
-						if ($extension==$tipos_array[0]) {
-							$nombre.= $nombre.".jpg";
-						} else if ($extension==$tipos_array[1]) {
-							$nombre.= $nombre.".gif";
-						} else if ($extension==$tipos_array[2]) {
-							$nombre.= $nombre.".png";
-						} 
-						//Subir el archivo
-						if (is_uploaded_file($archivo['tmp_name'])) {
-							//copiamos el archivo temporal
-							copy($archivo['tmp_name'],$carpeta.$nombre);
-						} 
-					} else {
-						$salida = false;
-					}
-				} else {
-					$salida = false;
-				}
-			}
-	  	}
-	  	return $salida;
+		}
+		// Consideramos éxito si se subieron 0 o más (no forzamos error cuando no adjuntan)
+		return $subidos >= 0;
 	}
 }
 ?>
