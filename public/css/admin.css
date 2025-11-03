@@ -126,3 +126,31 @@ body {
 
 /* Footer spacing in admin pages */
 .container-fluid > .row.content { margin-top: 10px; }
+
+/* Enhancements: microinteractions, modern feel */
+html { scroll-behavior: smooth; }
+
+.brand-logo { transition: transform .2s ease; }
+.brand-logo:hover { transform: scale(1.02); }
+
+.navbar-dark .navbar-nav .nav-link { transition: color .15s ease, transform .15s ease; }
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus { transform: translateY(-1px); }
+
+.btn { transition: all .18s ease; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,.08); }
+.btn:active { transform: translateY(0); box-shadow: none; }
+
+@keyframes xp-fade-up { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+.card { animation: xp-fade-up .25s ease both; }
+
+.table td, .table th { vertical-align: middle; }
+.table-hover > tbody > tr { transition: background-color .15s ease, transform .15s ease; }
+.table-hover > tbody > tr:hover { transform: scale(1.002); box-shadow: inset 3px 0 0 0 var(--xp-red); }
+
+.form-control, .form-select { border-radius: 10px; transition: box-shadow .2s ease, border-color .2s ease; }
+.form-control::placeholder { color: #9aa3ab; }
+
+/* Spinner utility (use <span class="xp-spinner"></span>) */
+@keyframes xp-spin { to { transform: rotate(360deg);} }
+.xp-spinner { width: 1.25rem; height: 1.25rem; border-radius: 50%; border: 2px solid rgba(0,0,0,.1); border-top-color: var(--xp-red); animation: xp-spin .8s linear infinite; display: inline-block; }

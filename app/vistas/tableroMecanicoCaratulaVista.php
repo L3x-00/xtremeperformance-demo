@@ -35,7 +35,7 @@
     </div>
   </div>
   <div class="table-responsive">
-  <table class="table table-striped" width="100%">
+  <table class="table table-striped table-hover align-middle" width="100%">
   <thead>
     <tr>
     <th>id</th>
