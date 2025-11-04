@@ -101,14 +101,14 @@
 	<!-- Sistema de Toggle de Tema -->
 	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
 	
-	<!-- SOLUCIÓN ANTI-SCROLL HORIZONTAL - SOLO PÁGINAS ADMINISTRATIVAS -->
+	<!-- CSS ESPECÍFICO PARA PÁGINAS ADMINISTRATIVAS -->
 	<?php 
-	// Solo cargar no-scroll-fix en páginas administrativas, NO en la página principal
+	// Solo cargar CSS administrativo en páginas del sistema, NO en la página principal
 	$currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
 	$currentController = empty($currentUrl) ? 'inicio' : explode('/', $currentUrl)[0];
 	if($currentController !== 'inicio' && !empty($currentController)): 
 	?>
-	<link href="<?php echo RUTA; ?>public/css/no-scroll-fix.css?v=<?php echo time(); ?>" rel="stylesheet">
+	<link href="<?php echo RUTA; ?>public/css/admin-scroll-fix.css?v=<?php echo time(); ?>" rel="stylesheet">
 	<?php endif; ?>
 </head>
 <body>
