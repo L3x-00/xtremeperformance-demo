@@ -48,10 +48,17 @@
       --text-primary: #ffffff;
     }
     
-    /* Eliminar scroll horizontal */
-    html, body {
+    /* SOLUCIÓN ESPECÍFICA PARA SCROLL Y BOTÓN CORTADO */
+    html {
       overflow-x: hidden !important;
       max-width: 100vw !important;
+    }
+    
+    body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
     
     /* Asegurar que la barra de navegación sea visible */
@@ -74,34 +81,59 @@
       visibility: visible !important;
     }
     
-    /* Header y contenedores sin desbordamiento */
-    .header, .header-top, .container {
+    /* CRÍTICO: Contenedores principales sin desbordamiento */
+    .header {
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow: hidden !important;
+    }
+    
+    .container {
       max-width: 100% !important;
-      overflow-x: hidden !important;
+      width: 100% !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
       box-sizing: border-box !important;
+      overflow: hidden !important;
     }
     
-    /* Botón de login completo y bien posicionado */
-    .login-button, .btn-primary {
-      display: inline-block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      white-space: nowrap !important;
-      padding: 8px 16px !important;
-      margin-left: 10px !important;
-    }
-    
-    /* Asegurar que todo se mantenga dentro del viewport */
-    * {
-      box-sizing: border-box !important;
-    }
-    
-    /* Contenedor del header sin overflow */
     .header-top {
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
       flex-wrap: nowrap !important;
+    }
+    
+    /* BOTÓN DE LOGIN - Ajuste preciso */
+    .login-button, 
+    .btn-primary,
+    a[href*="login"] {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      white-space: nowrap !important;
+      padding: 8px 12px !important;
+      margin: 0 !important;
+      font-size: 14px !important;
+      border-radius: 4px !important;
+      max-width: 150px !important;
+      text-overflow: ellipsis !important;
+      overflow: hidden !important;
+    }
+    
+    /* Eliminar cualquier elemento que cause scroll horizontal */
+    * {
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+    }
+    
+    /* Logo y elementos del lado izquierdo */
+    .logo {
+      flex-shrink: 0 !important;
+      max-width: 200px !important;
     }
   </style>
 
