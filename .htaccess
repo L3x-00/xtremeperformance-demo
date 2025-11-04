@@ -1,7 +1,9 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
-# Redirigir la página principal a homepage.html independiente
-RewriteRule ^$ public/homepage.html [L]
-# Mantener el sistema administrativo funcionando normalmente
-RewriteRule (.*) public/$1 [L]
+# Redirigir archivos estáticos (css, js, img) directamente
+RewriteRule ^(css|js|img|fotos)/(.*)$ public/$1/$2 [L]
+# Redirigir la página principal al sistema PHP
+RewriteRule ^$ public/index.php [L]
+# Redirigir todo lo demás al sistema PHP con parámetro URL
+RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L]
 </IfModule>

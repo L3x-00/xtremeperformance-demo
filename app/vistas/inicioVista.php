@@ -7,24 +7,24 @@
     <title>Xtreme Performance - Mecánica Automotriz</title>
     <meta name="title" content="Xtreme Performance - Mecánica Automotriz" />
     <meta name="description" content="Taller Automotriz Integral, especializados en reparación, planchado y pintura de vehículos." />
-    <link rel="shortcut icon" href="./public/img/favicon.png" type="image/svg+xml" />
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Mulish&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,600,0,0" />
-    <link rel="stylesheet" href="./public/css/style.css" />
-    <link rel="preload" as="image" href="./public/img/hero-banner.png" />
-    <link rel="preload" as="image" href="./public/img/hero-bg.png" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="preload" as="image" href="./img/hero-banner.png" />
+    <link rel="preload" as="image" href="./img/hero-bg.png" />
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <a href="index.html" class="logo">
-                <img src="./public/img/LogoWhite.png" width="128" height="63" alt="autofix home" />
+            <a href="<?php print RUTA; ?>" class="logo">
+                <img src="./img/LogoWhite.png" width="128" height="63" alt="autofix home" />
             </a>
             <nav class="navbar" data-navbar>
                 <ul class="navbar-list">
-                    <li><a href="index.html" class="navbar-link">Inicio</a></li>
+                    <li><a href="<?php print RUTA; ?>" class="navbar-link">Inicio</a></li>
                     <li><a href="#nosotros" class="navbar-link">Sobre Nosotros</a></li>
                     <li><a href="#servicios" class="navbar-link">Servicios</a></li>
                     <li><a href="#proyectos" class="navbar-link">Nuestros Proyectos</a></li>
@@ -49,7 +49,7 @@
 
     <main>
         <article>
-            <section class="hero has-bg-image" aria-label="home" style="background-image: url('./public/img/hero-bg.png')">
+            <section class="hero has-bg-image" aria-label="home" style="background-image: url('./img/hero-bg.png')">
                 <div class="container">
                     <div class="hero-content">
                         <p class="section-subtitle :dark">Nosotros tenemos talentosos mecánicos</p>
@@ -65,12 +65,12 @@
                         </a>
                     </div>
                     <figure class="hero-banner" style="--width: 1228; --height: 789">
-                        <img src="./public/img/hero-banner.png" width="1228" height="789" alt="red motor vehicle" class="move-anim" />
+                        <img src="./img/hero-banner.png" width="1228" height="789" alt="red motor vehicle" class="move-anim" />
                     </figure>
                 </div>
             </section>
 
-            <section class="section service has-bg-image" aria-labelledby="service-label" style="background-image: url('./public/img/service-bg.jpg')" id="servicios">
+            <section class="section service has-bg-image" aria-labelledby="service-label" style="background-image: url('./img/service-bg.jpg')" id="servicios">
                 <div class="container">
                     <p class="section-subtitle :light" id="service-label">Nuestros Servicios</p>
                     <h2 class="h2 section-title">Nosotros ofrecemos grandes servicios para tu vehículo</h2>
@@ -78,7 +78,7 @@
                         <li>
                             <div class="service-card">
                                 <figure class="card-icon">
-                                    <img src="./public/img/services-1.png" width="110" height="110" loading="lazy" alt="Engine Repair" />
+                                    <img src="./img/services-1.png" width="110" height="110" loading="lazy" alt="Engine Repair" />
                                 </figure>
                                 <h3 class="h3 card-title">Mantenimiento</h3>
                                 <p class="card-text">Revisión periódica del motor, frenos y otros sistemas para prevenir fallas y garantizar el buen rendimiento.</p>
@@ -87,7 +87,7 @@
                         <li>
                             <div class="service-card">
                                 <figure class="card-icon">
-                                    <img src="./public/img/services-2.png" width="110" height="110" loading="lazy" alt="Brake Repair" />
+                                    <img src="./img/services-2.png" width="110" height="110" loading="lazy" alt="Brake Repair" />
                                 </figure>
                                 <h3 class="h3 card-title">Planchado</h3>
                                 <p class="card-text">Reparación de abolladuras y alisado de superficies dañadas en la carrocería por impactos o accidentes</p>
@@ -96,7 +96,7 @@
                         <li>
                             <div class="service-card">
                                 <figure class="card-icon">
-                                    <img src="./public/img/services-3.png" width="110" height="110" loading="lazy" alt="Tire Repair" />
+                                    <img src="./img/services-3.png" width="110" height="110" loading="lazy" alt="Tire Repair" />
                                 </figure>
                                 <h3 class="h3 card-title">Traccionamiento</h3>
                                 <p class="card-text">Sistema que asegura el buen agarre del auto al suelo en distintas condiciones para evitar deslizamientos</p>
@@ -105,19 +105,19 @@
                         <li>
                             <div class="service-card">
                                 <figure class="card-icon">
-                                    <img src="./public/img/services-4.png" width="110" height="110" loading="lazy" alt="Battery Repair" />
+                                    <img src="./img/services-4.png" width="110" height="110" loading="lazy" alt="Battery Repair" />
                                 </figure>
                                 <h3 class="h3 card-title">Reparar bateria</h3>
                                 <p class="card-text">Servicio que evalúa, recarga o reemplaza baterías defectuosas para garantizar el arranque y funcionamiento del vehículo</p>
                             </div>
                         </li>
                         <li class="service-banner">
-                            <img src="./public/img/services-5.png" width="646" height="380" loading="lazy" alt="Red Car" class="move-anim" />
+                            <img src="./img/services-5.png" width="646" height="380" loading="lazy" alt="Red Car" class="move-anim" />
                         </li>
                         <li>
                             <div class="service-card">
                                 <figure class="card-icon">
-                                    <img src="./public/img/pintura.png" width="110" height="110" loading="lazy" alt="Steering Repair" />
+                                    <img src="./img/pintura.png" width="110" height="110" loading="lazy" alt="Steering Repair" />
                                 </figure>
                                 <h3 class="h3 card-title">Pintura</h3>
                                 <p class="card-text">Proceso que restaura o renueva la apariencia del vehículo con pintura especializada y acabado profesiona</p>
@@ -130,7 +130,7 @@
             <section class="section about has-before" aria-labelledby="about-label" id="nosotros">
                 <div class="container">
                     <figure class="about-banner">
-                        <img src="./public/img/about-banner.png" width="540" height="540" loading="lazy" alt="vehicle repire equipments" class="w-100" />
+                        <img src="./img/about-banner.png" width="540" height="540" loading="lazy" alt="vehicle repire equipments" class="w-100" />
                     </figure>
                     <div class="about-content">
                         <p class="section-subtitle :dark">Sobre Nosotros</p>
@@ -164,7 +164,7 @@
                         <li class="scrollbar-item">
                             <div class="work-card">
                                 <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./public/img/work-1.jpg" width="350" height="406" loading="lazy" alt="Engine Repair" class="img-cover" />
+                                    <img src="./img/work-1.jpg" width="350" height="406" loading="lazy" alt="Engine Repair" class="img-cover" />
                                 </figure>
                                 <div class="card-content">
                                     <p class="card-subtitle">Reparamiento de autos</p>
@@ -175,7 +175,7 @@
                         <li class="scrollbar-item">
                             <div class="work-card">
                                 <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./public/img/work-2.jpg" width="350" height="406" loading="lazy" alt="Car Tyre change" class="img-cover" />
+                                    <img src="./img/work-2.jpg" width="350" height="406" loading="lazy" alt="Car Tyre change" class="img-cover" />
                                 </figure>
                                 <div class="card-content">
                                     <p class="card-subtitle">Reparar autos</p>
@@ -186,7 +186,7 @@
                         <li class="scrollbar-item">
                             <div class="work-card">
                                 <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./public/img/work-3.jpg" width="350" height="406" loading="lazy" alt="Battery Adjust" class="img-cover" />
+                                    <img src="./img/work-3.jpg" width="350" height="406" loading="lazy" alt="Battery Adjust" class="img-cover" />
                                 </figure>
                                 <div class="card-content">
                                     <p class="card-subtitle">Reparar autos</p>
@@ -205,7 +205,7 @@
             <div class="container">
                 <div class="footer-brand">
                     <a href="#" class="logo">
-                        <img src="./public/img/logoWhite.png" width="128" height="63" alt="autofix home" />
+                        <img src="./img/logoWhite.png" width="128" height="63" alt="autofix home" />
                     </a>
                     <p class="footer-text">
                         Somos un taller automotriz especializado en brindar servicios
@@ -216,17 +216,17 @@
                     <ul class="social-list">
                         <li>
                             <a href="https://www.facebook.com/p/Xtreme-Performance-Automotive-EIRL-100057547266000/" class="social-link" target="_blank">
-                                <img src="./public/img/facebook.svg" alt="facebook" />
+                                <img src="./img/facebook.svg" alt="facebook" />
                             </a>
                         </li>
                         <li>
                             <a href="#" class="social-link">
-                                <img src="./public/img/instagram.svg" alt="instagram" />
+                                <img src="./img/instagram.svg" alt="instagram" />
                             </a>
                         </li>
                         <li>
                             <a href="#" class="social-link">
-                                <img src="./public/img/twitter.svg" alt="twitter" />
+                                <img src="./img/twitter.svg" alt="twitter" />
                             </a>
                         </li>
                     </ul>
@@ -258,17 +258,17 @@
                     </li>
                 </ul>
             </div>
-            <img src="./public/img/LogoLow.png" width="637" height="173" loading="lazy" alt="Shape" class="shape shape-3 move-anim" />
+            <img src="./img/LogoLow.png" width="637" height="173" loading="lazy" alt="Shape" class="shape shape-3 move-anim" />
         </div>
         <div class="footer-bottom">
             <div class="container">
                 <p class="copyright">Copyright 2025, Todos los derechos pertenecen a Xtreme Performance.</p>
-                <img src="./public/img/footer-shape-2.png" width="778" height="335" loading="lazy" alt="Shape" class="shape shape-2" />
-                <img src="./public/img/footer-shape-1.png" width="805" height="652" loading="lazy" alt="Red Car" class="shape shape-1 move-anim" />
+                <img src="./img/footer-shape-2.png" width="778" height="335" loading="lazy" alt="Shape" class="shape shape-2" />
+                <img src="./img/footer-shape-1.png" width="805" height="652" loading="lazy" alt="Red Car" class="shape shape-1 move-anim" />
             </div>
         </div>
     </footer>
 
-    <script src="./public/js/script.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>
