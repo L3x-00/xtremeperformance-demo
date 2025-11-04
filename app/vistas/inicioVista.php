@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Mulish&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,600,0,0" />
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/style.css?v=<?php echo time(); ?>" />
     <link rel="preload" as="image" href="./img/hero-banner.png" />
     <link rel="preload" as="image" href="./img/hero-bg.png" />
 </head>
@@ -20,7 +20,7 @@
     <header class="header">
         <div class="container">
             <a href="<?php print RUTA; ?>" class="logo">
-                <img src="./img/LogoWhite.png" width="128" height="63" alt="autofix home" />
+                <img src="./img/LogoWhite.png" width="128" height="63" alt="Xtreme Performance Logo" />
             </a>
             <nav class="navbar" data-navbar>
                 <ul class="navbar-list">
@@ -46,6 +46,12 @@
             </button>
         </div>
     </header>
+
+    <!-- Botón flotante móvil alternativo -->
+    <a href="<?php print RUTA; ?>login" class="mobile-floating-btn">
+        <span class="material-symbols-rounded">login</span>
+        <span class="btn-text">INICIAR SESIÓN</span>
+    </a>
 
     <main>
         <article>
@@ -205,7 +211,7 @@
             <div class="container">
                 <div class="footer-brand">
                     <a href="#" class="logo">
-                        <img src="./img/logoWhite.png" width="128" height="63" alt="autofix home" />
+                        <img src="./img/logoWhite.png" width="128" height="63" alt="Xtreme Performance Logo" />
                     </a>
                     <p class="footer-text">
                         Somos un taller automotriz especializado en brindar servicios
