@@ -48,6 +48,12 @@
       --text-primary: #ffffff;
     }
     
+    /* Eliminar scroll horizontal */
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+    }
+    
     /* Asegurar que la barra de navegación sea visible */
     .navbar {
       background-color: transparent !important;
@@ -68,11 +74,34 @@
       visibility: visible !important;
     }
     
-    /* Botón de login visible */
+    /* Header y contenedores sin desbordamiento */
+    .header, .header-top, .container {
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Botón de login completo y bien posicionado */
     .login-button, .btn-primary {
       display: inline-block !important;
       visibility: visible !important;
       opacity: 1 !important;
+      white-space: nowrap !important;
+      padding: 8px 16px !important;
+      margin-left: 10px !important;
+    }
+    
+    /* Asegurar que todo se mantenga dentro del viewport */
+    * {
+      box-sizing: border-box !important;
+    }
+    
+    /* Contenedor del header sin overflow */
+    .header-top {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: nowrap !important;
     }
   </style>
 
