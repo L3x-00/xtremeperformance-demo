@@ -35,8 +35,15 @@ header("Clear-Site-Data: \"cache\", \"storage\"");
             console.log('🗑️ Storage limpiado');
         }
         
-        // Mensaje visual
+        // Mensaje visual y limpieza más agresiva
         document.addEventListener('DOMContentLoaded', function() {
+            // Eliminar TODOS los CSS y JS del caché del DOM
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach(link => link.remove());
+            
+            const scripts = document.querySelectorAll('script[src]');
+            scripts.forEach(script => script.remove());
+            
             let countdown = 3;
             const counter = document.getElementById('countdown');
             const interval = setInterval(function() {
@@ -45,7 +52,8 @@ header("Clear-Site-Data: \"cache\", \"storage\"");
                 if (countdown < 0) {
                     clearInterval(interval);
                     console.log('🚀 Redirigiendo a página principal...');
-                    window.location.href = '/?nocache=' + Date.now();
+                    // Forzar recarga con parámetros anti-caché múltiples
+                    window.location.href = '/?nocache=' + Date.now() + '&reset=true&v=' + Math.random();
                 }
             }, 1000);
         });

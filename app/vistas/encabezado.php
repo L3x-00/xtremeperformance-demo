@@ -4,16 +4,28 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php if(defined('RUTA')){ echo "    <base href='".RUTA."'>\n"; } ?>
+	<?php 
+	// DETECTAR si es página administrativa - NO cargar CSS admin en página principal
+	$currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
+	$currentController = empty($currentUrl) ? 'inicio' : explode('/', $currentUrl)[0];
+	$isAdminPage = ($currentController !== 'inicio' && !empty($currentController));
+	
+	if($isAdminPage): 
+	?>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 	<link href="./public/css/admin.css?v=20251102" rel="stylesheet">
 	<link href="<?php echo RUTA; ?>public/css/dark-theme-override.css?v=<?php echo time(); ?>" rel="stylesheet">
+	<?php endif; ?>
 	
+	<?php if($isAdminPage): ?>
 	<!-- Toast Notifications -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 	
 	<!-- Font Awesome for Icons -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<?php endif; ?>
 	
+	<?php if($isAdminPage): ?>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 	
 	<!-- jQuery and Toastr -->
@@ -22,6 +34,7 @@
 	
 	<!-- Enhanced UI System -->
 	<script src="./public/js/enhanced-ui.js?v=<?php echo time(); ?>"></script>
+	<?php endif; ?>
 	
     <link rel="shortcut icon" href="./public/img/favicon.png" type="image/svg+xml" />
 
@@ -95,19 +108,18 @@
 		};
 	</script>
 	
-	<!-- CSS Override para Toggle -->
+	<!-- CSS Override para Toggle - SOLO PÁGINAS ADMIN -->
+	<?php if($isAdminPage): ?>
 	<link href="<?php echo RUTA; ?>public/css/toggle-override.css?v=<?php echo time(); ?>" rel="stylesheet">
+	<?php endif; ?>
 	
-	<!-- Sistema de Toggle de Tema -->
+	<!-- Sistema de Toggle de Tema - SOLO PÁGINAS ADMIN -->
+	<?php if($isAdminPage): ?>
 	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
+	<?php endif; ?>
 	
 	<!-- CSS ESPECÍFICO PARA PÁGINAS ADMINISTRATIVAS -->
-	<?php 
-	// Solo cargar CSS administrativo en páginas del sistema, NO en la página principal
-	$currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
-	$currentController = empty($currentUrl) ? 'inicio' : explode('/', $currentUrl)[0];
-	if($currentController !== 'inicio' && !empty($currentController)): 
-	?>
+	<?php if($isAdminPage): ?>
 	<link href="<?php echo RUTA; ?>public/css/admin-scroll-fix.css?v=<?php echo time(); ?>" rel="stylesheet">
 	<?php endif; ?>
 </head>

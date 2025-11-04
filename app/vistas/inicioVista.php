@@ -40,6 +40,11 @@
     />
 
     <!-- 
+    - RESETEO CSS ANTI-ADMIN (CRÍTICO)
+  -->
+  <link rel="stylesheet" href="./public/css/homepage-reset.css?v=<?php echo time(); ?>" />
+  
+  <!-- 
     - custom css link
   -->
   <link rel="stylesheet" href="./public/css/style.css?v=<?php echo time(); ?>-fixed" />
