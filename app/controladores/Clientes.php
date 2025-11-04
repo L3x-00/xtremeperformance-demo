@@ -321,12 +321,14 @@ if (empty($errores)) {
 		
 		// Título
 		$pdf->SetFont('Arial', 'B', 16);
-		$pdf->Cell(0, 10, 'XTREME PERFORMANCE - LISTADO DE CLIENTES', 0, 1, 'C');
+		$titulo = iconv('UTF-8', 'ISO-8859-1//IGNORE', 'XTREME PERFORMANCE - LISTADO DE CLIENTES');
+		$pdf->Cell(0, 10, $titulo, 0, 1, 'C');
 		$pdf->Ln(5);
 		
 		// Fecha
 		$pdf->SetFont('Arial', '', 10);
-		$pdf->Cell(0, 6, 'Generado el: ' . date('d/m/Y H:i:s'), 0, 1, 'C');
+		$fecha = iconv('UTF-8', 'ISO-8859-1//IGNORE', 'Generado el: ' . date('d/m/Y H:i:s'));
+		$pdf->Cell(0, 6, $fecha, 0, 1, 'C');
 		$pdf->Ln(10);
 		
 		// Headers de tabla
@@ -335,32 +337,41 @@ if (empty($errores)) {
 		$pdf->Cell(15, 8, 'ID', 1, 0, 'C', true);
 		$pdf->Cell(40, 8, 'Nombres', 1, 0, 'C', true);
 		$pdf->Cell(40, 8, 'Apellidos', 1, 0, 'C', true);
-		$pdf->Cell(25, 8, 'Telefono', 1, 0, 'C', true);
+		$pdf->Cell(25, 8, iconv('UTF-8', 'ISO-8859-1//IGNORE', 'Teléfono'), 1, 0, 'C', true);
 		$pdf->Cell(50, 8, 'Correo', 1, 0, 'C', true);
 		$pdf->Cell(30, 8, 'RUC', 1, 0, 'C', true);
-		$pdf->Cell(50, 8, 'Razon Social', 1, 0, 'C', true);
+		$pdf->Cell(50, 8, iconv('UTF-8', 'ISO-8859-1//IGNORE', 'Razón Social'), 1, 0, 'C', true);
 		$pdf->Cell(20, 8, 'Estado', 1, 1, 'C', true);
 		
 		// Datos
 		$pdf->SetFont('Arial', '', 8);
 		$fill = false;
 		foreach ($data as $row) {
+			// Convertir caracteres UTF-8 a ISO-8859-1 para FPDF
+			$nombres = iconv('UTF-8', 'ISO-8859-1//IGNORE', $row['nombres']);
+			$apellidos = iconv('UTF-8', 'ISO-8859-1//IGNORE', $row['apellidos']);
+			$correo = iconv('UTF-8', 'ISO-8859-1//IGNORE', $row['correo']);
+			$razonSocial = iconv('UTF-8', 'ISO-8859-1//IGNORE', $row['razonSocial']);
+			$estado = iconv('UTF-8', 'ISO-8859-1//IGNORE', $row['estado']);
+			
 			$pdf->Cell(15, 6, $row['id'], 1, 0, 'C', $fill);
-			$pdf->Cell(40, 6, substr($row['nombres'], 0, 25), 1, 0, 'L', $fill);
-			$pdf->Cell(40, 6, substr($row['apellidos'], 0, 25), 1, 0, 'L', $fill);
+			$pdf->Cell(40, 6, substr($nombres, 0, 25), 1, 0, 'L', $fill);
+			$pdf->Cell(40, 6, substr($apellidos, 0, 25), 1, 0, 'L', $fill);
 			$pdf->Cell(25, 6, $row['telefono'], 1, 0, 'C', $fill);
-			$pdf->Cell(50, 6, substr($row['correo'], 0, 30), 1, 0, 'L', $fill);
+			$pdf->Cell(50, 6, substr($correo, 0, 30), 1, 0, 'L', $fill);
 			$pdf->Cell(30, 6, $row['ruc'], 1, 0, 'C', $fill);
-			$pdf->Cell(50, 6, substr($row['razonSocial'], 0, 30), 1, 0, 'L', $fill);
-			$pdf->Cell(20, 6, substr($row['estado'], 0, 10), 1, 1, 'C', $fill);
+			$pdf->Cell(50, 6, substr($razonSocial, 0, 30), 1, 0, 'L', $fill);
+			$pdf->Cell(20, 6, substr($estado, 0, 10), 1, 1, 'C', $fill);
 			$fill = !$fill;
 		}
 		
 		// Footer
 		$pdf->Ln(10);
 		$pdf->SetFont('Arial', 'I', 8);
-		$pdf->Cell(0, 6, 'Total de registros: ' . count($data), 0, 1, 'L');
-		$pdf->Cell(0, 6, 'Xtreme Performance - Sistema de Gestion Automotriz', 0, 1, 'C');
+		$totalRegistros = iconv('UTF-8', 'ISO-8859-1//IGNORE', 'Total de registros: ' . count($data));
+		$footer = iconv('UTF-8', 'ISO-8859-1//IGNORE', 'Xtreme Performance - Sistema de Gestión Automotriz');
+		$pdf->Cell(0, 6, $totalRegistros, 0, 1, 'L');
+		$pdf->Cell(0, 6, $footer, 0, 1, 'C');
 		
 		// Output
 		$pdf->Output('D', 'clientes_' . date('Y-m-d') . '.pdf');
