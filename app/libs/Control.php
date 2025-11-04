@@ -21,11 +21,12 @@ class Control
 		//
 		//Cargar la clase controladora
 		//
-		require_once("../app/controladores/".ucwords($this->controlador).".php");
+		$nombreControlador = $this->controlador;
+		require_once("../app/controladores/".ucwords($nombreControlador).".php");
 		//
 		//Crear instancia
 		//
-		$this->controlador = new $this->controlador;
+		$this->controlador = new $nombreControlador;
 		//
 		//Metodo
 		//
@@ -44,7 +45,8 @@ class Control
 		//
 		//Ejecutar método
 		//
-		error_log("ROUTING DEBUG: Ejecutando {$this->controlador}->{$this->metodo} con parámetros: " . json_encode($this->parametros));
+		$nombreClase = get_class($this->controlador);
+		error_log("ROUTING DEBUG: Ejecutando {$nombreClase}->{$this->metodo} con parámetros: " . json_encode($this->parametros));
 		call_user_func_array([$this->controlador,$this->metodo], $this->parametros);
 	}
 
