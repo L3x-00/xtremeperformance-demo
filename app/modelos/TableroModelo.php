@@ -66,33 +66,36 @@ class TableroModelo
 		$esquemaTabla = $this->db->querySelect("SHOW CREATE TABLE ".$tabla);
 		$esquema = $esquemaTabla[0]["Create Table"];
 		$salida.= "\n\n".$esquema.";\n\n";
-		for ($i=0, $contador=0; $i < $campos; $i++, $contador=0) { 
-			while ($fila = $datos->fetch()) {
-				// verificamos contador
-				if ($contador%100==0||$contador==0) {
-					$salida .= "\nINSERT INTO ".$tabla." VALUES";
+		$contador = 0;
+		while ($fila = $datos->fetch(PDO::FETCH_NUM)) {
+			// verificamos contador
+			if ($contador%100==0||$contador==0) {
+				if ($contador > 0) {
+					$salida .= ";\n";
 				}
-				$salida .= "\n(";
-				for ($j=0; $j < $campos; $j++) { 
-					$file[$j] = str_replace("\n", "\\n", addslashes($fila[$j]));
-					if (isset($fila[$j])) {
-						$salida .= '"'.$fila[$j].'"';
-					} else {
-						$salida .= '""';
-					}
-					if($j < ($campos-1)){
-						$salida .= ',';
-					}
-				}
-				$salida .= ")";
-				//cada 100
-				if ((($contador + 1)%100==0 && $contador !=0) || $contador+1==$filas) {
-					$salida .= ";";
-				} else {
-					$salida .= ",";
-				}
-				$contador++;
+				$salida .= "\nINSERT INTO ".$tabla." VALUES";
 			}
+			$salida .= "\n(";
+			for ($j=0; $j < $campos; $j++) { 
+				// Verificar que el índice existe antes de acceder
+				$valorCampo = isset($fila[$j]) ? $fila[$j] : null;
+				if ($valorCampo !== null) {
+					$salida .= '"'.addslashes($valorCampo).'"';
+				} else {
+					$salida .= 'NULL';
+				}
+				if($j < ($campos-1)){
+					$salida .= ',';
+				}
+			}
+			$salida .= ")";
+			//cada 100
+			if ((($contador + 1)%100==0 && $contador !=0) || $contador+1==$filas) {
+				$salida .= ";";
+			} else {
+				$salida .= ",";
+			}
+			$contador++;
 		}
 		$salida .= "\r\n\r\n/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;\r\n/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;\r\n/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;";
 		$carpeta = "respaldos/".$fecha."-".$id;
