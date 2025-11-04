@@ -117,10 +117,6 @@
               echo "            class='btn btn-outline-danger microinteraction hover-grow' title='Eliminar cliente'>";
               echo "      <i class='fas fa-trash'></i>";
               echo "    </button>";
-              echo "    <a href='".RUTA."clientes/modificar/".$datos["data"][$i]["id"]."/1' ";
-              echo "       class='btn btn-outline-success microinteraction' title='Ver/Editar cliente'>";
-              echo "      <i class='fas fa-eye'></i>";
-              echo "    </a>";
               echo "  </div>";
               echo "</td>";
               echo "</tr>";
@@ -271,89 +267,7 @@ function confirmDeleteClient(clientId, clientName, page) {
   });
 }
 
-// Ver detalles del cliente - VERSIÓN SIMPLE SIN AJAX (INSTANTÁNEA)
-function viewClientDetails(clientId) {
-  // Buscar la fila del cliente en la tabla para obtener datos básicos
-  const row = document.querySelector(`tr[data-client-id="${clientId}"]`);
-  if (!row) {
-    showToast('error', 'No se encontraron datos del cliente en la tabla');
-    return;
-  }
-  
-  // Extraer datos básicos de la fila
-  const cells = row.querySelectorAll('td');
-  const clienteId = cells[0]?.textContent.trim() || clientId;
-  const nombreElement = cells[1]?.querySelector('.fw-semibold');
-  const nombreCompleto = nombreElement?.textContent.trim() || 'No disponible';
-  const razonSocial = cells[2]?.textContent.trim() || 'No especificada';
-  const estadoBadge = cells[3]?.querySelector('.badge');
-  const estado = estadoBadge?.textContent.trim() || 'Desconocido';
-  
-  // Crear contenido del modal con datos básicos (instantáneo)
-  const quickContent = `
-    <div class="row">
-      <div class="col-md-8">
-        <div class="card border-0 bg-light">
-          <div class="card-body">
-            <h6 class="card-title">
-              <i class="fas fa-user-circle me-2 text-primary"></i>
-              Información Básica
-            </h6>
-            <div class="row mb-2">
-              <div class="col-sm-4"><strong>ID Cliente:</strong></div>
-              <div class="col-sm-8">
-                <span class="badge bg-secondary">${clienteId}</span>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-sm-4"><strong>Nombre:</strong></div>
-              <div class="col-sm-8">${nombreCompleto}</div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-sm-4"><strong>Razón Social:</strong></div>
-              <div class="col-sm-8">${razonSocial}</div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-sm-4"><strong>Estado:</strong></div>
-              <div class="col-sm-8">
-                <span class="badge ${estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">${estado}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-0 bg-primary text-white">
-          <div class="card-body text-center">
-            <i class="fas fa-info-circle fa-3x mb-3 opacity-50"></i>
-            <h6>Más Información</h6>
-            <p class="small">Para ver estadísticas detalladas, vehículos y historial completo, use el botón "Modificar"</p>
-            <a href="<?php echo RUTA; ?>clientes/modificar/${clienteId}/1" class="btn btn-light btn-sm">
-              <i class="fas fa-edit me-1"></i>Ver Detalles Completos
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="mt-4 d-flex justify-content-between">
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-info btn-sm" onclick="showToast('info', 'Función disponible próximamente', 'Vehículos del Cliente')">
-          <i class="fas fa-car me-1"></i>Ver Vehículos
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="showToast('info', 'Función disponible próximamente', 'Historial de Órdenes')">
-          <i class="fas fa-history me-1"></i>Ver Historial
-        </button>
-      </div>
-      <a href="<?php echo RUTA; ?>clientes/modificar/${clienteId}/1" class="btn btn-primary">
-        <i class="fas fa-edit me-2"></i>Modificar Cliente
-      </a>
-    </div>
-  `;
-  
-  // Mostrar modal instantáneamente con datos básicos
-  showDetailsModal(`Cliente: ${nombreCompleto}`, quickContent, 'modal-lg');
-}
+// Función de ver detalles eliminada - ahora solo se usa el botón "Modificar"
 
 // Las funciones de exportación ahora se manejan del lado del servidor
 // Los enlaces de CSV y PDF redirigen a los controladores PHP correspondientes
