@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- FORZAR RECARGA COMPLETA - ANTI CACHÉ -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
 
     <title>Xtreme Performance - Mecánica Automotriz</title>
     <meta name="title" content="Xtreme Performance - Mecánica Automotriz" />
@@ -40,14 +35,46 @@
     />
 
     <!-- 
-    - RESETEO CSS ANTI-ADMIN (CRÍTICO)
-  -->
-  <link rel="stylesheet" href="./public/css/homepage-reset.css?v=<?php echo time(); ?>" />
-  
-  <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="./public/css/style.css?v=<?php echo time(); ?>-fixed" />
+  <link rel="stylesheet" href="./public/css/style.css?v=20251102" />
+  
+  <!-- FIX TEMPORAL PARA ELEMENTOS CORTADOS -->
+  <style>
+    /* Asegurar que el header no se corte */
+    .header {
+      position: relative !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+    }
+    
+    /* Botón de login posicionado correctamente */
+    .mobile-login-button,
+    .btn {
+      position: relative !important;
+      z-index: 1001 !important;
+      margin: 0 !important;
+      padding: 8px 16px !important;
+    }
+    
+    /* Asegurar que el contenido no se corte */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+    }
+    
+    /* Contenedor principal */
+    .container {
+      max-width: 100% !important;
+      padding: 0 15px !important;
+    }
+    
+    /* Elementos que aparecen cortados */
+    * {
+      box-sizing: border-box !important;
+    }
+  </style>
 
     <!-- 
     - IMAGENES PRE CARGADAS
