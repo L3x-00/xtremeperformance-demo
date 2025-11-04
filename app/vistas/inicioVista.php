@@ -20,7 +20,7 @@
     <header class="header">
         <div class="container">
             <a href="<?php print RUTA; ?>" class="logo">
-                <img src="./img/LogoWhite.png" width="128" height="63" alt="Xtreme Performance Logo" />
+                <img src="./img/LogoWhite.png" width="128" height="63" alt="" />
             </a>
             <nav class="navbar" data-navbar>
                 <ul class="navbar-list">
@@ -211,7 +211,7 @@
             <div class="container">
                 <div class="footer-brand">
                     <a href="#" class="logo">
-                        <img src="./img/logoWhite.png" width="128" height="63" alt="Xtreme Performance Logo" />
+                        <img src="./img/logoWhite.png" width="128" height="63" alt="" />
                     </a>
                     <p class="footer-text">
                         Somos un taller automotriz especializado en brindar servicios
