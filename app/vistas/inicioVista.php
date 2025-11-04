@@ -29,6 +29,11 @@
                     <li><a href="#servicios" class="navbar-link">Servicios</a></li>
                     <li><a href="#proyectos" class="navbar-link">Nuestros Proyectos</a></li>
                     <li><a href="#contactanos" class="navbar-link">Contáctanos</a></li>
+                    <li class="mobile-login-item">
+                        <a href="<?php print RUTA; ?>login" class="btn btn-primary mobile-login-btn">
+                            <span class="span">INICIAR SESIÓN</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <a href="<?php print RUTA; ?>login" class="btn btn-primary">
