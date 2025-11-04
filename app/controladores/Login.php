@@ -300,8 +300,8 @@ class Login extends Controlador
 								header("location:".RUTA."Tablero");
 								exit;
 							} else if ($tipoUsuario==OPERADOR) {
-								Helper::mostrar("Bienvenido Operador");
-								//header("location:".RUTA."TableroOperador");
+								header("location:".RUTA."TableroOperador");
+								exit;
 							}
 						} else {
 							$this->mensaje(

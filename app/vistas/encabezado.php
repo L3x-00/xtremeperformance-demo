@@ -124,6 +124,8 @@
 			if ($tipo!==null) {
 				if ($tipo==ADMON) {
 					$brandHref = RUTA.'Tablero';
+				} else if (defined('OPERADOR') && $tipo==OPERADOR) {
+					$brandHref = RUTA.'TableroOperador';
 				} else if (defined('MECANICO') && $tipo==MECANICO) {
 					$brandHref = RUTA.'TableroMecanico';
 				} else if (defined('CLIENTE') && $tipo==CLIENTE) {
@@ -199,6 +201,38 @@
 			    print "<li class='nav-item'>";
 			    print "<a href='".RUTA."tablero/respaldar' class='nav-link'>Respaldar</a>";
 			    print "</li>";
+				//
+				print "</ul>";
+				//
+			} else if (isset($datos["usuario"]["tipoUsuario"]) && $datos["usuario"]["tipoUsuario"]==OPERADOR) {
+				// Menú limitado para operadores
+				print "<ul class='navbar-nav me-auto'>";
+				//
+				print "<li class='nav-item'>";
+				print "<a href='".RUTA."tablerooperador' class='nav-link ";
+				if(isset($datos["activo"]) && $datos["activo"]=="tablerooperador") print "active";
+				print "'><i class='fas fa-tachometer-alt me-1'></i>Dashboard</a>";
+				print "</li>";
+				//
+				print "<li class='nav-item'>";
+				print "<a href='#' class='nav-link text-muted' onclick='showToast(\"info\", \"Solo tienes permisos de lectura\", \"Consulta de Órdenes\")'>";
+				print "<i class='fas fa-eye me-1'></i>Ver Órdenes</a>";
+				print "</li>";
+				//
+				print "<li class='nav-item'>";
+				print "<a href='#' class='nav-link text-muted' onclick='showToast(\"info\", \"Solo tienes permisos de lectura\", \"Consulta de Clientes\")'>";
+				print "<i class='fas fa-users me-1'></i>Ver Clientes</a>";
+				print "</li>";
+				//
+				print "<li class='nav-item'>";
+				print "<a href='#' class='nav-link text-muted' onclick='showToast(\"info\", \"Solo tienes permisos de lectura\", \"Consulta de Mecánicos\")'>";
+				print "<i class='fas fa-user-cog me-1'></i>Ver Mecánicos</a>";
+				print "</li>";
+				//
+				print "<li class='nav-item'>";
+				print "<a href='#' class='nav-link text-muted' onclick='showToast(\"info\", \"Función disponible próximamente\", \"Reportes\")'>";
+				print "<i class='fas fa-chart-bar me-1'></i>Reportes</a>";
+				print "</li>";
 				//
 				print "</ul>";
 				//
