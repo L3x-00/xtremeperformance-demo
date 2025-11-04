@@ -314,7 +314,7 @@ if (empty($errores)) {
 		$data = $this->modelo->getTodos();
 		
 		// Inicializar FPDF
-		require_once('libs/fpdf.php');
+		require_once('../libs/fpdf.php');
 		
 		$pdf = new FPDF('L', 'mm', 'A4'); // Orientación horizontal
 		$pdf->AddPage();
