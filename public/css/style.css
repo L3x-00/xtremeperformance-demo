@@ -802,8 +802,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   position: relative;
+  padding: 0 15px;
+  max-width: 100%;
 }
 
 .header-left {
@@ -817,16 +819,13 @@ body {
 }
 
 /* Estilos específicos para el botón de login */
-.login-button {
-  position: fixed;
-  top: 20px;
-  right: 80px;
-  display: flex !important;
+.header .btn {
+  display: flex;
   align-items: center;
-  padding: 8px 16px !important;
+  padding: 8px 16px;
   font-size: var(--fs-5);
   white-space: nowrap;
-  z-index: 100;
+  min-width: max-content;
 }
 /* Botón flotante específico para móvil (oculto por defecto) */
 .mobile-login-button {
@@ -839,6 +838,11 @@ body {
     padding: 15px 0;
   }
 
+  .header .container {
+    padding: 0 10px;
+    gap: 10px;
+  }
+
   .nav-toggle-btn {
     position: fixed;
     right: 15px;
@@ -846,7 +850,7 @@ body {
     z-index: 100;
   }
 
-  .login-button {
+  .header .btn {
     display: none !important;
   }
 
@@ -922,7 +926,10 @@ body {
   position: absolute;
   top: 100px;
   right: 30px;
-  background-color: var(--international-orange-engineering);
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
   min-width: max-content;
   width: 30%;
   transform: translateY(20px);
@@ -943,14 +950,14 @@ body {
   font-family: var(--ff-chakra-petch);
   font-size: var(--fs-5);
   text-transform: uppercase;
-  color: var(--white);
+  color: var(--dark-color);
   padding: 10px 20px;
   transition: var(--transition);
 }
 
 .navbar-link:is(:hover, :focus-visible) {
-  background-color: var(--white);
-  color: var(--international-orange-engineering);
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 /*-----------------------------------*\
