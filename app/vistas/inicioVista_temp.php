@@ -37,7 +37,7 @@
     <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="./public/css/homepage-new.css?v=<?php echo time(); ?>" />
+  <link rel="stylesheet" href="./public/css/style.css?v=20251102" />
 
     <!-- 
     - IMAGENES PRE CARGADAS
