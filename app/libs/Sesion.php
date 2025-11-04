@@ -77,11 +77,12 @@ private function configurarSesion(): void
 	
 	// Configurar parámetros de sesión antes de iniciarla
 	if (session_status() === PHP_SESSION_NONE) {
-		ini_set('session.cookie_httponly', $httponly ? '1' : '0');
-		ini_set('session.cookie_secure', $secure ? '1' : '0');
-		ini_set('session.cookie_samesite', $samesite);
-		ini_set('session.use_only_cookies', '1');
-		ini_set('session.cookie_lifetime', '0'); // Cookie de sesión
+		// TEMPORALMENTE DESACTIVADO - ini_set() después de headers enviados causa errores
+		// ini_set('session.cookie_httponly', $httponly ? '1' : '0');
+		// ini_set('session.cookie_secure', $secure ? '1' : '0');
+		// ini_set('session.cookie_samesite', $samesite);
+		// ini_set('session.use_only_cookies', '1');
+		// ini_set('session.cookie_lifetime', '0'); // Cookie de sesión
 	}
 }	public function getLogin():bool
 	{
