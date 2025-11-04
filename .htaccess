@@ -1,5 +1,7 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
-RewriteRule ^$ public/ [L]
+# Redirigir la página principal a homepage.html independiente
+RewriteRule ^$ public/homepage.html [L]
+# Mantener el sistema administrativo funcionando normalmente
 RewriteRule (.*) public/$1 [L]
 </IfModule>
