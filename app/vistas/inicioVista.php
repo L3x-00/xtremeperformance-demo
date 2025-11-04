@@ -39,40 +39,40 @@
   -->
   <link rel="stylesheet" href="./public/css/style.css?v=20251102" />
   
-  <!-- FIX TEMPORAL PARA ELEMENTOS CORTADOS -->
+  <!-- FIX ESPECÍFICO PARA VARIABLES CSS NO DEFINIDAS EN HOMEPAGE -->
   <style>
-    /* Asegurar que el header no se corte */
-    .header {
-      position: relative !important;
-      top: 0 !important;
-      z-index: 1000 !important;
+    :root {
+      /* Definir variables CSS que el sistema admin puede estar usando */
+      --bg-card: transparent;
+      --border-color: rgba(255,255,255,0.1);
+      --text-primary: #ffffff;
     }
     
-    /* Botón de login posicionado correctamente */
-    .mobile-login-button,
-    .btn {
-      position: relative !important;
-      z-index: 1001 !important;
-      margin: 0 !important;
-      padding: 8px 16px !important;
+    /* Asegurar que la barra de navegación sea visible */
+    .navbar {
+      background-color: transparent !important;
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
-    /* Asegurar que el contenido no se corte */
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow-x: hidden !important;
+    .navbar-list {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     
-    /* Contenedor principal */
-    .container {
-      max-width: 100% !important;
-      padding: 0 15px !important;
+    .navbar-link {
+      color: #ffffff !important;
+      display: block !important;
+      visibility: visible !important;
     }
     
-    /* Elementos que aparecen cortados */
-    * {
-      box-sizing: border-box !important;
+    /* Botón de login visible */
+    .login-button, .btn-primary {
+      display: inline-block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
   </style>
 
