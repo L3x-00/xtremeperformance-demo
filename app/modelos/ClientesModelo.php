@@ -51,13 +51,31 @@ public function alta(array $data): int
 
 	public function eliminarFisico(string $id):bool
 	{
+		error_log("MODELO DEBUG: eliminarFisico llamado con ID: '$id'");
+		
 		if (empty($id) || !is_numeric($id)) {
+			error_log("MODELO DEBUG: ID inválido (vacío o no numérico)");
 			return false;
 		}
 		
+		// Primero verificar si el cliente existe
+		$existe = "SELECT id, baja FROM clientes WHERE id = ?";
+		$cliente = $this->db->querySelect($existe, [$id]);
+		error_log("MODELO DEBUG: Cliente existe: " . json_encode($cliente));
+		
 		$sql = "DELETE FROM clientes WHERE id = ? AND baja = 0";
 		$data = [$id];
-		return $this->db->queryNoSelect($sql, $data);
+		error_log("MODELO DEBUG: Ejecutando SQL: $sql con datos: " . json_encode($data));
+		
+		$resultado = $this->db->queryNoSelect($sql, $data);
+		error_log("MODELO DEBUG: Resultado de eliminación: " . ($resultado ? 'true' : 'false'));
+		
+		// Verificar si realmente se eliminó
+		$verificar = "SELECT COUNT(*) as count FROM clientes WHERE id = ?";
+		$cuenta = $this->db->querySelect($verificar, [$id]);
+		error_log("MODELO DEBUG: Clientes restantes con ese ID: " . json_encode($cuenta));
+		
+		return $resultado;
 	}
 
 

@@ -230,15 +230,21 @@ if (empty($errores)) {
 
 	public function eliminar(string $id='', string $pagina="1"):void
 	{
+		// Debug: Log para verificar que se está ejecutando
+		error_log("ELIMINACION DEBUG: Método eliminar() llamado con ID: $id, Página: $pagina");
+		
 		if (isset($id) && $id!="") {
 			// Obtener el nombre del cliente antes de eliminarlo
 			$cliente = $this->modelo->getId($id);
+			error_log("ELIMINACION DEBUG: Cliente encontrado: " . json_encode($cliente));
+			
 			$nombre = isset($cliente['nombres']) && isset($cliente['apellidos']) 
 				? $cliente['nombres'] . ' ' . $cliente['apellidos'] 
 				: "Cliente ID: " . $id;
 
 			// Verificar integridad referencial antes de eliminar
 			$ir_array = $this->modelo->getIntegridadReferencial($id);
+			error_log("ELIMINACION DEBUG: Integridad referencial: " . json_encode($ir_array));
 			
 			if ($ir_array[0] > 0) {
 				// No se puede eliminar porque tiene referencias
@@ -249,6 +255,7 @@ if (empty($errores)) {
 					$m.="<li>".$ir_array[1]." Vehículos.</li>";
 				}
 				$m.="</ul>Primero debe eliminar esas referencias.";
+				error_log("ELIMINACION DEBUG: Bloqueado por integridad referencial");
 				$this->mensaje(
 					"Error al eliminar cliente", 
 					"Error al eliminar cliente", 
@@ -260,7 +267,11 @@ if (empty($errores)) {
 			}
 
 			// Si no hay referencias, proceder con la eliminación
-			if ($this->modelo->eliminarFisico($id)) {
+			$resultado = $this->modelo->eliminarFisico($id);
+			error_log("ELIMINACION DEBUG: Resultado eliminarFisico: " . ($resultado ? 'true' : 'false'));
+			
+			if ($resultado) {
+				error_log("ELIMINACION DEBUG: Eliminación exitosa");
 				$this->mensaje(
 					"Eliminación de cliente", 
 					"Eliminación de cliente", 
@@ -269,6 +280,7 @@ if (empty($errores)) {
 					"success"
 				);
 	        } else {
+	        	error_log("ELIMINACION DEBUG: Error en eliminación");
 	        	$this->mensaje(
 	        		"Eliminación de cliente", 
 	        		"Eliminación de cliente", 
@@ -277,6 +289,8 @@ if (empty($errores)) {
 	        		"danger"
 	        	);
 	        }
+	   } else {
+	   	   error_log("ELIMINACION DEBUG: ID vacío o no válido");
 	   }
 	}
 

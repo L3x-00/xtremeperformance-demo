@@ -262,7 +262,9 @@ function confirmDeleteClient(clientId, clientName, page) {
     
     // Simular proceso y redirigir
     setTimeout(() => {
-      window.location.href = `<?php echo RUTA; ?>clientes/eliminar/${clientId}/${page}`;
+      const url = `<?php echo RUTA; ?>clientes/eliminar/${clientId}/${page}`;
+      console.log('DEBUG: Redirigiendo a URL de eliminación:', url);
+      window.location.href = url;
     }, 1000);
   });
 }
