@@ -245,7 +245,7 @@ function updateResultsCount() {
 
 // Confirmar eliminación con modal personalizado y efectos
 function confirmDeleteClient(clientId, clientName, page) {
-  const message = `¿Está seguro que desea eliminar al cliente <strong>${clientName}</strong>?<br><small class="text-muted">Esta acción no se puede deshacer</small>`;
+  const message = `¿Está seguro que desea eliminar al cliente <strong>${clientName}</strong>?<br><small class="text-muted">Esta acción no se puede deshacer.</small>`;
   
   confirmDelete(message, function() {
     // Mostrar loading en el botón y fila
@@ -262,7 +262,7 @@ function confirmDeleteClient(clientId, clientName, page) {
     
     // Simular proceso y redirigir
     setTimeout(() => {
-      window.location.href = `<?php echo RUTA; ?>clientes/borrar/${clientId}/${page}`;
+      window.location.href = `<?php echo RUTA; ?>clientes/eliminar/${clientId}/${page}`;
     }, 1000);
   });
 }

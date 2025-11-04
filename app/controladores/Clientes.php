@@ -237,6 +237,29 @@ if (empty($errores)) {
 				? $cliente['nombres'] . ' ' . $cliente['apellidos'] 
 				: "Cliente ID: " . $id;
 
+			// Verificar integridad referencial antes de eliminar
+			$ir_array = $this->modelo->getIntegridadReferencial($id);
+			
+			if ($ir_array[0] > 0) {
+				// No se puede eliminar porque tiene referencias
+				$m = "No se puede eliminar al cliente porque tiene:<ul>";
+				if ($ir_array[1]==1) {
+					$m.="<li>Un vehículo.</li>";
+				} else if ($ir_array[1]>1) {
+					$m.="<li>".$ir_array[1]." Vehículos.</li>";
+				}
+				$m.="</ul>Primero debe eliminar esas referencias.";
+				$this->mensaje(
+					"Error al eliminar cliente", 
+					"Error al eliminar cliente", 
+					$m, 
+					"clientes/".$pagina, 
+					"danger"
+				);
+				return;
+			}
+
+			// Si no hay referencias, proceder con la eliminación
 			if ($this->modelo->eliminarFisico($id)) {
 				$this->mensaje(
 					"Eliminación de cliente", 
@@ -249,7 +272,7 @@ if (empty($errores)) {
 	        	$this->mensaje(
 	        		"Eliminación de cliente", 
 	        		"Eliminación de cliente", 
-	        		"Error al eliminar al cliente: " . $nombre, 
+	        		"Error al eliminar al cliente: " . $nombre . ". Es posible que ya haya sido eliminado.", 
 	        		"clientes/".$pagina,
 	        		"danger"
 	        	);

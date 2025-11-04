@@ -55,9 +55,9 @@ public function alta(array $data): int
 			return false;
 		}
 		
-		// Verificar si el método queryNoSelect soporta parámetros, si no usar concatenación segura
-		$sql = "DELETE FROM clientes WHERE id = " . intval($id);
-		return $this->db->queryNoSelect($sql);
+		$sql = "DELETE FROM clientes WHERE id = ? AND baja = 0";
+		$data = [$id];
+		return $this->db->queryNoSelect($sql, $data);
 	}
 
 
