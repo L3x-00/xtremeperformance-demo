@@ -228,6 +228,35 @@ if (empty($errores)) {
 	   }
 	}
 
+	public function eliminar(string $id='', string $pagina="1"):void
+	{
+		if (isset($id) && $id!="") {
+			// Obtener el nombre del cliente antes de eliminarlo
+			$cliente = $this->modelo->getId($id);
+			$nombre = isset($cliente['nombres']) && isset($cliente['apellidos']) 
+				? $cliente['nombres'] . ' ' . $cliente['apellidos'] 
+				: "Cliente ID: " . $id;
+
+			if ($this->modelo->eliminarFisico($id)) {
+				$this->mensaje(
+					"Eliminación de cliente", 
+					"Eliminación de cliente", 
+					"Se eliminó correctamente al cliente: " . $nombre, 
+					"clientes/".$pagina, 
+					"success"
+				);
+	        } else {
+	        	$this->mensaje(
+	        		"Eliminación de cliente", 
+	        		"Eliminación de cliente", 
+	        		"Error al eliminar al cliente: " . $nombre, 
+	        		"clientes/".$pagina,
+	        		"danger"
+	        	);
+	        }
+	   }
+	}
+
 	public function caratula(string $pagina="1"):void
 	{
 		$num = $this->modelo->getNumRegistros();

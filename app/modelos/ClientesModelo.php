@@ -49,6 +49,17 @@ public function alta(array $data): int
 		return $salida;
 	}
 
+	public function eliminarFisico(string $id):bool
+	{
+		if (empty($id) || !is_numeric($id)) {
+			return false;
+		}
+		
+		// Verificar si el método queryNoSelect soporta parámetros, si no usar concatenación segura
+		$sql = "DELETE FROM clientes WHERE id = " . intval($id);
+		return $this->db->queryNoSelect($sql);
+	}
+
 
 
 public function getId(string $id = ''): array

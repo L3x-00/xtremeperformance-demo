@@ -62,9 +62,9 @@
       <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pagina'])) { print $datos['pagina']; } else { print "1"; } ?>">
       
       <?php if (isset($datos["baja"])) { ?>
-        <a href="<?php print RUTA; ?>clientes/bajaLogica/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger">Borrar</a>
-        <a href="<?php print RUTA.'clientes/'.$datos['pagina']; ?>" class="btn btn-danger">Regresar</a>
-        <p><b>Advertencia: una vez borrado el registro, no podrá recuperar la información.</b></p>
+        <a href="<?php print RUTA; ?>clientes/eliminar/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar al cliente <?php echo htmlspecialchars($datos['data']['nombres'] . ' ' . $datos['data']['apellidos']); ?>?\n\nEsta acción no se puede deshacer.');">Eliminar</a>
+        <a href="<?php print RUTA.'clientes/'.$datos['pagina']; ?>" class="btn btn-secondary">Regresar</a>
+        <p><b>Advertencia: una vez eliminado el registro, no podrá recuperar la información.</b></p>
       <?php } else { ?>
       <input type="submit" value="Enviar" class="btn btn-success">
       <a href="<?php print RUTA; ?>clientes" class="btn btn-info">Regresar</a>
