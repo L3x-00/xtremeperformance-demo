@@ -297,7 +297,7 @@ if (empty($errores)) {
 	public function caratula(string $pagina="1"):void
 	{
 		$num = $this->modelo->getNumRegistros();
-		$paginaInt = (int)$pagina; // Convertir a entero para evitar error de tipos
+		$paginaInt = max(1, (int)$pagina); // Asegurar que la página sea al menos 1
 		$inicio = ($paginaInt-1)*TAMANO_PAGINA;
 		$totalPaginas = ceil($num/TAMANO_PAGINA);
 		$data = $this->modelo->getTabla($inicio,TAMANO_PAGINA);

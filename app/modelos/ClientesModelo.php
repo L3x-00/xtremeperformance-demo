@@ -127,6 +127,9 @@ public function getId(string $id = ''): array
 
 	public function getTabla(int $inicio=1, int $tamano=0):array
 {
+  // Asegurar que $inicio no sea negativo
+  $inicio = max(0, $inicio);
+  
   // La consulta SQL correcta para unir las dos tablas
   $sql = "SELECT c.id, CONCAT(c.apellidos,', ',c.nombres) as nombre, ";
   $sql.= "c.razonSocial, ec.estado ";
