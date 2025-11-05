@@ -311,7 +311,7 @@ class Salidas extends Controlador
 			$qrImageHTML = "";
 			if (file_exists($qrImagePath)) {
 				$qrImageHTML = "<br><div style='text-align: center; margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;'>" .
-							   "<img src='".RUTA."public/img/yape-qr.png?v=".time()."' alt='Código QR Yape' style='max-width: 180px; height: auto; border: 2px solid #8B4A9C; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);'>" .
+							   "<img src='".RUTA."public/img/yape-qr.png?v=".time()."' alt='' style='max-width: 180px; height: auto; border: 2px solid #8B4A9C; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);'>" .
 							   "<br><small style='color: #666; font-size: 12px; margin-top: 8px; display: block; font-weight: bold;'>💳 Escanea para pagar con Yape</small></div>";
 			}
 			
