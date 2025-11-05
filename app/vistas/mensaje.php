@@ -6,7 +6,7 @@ print '<h4>'.$datos["texto"].'</h4>';
 if (stripos($datos["texto"], "factura") !== false) {
     print '<div class="text-center mt-4 mb-3">';
     print '<p class="mb-3"><strong>💳 Puedes pagar con Yape escaneando este código:</strong></p>';
-    print '<img src="'.RUTA.'public/img/qr-yape.png" alt="Código QR Yape" class="img-fluid" style="max-width: 200px; border: 2px solid #7b2cbf; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">';
+    
     print '<p class="mt-2 text-muted small">Escanea con tu app de Yape para pagar de forma rápida y segura</p>';
     print '</div>';
 }
