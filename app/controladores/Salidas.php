@@ -309,7 +309,7 @@ class Salidas extends Controlador
 			$this->mensaje(
 				"Facturar orden de reparación.", 
 				"Facturar orden de reparación.", 
-				"¿Desea generar la factura? Una vez creada no podrá modificarla.", 
+				"¿Desea generar la factura? Una vez creada no podrá modificarla.<br><br><img src='./public/img/yape-qr.png' alt='Pago con Yape' style='max-width: 200px; height: auto; display: block; margin: 10px auto;'>", 
 				"salidas/".$pagina,
 				"danger",
 				"salidas/imprimirFactura/".$id."/".$pagina."/".$manoObra."/".$otro."/".$observacion,

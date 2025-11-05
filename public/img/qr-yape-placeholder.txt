@@ -1,0 +1,2 @@
+<!-- Esta es una referencia temporal para la imagen del QR -->
+<!-- La imagen real será colocada manualmente en public/img/qr-yape.png -->
