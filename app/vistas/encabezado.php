@@ -197,6 +197,12 @@
 				print "'>Usuarios</a>";
 				print "</li>";
 				//
+				print "<li class='nav-item'>";
+				print "<a href='".RUTA."mantenimientoFacturas/diagnostico' class='nav-link ";
+				if(isset($datos["activo"]) && $datos["activo"]=="mantenimiento") print "active";
+				print "'><i class='fas fa-tools me-1'></i>Mantenimiento</a>";
+				print "</li>";
+				//
 			    print "<li class='nav-item'>";
 			    print "<a href='".RUTA."tablero/respaldar' class='nav-link'>Respaldar</a>";
 			    print "</li>";
