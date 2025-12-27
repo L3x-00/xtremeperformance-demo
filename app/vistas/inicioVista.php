@@ -13,7 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Mulish&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,600,0,0" />
     <link rel="stylesheet" href="./css/style.css?v=<?php echo time(); ?>" />
-    <link rel="preload" as="image" href="./img/hero-banner.png" />
+    <!-- CSS ESPECÍFICO PARA LA PÁGINA INICIAL (no mezclar con paneles) -->
+    <link rel="stylesheet" href="./css/xtreme-inicio.css?v=20251227" />
     <link rel="preload" as="image" href="./img/hero-bg.png" />
 </head>
 <body>
