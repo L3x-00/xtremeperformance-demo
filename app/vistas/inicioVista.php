@@ -294,6 +294,6 @@
 
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="main.js"></script>
+    <script src="../../public/js/script.js"></script>
   </body>
 </html>
