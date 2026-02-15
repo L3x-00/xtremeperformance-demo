@@ -93,7 +93,7 @@ body {
   padding-block: 5rem;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../../public/img/header.jpg");
+    url("../../public/img/header.png");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
