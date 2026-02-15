@@ -1,281 +1,299 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Performance - Mecánica Automotriz</title>
-    <meta name="title" content="Xtreme Performance - Mecánica Automotriz" />
-    <meta name="description" content="Taller Automotriz Integral, especializados en reparación, planchado y pintura de vehículos." />
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Mulish&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,600,0,0" />
-    <link rel="stylesheet" href="./css/style.css?v=<?php echo time(); ?>" />
-    <!-- CSS ESPECÍFICO PARA LA PÁGINA INICIAL (no mezclar con paneles) -->
-    <link rel="stylesheet" href="./css/xtreme-inicio.css?v=20251227" />
-    <link rel="preload" as="image" href="./img/hero-bg.png" />
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Inicio - Xtreme Performance</title>
+  </head>
+  <body>
     <header class="header">
-        <div class="container">
-            <a href="<?php print RUTA; ?>" class="logo">
-                <img src="./img/LogoWhite.png" width="128" height="63" alt="" />
-            </a>
-            <nav class="navbar" data-navbar>
-                <ul class="navbar-list">
-                    <li><a href="<?php print RUTA; ?>" class="navbar-link">Inicio</a></li>
-                    <li><a href="#nosotros" class="navbar-link">Sobre Nosotros</a></li>
-                    <li><a href="#servicios" class="navbar-link">Servicios</a></li>
-                    <li><a href="#proyectos" class="navbar-link">Nuestros Proyectos</a></li>
-                    <li><a href="#contactanos" class="navbar-link">Contáctanos</a></li>
-                    <li class="mobile-login-item">
-                        <a href="<?php print RUTA; ?>login" class="btn btn-primary mobile-login-btn">
-                            <span class="span">INICIAR SESIÓN</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <a href="<?php print RUTA; ?>login" class="btn btn-primary">
-                <span class="span">INICIAR SESIÓN</span>
-            </a>
-            <button class="nav-toggle-btn" aria-label="toggle menu" data-nav-toggler>
-                <span class="nav-toggle-icon icon-1"></span>
-                <span class="nav-toggle-icon icon-2"></span>
-                <span class="nav-toggle-icon icon-3"></span>
-            </button>
+      <nav>
+        <div class="nav__bar">
+          <div class="logo nav__logo">
+            <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-3-line"></i>
+          </div>
         </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#home">INICIO</a></li>
+          <li><a href="#about">SOBRE NOSOTROS</a></li>
+          <li><a href="#service">SERVICIOS</a></li>
+          <li><a href="#client">NUESTROS CLIENTES</a></li>
+          
+          <button class="btn"><a href="<?php print RUTA; ?>login">
+  <span class="span">INICIAR SESIÓN</span>
+  </a></button>
+        </ul>
+      </nav>
+      <div class="section__container header__container" id="home">
+        <div class="header__content">
+          <h1>Somos líderes en la región Junín</h1>
+          <div class="header__btn">
+            <button class="btn"><a href="#about">Leer más</a></button>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <!-- Botón flotante móvil alternativo -->
-    <a href="<?php print RUTA; ?>login" class="mobile-floating-btn">
-        <span class="material-symbols-rounded">login</span>
-        <span class="btn-text">INICIAR SESIÓN</span>
-    </a>
+    <section class="banner__container">
+      <div class="banner__card">
+        <h4>Satisfacción garantizada siempre encontrará.</h4>
+      </div>
+      <div class="banner__card">
+        <h4>Cuidaremos su coche como lo haría usted.</h4>
+      </div>
+      <div class="banner__image">
+        <img src="assets/banner.jpg" alt="banner" />
+      </div>
+    </section>
 
-    <main>
-        <article>
-            <section class="hero has-bg-image" aria-label="home" style="background-image: url('./img/hero-bg.png')">
-                <div class="container">
-                    <div class="hero-content">
-                        <p class="section-subtitle :dark">Nosotros tenemos talentosos mecánicos</p>
-                        <h1 class="h1 section-title">MECÁNICA AUTOMOTRIZ</h1>
-                        <p class="section-text">
-                            Taller Automotriz Integral, especializados en reparación,
-                            planchado y pintura de vehículos. Contamos con maquina de
-                            traccionamiento y laboratorio de matizado
-                        </p>
-                        <a href="#servicios" class="btn">
-                            <span class="span">Nuestros Servicios</span>
-                            <span class="material-symbols-rounded">arrow_forward</span>
-                        </a>
-                    </div>
-                    <figure class="hero-banner" style="--width: 1228; --height: 789">
-                        <img src="./img/hero-banner.png" width="1228" height="789" alt="red motor vehicle" class="move-anim" />
-                    </figure>
-                </div>
-            </section>
+    <section class="section__container experience__container" id="about">
+      <div class="experience__image">
+        <img src="assets/experience.jpg" alt="experience" />
+      </div>
+      <div class="experience__content">
+        <p class="section__subheader">¿QUIENES SOMOS?</p>
+        <h2 class="section__header">
+          Nosotros tenemos 10 años de experiencia en este campo
+        </h2>
+        <p class="section__description">
+          Con un rico legado de 10 años, nuestro compromiso con la excelencia en
+          el mantenimiento de automóviles es inquebrantable. Nuestro
+          experimentado equipo aporta una gran experiencia para garantizar que
+          su vehículo reciba un cuidado de primera categoría. Confíe en nuestra
+          experiencia para que su coche funcione sin problemas y de forma
+          segura.
+        </p>
+      </div>
+    </section>
 
-            <section class="section service has-bg-image" aria-labelledby="service-label" style="background-image: url('./img/service-bg.jpg')" id="servicios">
-                <div class="container">
-                    <p class="section-subtitle :light" id="service-label">Nuestros Servicios</p>
-                    <h2 class="h2 section-title">Nosotros ofrecemos grandes servicios para tu vehículo</h2>
-                    <ul class="service-list">
-                        <li>
-                            <div class="service-card">
-                                <figure class="card-icon">
-                                    <img src="./img/services-1.png" width="110" height="110" loading="lazy" alt="Engine Repair" />
-                                </figure>
-                                <h3 class="h3 card-title">Mantenimiento</h3>
-                                <p class="card-text">Revisión periódica del motor, frenos y otros sistemas para prevenir fallas y garantizar el buen rendimiento.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="service-card">
-                                <figure class="card-icon">
-                                    <img src="./img/services-2.png" width="110" height="110" loading="lazy" alt="Brake Repair" />
-                                </figure>
-                                <h3 class="h3 card-title">Planchado</h3>
-                                <p class="card-text">Reparación de abolladuras y alisado de superficies dañadas en la carrocería por impactos o accidentes</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="service-card">
-                                <figure class="card-icon">
-                                    <img src="./img/services-3.png" width="110" height="110" loading="lazy" alt="Tire Repair" />
-                                </figure>
-                                <h3 class="h3 card-title">Traccionamiento</h3>
-                                <p class="card-text">Sistema que asegura el buen agarre del auto al suelo en distintas condiciones para evitar deslizamientos</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="service-card">
-                                <figure class="card-icon">
-                                    <img src="./img/services-4.png" width="110" height="110" loading="lazy" alt="Battery Repair" />
-                                </figure>
-                                <h3 class="h3 card-title">Reparar bateria</h3>
-                                <p class="card-text">Servicio que evalúa, recarga o reemplaza baterías defectuosas para garantizar el arranque y funcionamiento del vehículo</p>
-                            </div>
-                        </li>
-                        <li class="service-banner">
-                            <img src="./img/services-5.png" width="646" height="380" loading="lazy" alt="Red Car" class="move-anim" />
-                        </li>
-                        <li>
-                            <div class="service-card">
-                                <figure class="card-icon">
-                                    <img src="./img/pintura.png" width="110" height="110" loading="lazy" alt="Steering Repair" />
-                                </figure>
-                                <h3 class="h3 card-title">Pintura</h3>
-                                <p class="card-text">Proceso que restaura o renueva la apariencia del vehículo con pintura especializada y acabado profesiona</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <section class="section about has-before" aria-labelledby="about-label" id="nosotros">
-                <div class="container">
-                    <figure class="about-banner">
-                        <img src="./img/about-banner.png" width="540" height="540" loading="lazy" alt="vehicle repire equipments" class="w-100" />
-                    </figure>
-                    <div class="about-content">
-                        <p class="section-subtitle :dark">Sobre Nosotros</p>
-                        <h2 class="h2 section-title">Nos comprometemos a cumplir con la calidad</h2>
-                        <p class="section-text">
-                            En Xtreme Performance ofrecemos servicios automotrices
-                            con altos estándares de calidad, precisión y puntualidad.
-                            Contamos con personal capacitado y tecnología moderna para
-                            brindar soluciones confiables a cada vehículo.
-                        </p>
-                        <p class="section-text">
-                            Nos especializamos en traccionamiento, planchado, mantenimiento
-                            y pintura, asegurando resultados duraderos y la satisfacción de
-                            nuestros clientes. Tu confianza es nuestra mejor garantía.
-                        </p>
-                        <ul class="about-list">
-                            <li class="about-item"><p><strong class="display-1 strong">1K+</strong> Clientes Felices</p></li>
-                            <li class="about-item"><p><strong class="display-1 strong">10+</strong> Instrumentos</p></li>
-                            <li class="about-item"><p><strong class="display-1 strong">10+</strong> Años en el mercado</p></li>
-                            <li class="about-item"><p><strong class="display-1 strong">99%</strong> Proyectos Completados</p></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section work" aria-labelledby="work-label" id="proyectos">
-                <div class="container">
-                    <p class="section-subtitle :light" id="work-label">Nuestros Trabajos</p>
-                    <h2 class="h2 section-title">Ultimos Proyectos que Realizamos</h2>
-                    <ul class="has-scrollbar">
-                        <li class="scrollbar-item">
-                            <div class="work-card">
-                                <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./img/work-1.jpg" width="350" height="406" loading="lazy" alt="Engine Repair" class="img-cover" />
-                                </figure>
-                                <div class="card-content">
-                                    <p class="card-subtitle">Reparamiento de autos</p>
-                                    <h3 class="h3 card-title">Reparación general</h3>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="scrollbar-item">
-                            <div class="work-card">
-                                <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./img/work-2.jpg" width="350" height="406" loading="lazy" alt="Car Tyre change" class="img-cover" />
-                                </figure>
-                                <div class="card-content">
-                                    <p class="card-subtitle">Reparar autos</p>
-                                    <h3 class="h3 card-title">Cambio del tirón </h3>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="scrollbar-item">
-                            <div class="work-card">
-                                <figure class="card-banner img-holder" style="--width: 350; --height: 406">
-                                    <img src="./img/work-3.jpg" width="350" height="406" loading="lazy" alt="Battery Adjust" class="img-cover" />
-                                </figure>
-                                <div class="card-content">
-                                    <p class="card-subtitle">Reparar autos</p>
-                                    <h3 class="h3 card-title">Ajustar Baterías</h3>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-        </article>
-    </main>
-
-    <footer class="footer" id="contactanos">
-        <div class="footer-top section">
-            <div class="container">
-                <div class="footer-brand">
-                    <a href="#" class="logo">
-                        <img src="./img/logoWhite.png" width="128" height="63" alt="" />
-                    </a>
-                    <p class="footer-text">
-                        Somos un taller automotriz especializado en brindar servicios
-                        de calidad en traccionamiento, planchado, mantenimiento y
-                        pintura. Nuestro compromiso es el cuidado y rendimiento
-                        óptimo de tu vehículo.
-                    </p>
-                    <ul class="social-list">
-                        <li>
-                            <a href="https://www.facebook.com/p/Xtreme-Performance-Automotive-EIRL-100057547266000/" class="social-link" target="_blank">
-                                <img src="./img/facebook.svg" alt="facebook" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="social-link">
-                                <img src="./img/instagram.svg" alt="instagram" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="social-link">
-                                <img src="./img/twitter.svg" alt="twitter" />
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <ul class="footer-list">
-                    <li><p class="h3">Horario de Atención</p></li>
-                    <li><p class="p">Lunes - Viernes</p><span class="span">8:00 a.m - 6:00 p.m</span></li>
-                    <li><p class="p">Sábado</p><span class="span">8:00 a.m - 2:00 p.m </span></li>
-                </ul>
-                <ul class="footer-list">
-                    <li><p class="h3">Información de Contacto</p></li>
-                    <li>
-                        <a href="tel:+01234567890" class="footer-link">
-                            <span class="material-symbols-rounded">call</span>
-                            <span class="span">+51 998 980 547</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mailto:info@autofix.com" class="footer-link">
-                            <span class="material-symbols-rounded">mail</span>
-                            <span class="span">xtremeperformance@gmail.com</span>
-                        </a>
-                    </li>
-                    <li>
-                        <address class="footer-link address">
-                            <span class="material-symbols-rounded">location_on</span>
-                            <span class="span">Jr Nemesio Raez 2241 El tambo, Huancayo, Peru</span>
-                        </address>
-                    </li>
-                </ul>
-            </div>
-            <img src="./img/LogoLow.png" width="637" height="173" loading="lazy" alt="Shape" class="shape shape-3 move-anim" />
+    <section class="service" id="service">
+      <div class="section__container service__container">
+        <p class="section__subheader">¿POR QUÉ ELEGIRNOS?</p>
+        <h2 class="section__header">Grandiosos Servicios Automotrices</h2>
+        <p class="section__description">
+          Confíe en nosotros para mantener su automóvil funcionando sin
+          problemas y de forma fiable.
+        </p>
+        <div class="service__grid">
+          <div class="service__card">
+            <img src="assets/service-1.jpg" alt="service" />
+            <h4>Planchado</h4>
+            <p>
+              Servicio de planchado especializado para componentes automotrices,
+              garantizando una apariencia impecable y profesional
+            </p>
+          </div>
+          <div class="service__card">
+            <img src="assets/service-2.jpg" alt="service" />
+            <h4>Pintura</h4>
+            <p>
+              Servicio de pintura automotriz de alta calidad, ofreciendo
+              acabados duraderos y profesionales para mejorar la estética y
+              protección de tu vehículo.
+            </p>
+          </div>
+          <div class="service__card">
+            <img src="assets/service-3.jpg" alt="service" />
+            <h4>Traccionamiento</h4>
+            <p>
+              Servicio de traccionamiento especializado para mejorar el
+              rendimiento y la estabilidad de tu vehículo, asegurando una
+              conducción más eficiente y segura
+            </p>
+          </div>
+          <div class="service__card">
+            <img src="assets/service-4.jpg" alt="service" />
+            <h4>Mantenimiento</h4>
+            <p>
+              Servicio de mantenimiento integral para vehículos, garantizando su
+              óptimo funcionamiento y prolongando su vida útil con revisiones y
+              ajustes especializados.
+            </p>
+          </div>
         </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p class="copyright">Copyright 2025, Todos los derechos pertenecen a Xtreme Performance.</p>
-                <img src="./img/footer-shape-2.png" width="778" height="335" loading="lazy" alt="Shape" class="shape shape-2" />
-                <img src="./img/footer-shape-1.png" width="805" height="652" loading="lazy" alt="Red Car" class="shape shape-1 move-anim" />
-            </div>
+      </div>
+    </section>
+
+    <section class="customisation">
+      <div class="section__container customisation__container">
+        <p class="section__subheader">NUESTRO EQUIPO</p>
+        <h2 class="section__header">
+          El servicio de coches se combina con una gran mano de obra
+        </h2>
+        <p class="section__description">
+          Nuestro equipo de técnicos y mecánicos especializados se enorgullece
+          de ofrecer el mejor servicio para su querido vehículo.
+        </p>
+        <div class="customisation__grid">
+          <div class="customisation__card">
+            <h4>+10</h4>
+            <p>Proyectos Totales</p>
+          </div>
+          <div class="customisation__card">
+            <h4>+10</h4>
+            <p>Convenios</p>
+          </div>
+          <div class="customisation__card">
+            <h4>+500</h4>
+            <p>Proyectos Realizados</p>
+          </div>
+          <div class="customisation__card">
+            <h4>+500</h4>
+            <p>Clientes Satisfechos</p>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="contact">
+      <div class="section__container contact__container">
+        <div class="contact__content">
+          <p class="section__subheader">CONTÁCTANOS</p>
+          <h2 class="section__header">
+            Imagine que su coche vuelve a ser nuevo
+          </h2>
+          <p class="section__description">
+            Experimente la magia de una conducción rejuvenecida mientras mimamos
+            su coche con un cuidado de precisión, dejándolo como nuevo.
+          </p>
+          <div class="contact__btns">
+            <button class="btn">
+              <a href="#service">Nuestros Servicios</a>
+            </button>
+            <button class="btn">
+              <a
+                href="https://www.facebook.com/profile.php?id=100057547266000"
+                target="_blank"
+                style="color: red"
+                ><b>Contáctanos</b></a
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container testimonial__container" id="client">
+      <p class="section__subheader">TESTIMONIOS DE CLIENTES</p>
+      <h2 class="section__header">100% Aprobados Por Los Clientes</h2>
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="testimonial__card">
+              <img src="assets/testimonial-1.jpg" alt="testimonial" />
+              <p>
+                No podía creer lo que veían mis ojos cuando me devolvieron el
+                coche de la servicio. Se veía y conducía como si acabara de
+                salir de la línea de montaje. El equipo hizo un trabajo
+                increíble, y yo soy un ¡cliente de por vida!
+              </p>
+              <h4>- Verónica Quispe</h4>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="testimonial__card">
+              <img src="assets/testimonial-2.jpg" alt="testimonial" />
+              <p>
+                He estado trayendo mi coche aquí durante años, y nunca
+                decepcionan. Su atención al detalle y el compromiso con la
+                calidad calidad es incomparable. Mi coche siempre se siente como
+                nuevo visita.
+              </p>
+              <h4>- Jonh Asparrín</h4>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="testimonial__card">
+              <img src="assets/testimonial-3.jpg" alt="testimonial" />
+              <p>
+                Como entusiasta de los coches, soy muy exigente con quien toca
+                mi preciada posesión. La experiencia de su equipo y su pasión
+                por de su equipo por los coches. Mi coche nunca ha mejor.
+              </p>
+              <h4>- Micaelo Mamani</h4>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="section__container footer__container">
+        <div class="footer__col">
+          <div class="logo footer__logo">
+            <a href="#"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+          <p class="section__description">
+            Con un rico legado de 10 años, nuestro compromiso con la excelencia
+            en el mantenimiento de automóviles es inquebrantable.
+          </p>
+          <ul class="footer__socials">
+            <li>
+              <a
+                href="https://www.facebook.com/profile.php?id=100057547266000"
+                target="_blank"
+                ><i class="ri-facebook-fill"></i
+              ></a>
+            </li>
+            <li>
+              <a href="#"><i class="ri-google-fill"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="ri-instagram-line"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="ri-youtube-line"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Nuestros Servicios</h4>
+          <ul class="footer__links">
+            <li><a href="#">Pintura</a></li>
+            <li><a href="#">Planchado</a></li>
+            <li><a href="#">Traccionamiento</a></li>
+            <li><a href="#">Mantenimiento</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Información de Contacto</h4>
+          <ul class="footer__links">
+            <li>
+              <p>
+                Experimente la magia de una conducción rejuvenecida mientras
+                mimamos su coche con un cuidado de precisión
+              </p>
+            </li>
+            <li>
+              <p>Teléfono <span>+51 991 550 564</span></p>
+            </li>
+            <li>
+              <p>Email: <span>info@xtremeperformance.com</span></p>
+            </li>
+          </ul>
+        </div>
+      </div>
     </footer>
+    <div class="footer__bar">
+      Copyright © 2025 Xtreme Performance. Todos los derechos son reservados.
+    </div>
 
-    <script src="./js/script.js"></script>
-</body>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="main.js"></script>
+  </body>
 </html>
