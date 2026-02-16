@@ -292,6 +292,6 @@
       Copyright © 2025 Xtreme Performance. Todos los derechos son reservados.
     </div>
 
-    <script src="./js/sc../../public/js/homepage.jsript.js"></script>
+    <script src="../../public/js/script.js"></script>
 </body>
 </html>
