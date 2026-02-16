@@ -249,15 +249,7 @@
                 ><i class="ri-facebook-fill"></i
               ></a>
             </li>
-            <li>
-              <a href="#"><i class="ri-google-fill"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="ri-instagram-line"></i></a>
-            </li>
-            <li>
-              <a href="#"><i class="ri-youtube-line"></i></a>
-            </li>
+            
           </ul>
         </div>
         <div class="footer__col">
@@ -289,7 +281,7 @@
       </div>
     </footer>
     <div class="footer__bar">
-      Copyright © 2025 Xtreme Performance. Todos los derechos son reservados.
+      Copyright © 2026 Xtreme Performance. Todos los derechos son reservados.
     </div>
 
     <script src="../../public/js/script.js"></script>
