@@ -68,7 +68,7 @@
           Nosotros tenemos 10 años de experiencia en este campo
         </h2>
         <p class="section__description">
-          Con un rico legado de 10 años, nuestro compromiso con la excelencia en
+          Con un rico legado de +10 años, nuestro compromiso con la excelencia en
           el mantenimiento de automóviles es inquebrantable. Nuestro
           experimentado equipo aporta una gran experiencia para garantizar que
           su vehículo reciba un cuidado de primera categoría. Confíe en nuestra
@@ -200,7 +200,7 @@
                 salir de la línea de montaje. El equipo hizo un trabajo
                 increíble, y yo soy un ¡cliente de por vida!
               </p>
-              <h4>- Verónica Quispe</h4>
+              <h4>- Nataly Liliana</h4>
             </div>
           </div>
           <div class="swiper-slide">
