@@ -23,7 +23,6 @@ const scrollRevealOptions = {
   duration: 1000,
 };
 
-// header container
 ScrollReveal().reveal(".header__content h1", {
   ...scrollRevealOptions,
 });
@@ -33,7 +32,6 @@ ScrollReveal().reveal(".header__btn", {
   delay: 500,
 });
 
-// service container
 ScrollReveal().reveal(".service__card", {
   ...scrollRevealOptions,
   interval: 500,
