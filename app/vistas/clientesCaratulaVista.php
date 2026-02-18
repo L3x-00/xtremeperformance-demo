@@ -250,22 +250,23 @@ function confirmDeleteClient(clientId, clientName, page) {
   confirmDelete(message, function() {
     // Mostrar loading en el botón y fila
     const row = document.querySelector(`tr[data-client-id="${clientId}"]`);
-    const button = row.querySelector('.btn-outline-danger');
+    const button = row && row.querySelector('.btn-outline-danger');
     
     // Efectos visuales
-    setButtonLoading(button, true);
-    row.style.opacity = '0.6';
-    row.style.transform = 'scale(0.98)';
+    if (button) setButtonLoading(button, true);
+    if (row) {
+      row.style.opacity = '0.6';
+      row.style.transform = 'scale(0.98)';
+    }
     
     // Mostrar notificación de proceso
     showFloatingNotification('Eliminando cliente...', 'warning', 2000);
     
-    // Simular proceso y redirigir
-    setTimeout(() => {
-      const url = `<?php echo RUTA; ?>clientes/eliminar/${clientId}/${page}`;
-      console.log('DEBUG: Redirigiendo a URL de eliminación:', url);
-      window.location.href = url;
-    }, 1000);
+    // Redirigir directamente (sin timeout)
+    const baseUrl = '<?php echo RUTA; ?>';
+    const url = baseUrl + 'clientes/eliminar/' + clientId + '/' + page;
+    console.log('DEBUG: Redirigiendo a URL de eliminación:', url);
+    window.location.href = url;
   });
 }
 
