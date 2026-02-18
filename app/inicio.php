@@ -57,7 +57,7 @@ define('CLIENTE_INACTIVO',2);
 define('ORDEN_ABIERTA',1);
 define('ORDEN_FACTURADA',2);
 //
-date_default_timezone_set('America/Mexico_City');
+date_default_timezone_set('America/Lima');
 //
 require_once('libs/fpdf.php');
 require_once('libs/Imprimir.php');
