@@ -96,7 +96,7 @@
             </p>
           </div>
           <div class="service__card">
-            <img src="../../public/img/service-2.jpg" alt="service" />
+            <img src="../../public/img/pinturas.jpg" alt="service" />
             <h4>Pintura</h4>
             <p>
               Servicio de pintura automotriz de alta calidad, ofreciendo
