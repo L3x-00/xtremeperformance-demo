@@ -2,6 +2,10 @@
 /**
  * Autenticación de API
  */
+
+// Incluir constantes
+require_once(__DIR__ . '/../../app/inicio.php');
+
 class Auth {
     
     private static $db;
@@ -19,6 +23,9 @@ class Auth {
         if (empty($correo) || empty($clave)) {
             Response::error('Correo y contraseña son requeridos', 400);
         }
+        
+        // Hashear contraseña con el mismo método que el sistema
+        $claveHasheada = hash_hmac("sha512", $clave, CLAVE);
         
         // Buscar usuario por correo (puede ser cliente o usuario del sistema)
         $sql = "SELECT id, nombres, apellidos, correo, clave, tipoUsuario 
@@ -43,7 +50,7 @@ class Auth {
         
         // Verificar contraseña
         $usuarioData = $usuario[0];
-        if (!password_verify($clave, $usuarioData['clave']) && $clave !== $usuarioData['clave']) {
+        if ($claveHasheada !== $usuarioData['clave']) {
             Response::unauthorized('Correo o contraseña incorrectos');
         }
         
