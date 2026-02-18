@@ -195,9 +195,6 @@ if (empty($errores)) {
 			if ($ir_array['facturas'] > 0) {
 				$m .= "<li>" . (($ir_array['facturas'] == 1) ? "Una factura" : $ir_array['facturas'] . " Facturas") . ".</li>";
 			}
-			if ($ir_array['seguimientos'] > 0) {
-				$m .= "<li>" . (($ir_array['seguimientos'] == 1) ? "Un seguimiento" : $ir_array['seguimientos'] . " Seguimientos") . ".</li>";
-			}
 			$m.="</ul>Primero debe eliminar esas referencias.";
 			$this->mensaje(
 	    		"Error al borrar al cliente", 
