@@ -193,14 +193,14 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="testimonial__card">
-              <img src="../../public/img/testimonial-1.jpg" alt="testimonial" />
+              <img src="../../public/img/avatar-carrusel.jpg" alt="testimonial" />
               <p>
                 No podía creer lo que veían mis ojos cuando me devolvieron el
                 coche de la servicio. Se veía y conducía como si acabara de
                 salir de la línea de montaje. El equipo hizo un trabajo
                 increíble, y yo soy un ¡cliente de por vida!
               </p>
-              <h4>- Nataly Liliana</h4>
+              <h4>- Jonh Asparrín</h4>
             </div>
           </div>
           <div class="swiper-slide">
