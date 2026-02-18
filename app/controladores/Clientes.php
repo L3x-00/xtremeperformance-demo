@@ -269,12 +269,16 @@ if (empty($errores)) {
 				$m .= "<li>" . (($ir_array['seguimientos'] == 1) ? "Un seguimiento" : $ir_array['seguimientos'] . " Seguimientos") . ".</li>";
 			}
 			$m .= "</ul>Primero debe eliminar o desasociar esas referencias.";
-					$m, 
-					"clientes/".$pagina, 
-					"danger"
-				);
-				return;
-			}
+			error_log("ELIMINACION DEBUG: Bloqueado por integridad referencial");
+			$this->mensaje(
+				"Error al eliminar cliente", 
+				"Error al eliminar cliente", 
+				$m, 
+				"clientes/".$pagina, 
+				"danger"
+			);
+			return;
+		}
 
 			// Si no hay referencias, proceder con la eliminación
 			$resultado = $this->modelo->eliminarFisico($id);
