@@ -237,75 +237,8 @@ if (empty($errores)) {
 
 	public function eliminar(string $id='', string $pagina="1"):void
 	{
-		// Debug: Log para verificar que se está ejecutando
-		error_log("ELIMINACION DEBUG: Método eliminar() llamado con ID: $id, Página: $pagina");
-		
-		if (isset($id) && $id!="") {
-			// Obtener el nombre del cliente antes de eliminarlo
-			$cliente = $this->modelo->getId($id);
-			error_log("ELIMINACION DEBUG: Cliente encontrado: " . json_encode($cliente));
-			
-			$nombre = isset($cliente['nombres']) && isset($cliente['apellidos']) 
-				? $cliente['nombres'] . ' ' . $cliente['apellidos'] 
-				: "Cliente ID: " . $id;
-
-			// Verificar integridad referencial antes de eliminar
-			$ir_array = $this->modelo->getIntegridadReferencial($id);
-			error_log("ELIMINACION DEBUG: Integridad referencial: " . json_encode($ir_array));
-			
-		if ($ir_array['total'] > 0) {
-			// No se puede eliminar porque tiene referencias
-			$m = "No se puede eliminar al cliente porque tiene:<ul>";
-			if ($ir_array['vehiculos'] > 0) {
-				$m .= "<li>" . (($ir_array['vehiculos'] == 1) ? "Un vehículo" : $ir_array['vehiculos'] . " Vehículos") . ".</li>";
-			}
-			if ($ir_array['salidas'] > 0) {
-				$m .= "<li>" . (($ir_array['salidas'] == 1) ? "Una salida" : $ir_array['salidas'] . " Salidas") . ".</li>";
-			}
-			if ($ir_array['facturas'] > 0) {
-				$m .= "<li>" . (($ir_array['facturas'] == 1) ? "Una factura" : $ir_array['facturas'] . " Facturas") . ".</li>";
-			}
-			if ($ir_array['seguimientos'] > 0) {
-				$m .= "<li>" . (($ir_array['seguimientos'] == 1) ? "Un seguimiento" : $ir_array['seguimientos'] . " Seguimientos") . ".</li>";
-			}
-			$m .= "</ul>Primero debe eliminar o desasociar esas referencias.";
-			error_log("ELIMINACION DEBUG: Bloqueado por integridad referencial");
-			$this->mensaje(
-				"Error al eliminar cliente", 
-				"Error al eliminar cliente", 
-				$m, 
-				"clientes/".$pagina, 
-				"danger"
-			);
-			return;
-		}
-
-			// Si no hay referencias, proceder con la eliminación
-			$resultado = $this->modelo->eliminarFisico($id);
-			error_log("ELIMINACION DEBUG: Resultado eliminarFisico: " . ($resultado ? 'true' : 'false'));
-			
-			if ($resultado) {
-				error_log("ELIMINACION DEBUG: Eliminación exitosa");
-				$this->mensaje(
-					"Eliminación de cliente", 
-					"Eliminación de cliente", 
-					"Se eliminó correctamente al cliente: " . $nombre, 
-					"clientes/".$pagina, 
-					"success"
-				);
-	        } else {
-	        	error_log("ELIMINACION DEBUG: Error en eliminación");
-	        	$this->mensaje(
-	        		"Eliminación de cliente", 
-	        		"Eliminación de cliente", 
-	        		"Error al eliminar al cliente: " . $nombre . ". Es posible que ya haya sido eliminado.", 
-	        		"clientes/".$pagina,
-	        		"danger"
-	        	);
-	        }
-	   } else {
-	   	   error_log("ELIMINACION DEBUG: ID vacío o no válido");
-	   }
+		// Redirige a bajaLogica (igual que Vehículos)
+		$this->bajaLogica($id, $pagina);
 	}
 
 	public function caratula(string $pagina="1"):void

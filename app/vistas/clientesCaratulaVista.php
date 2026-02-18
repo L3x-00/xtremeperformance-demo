@@ -113,10 +113,10 @@
               echo "       class='btn btn-outline-primary microinteraction hover-lift' title='Modificar cliente'>";
               echo "      <i class='fas fa-edit'></i>";
               echo "    </a>";
-              echo "    <button onclick='confirmDeleteClient(".$datos["data"][$i]["id"].", \"".$datos["data"][$i]["nombre"]."\", ".$datos["pag"]["pagina"].")' ";
-              echo "            class='btn btn-outline-danger microinteraction hover-grow' title='Eliminar cliente'>";
+              echo "    <a href='".RUTA."clientes/borrar/".$datos["data"][$i]["id"]."/".$datos["pag"]["pagina"]."' ";
+              echo "       class='btn btn-outline-danger microinteraction hover-grow' title='Eliminar cliente'>";
               echo "      <i class='fas fa-trash'></i>";
-              echo "    </button>";
+              echo "    </a>";
               echo "  </div>";
               echo "</td>";
               echo "</tr>";
