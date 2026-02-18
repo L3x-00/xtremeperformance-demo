@@ -271,10 +271,10 @@
               </p>
             </li>
             <li>
-              <p>Teléfono <span>+51 991 550 564</span></p>
+              <p>Teléfono <span>+51 957 214 327</span></p>
             </li>
             <li>
-              <p>Email: <span>info@xtremeperformance.com</span></p>
+              <p>Email: <span>cpalacios@gmail.com</span></p>
             </li>
           </ul>
         </div>
