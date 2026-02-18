@@ -3,9 +3,6 @@
  * Autenticación de API
  */
 
-// Incluir constantes
-require_once(__DIR__ . '/../../app/inicio.php');
-
 class Auth {
     
     private static $db;

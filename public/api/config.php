@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Constantes de seguridad (del proyecto)
+define("CLAVE", "mimamamemimamucho");
+
 // Incluir archivos necesarios
 require_once(__DIR__ . '/../../app/libs/MySQLdb.php');
 require_once(__DIR__ . '/../../app/libs/Helper.php');
@@ -22,4 +25,3 @@ require_once(__DIR__ . '/Response.php');
 
 // Definir constantes
 define('API_VERSION', '1.0');
-define('API_KEY_HEADER', 'X-API-Key');
