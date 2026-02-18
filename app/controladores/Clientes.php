@@ -172,7 +172,7 @@ if (empty($errores)) {
 		//Integridad referencial
     	$ir_array = $this->modelo->getIntegridadReferencial($id);
 
-		if ($ir_array[0]==0) {
+		if ($ir_array['total']==0) {
 			$datos = [
 			  "titulo" => "Baja de un cliente",
 			  "subtitulo" => "Baja de un cliente",
@@ -189,10 +189,17 @@ if (empty($errores)) {
 			$this->vista("clientesAltaVista",$datos);
 		} else {
 			$m = "No podemos eliminar al cliente porque tiene:<ul>";
-			if ($ir_array[1]==1) {
-				$m.="<li>Un vehículo.</li>";
-			} else if ($ir_array[1]>1) {
-				$m.="<li>".$ir_array[1]." Vehículos.</li>";
+			if ($ir_array['vehiculos'] > 0) {
+				$m .= "<li>" . (($ir_array['vehiculos'] == 1) ? "Un vehículo" : $ir_array['vehiculos'] . " Vehículos") . ".</li>";
+			}
+			if ($ir_array['salidas'] > 0) {
+				$m .= "<li>" . (($ir_array['salidas'] == 1) ? "Una salida" : $ir_array['salidas'] . " Salidas") . ".</li>";
+			}
+			if ($ir_array['facturas'] > 0) {
+				$m .= "<li>" . (($ir_array['facturas'] == 1) ? "Una factura" : $ir_array['facturas'] . " Facturas") . ".</li>";
+			}
+			if ($ir_array['seguimientos'] > 0) {
+				$m .= "<li>" . (($ir_array['seguimientos'] == 1) ? "Un seguimiento" : $ir_array['seguimientos'] . " Seguimientos") . ".</li>";
 			}
 			$m.="</ul>Primero debe eliminar esas referencias.";
 			$this->mensaje(
@@ -246,19 +253,22 @@ if (empty($errores)) {
 			$ir_array = $this->modelo->getIntegridadReferencial($id);
 			error_log("ELIMINACION DEBUG: Integridad referencial: " . json_encode($ir_array));
 			
-			if ($ir_array[0] > 0) {
-				// No se puede eliminar porque tiene referencias
-				$m = "No se puede eliminar al cliente porque tiene:<ul>";
-				if ($ir_array[1]==1) {
-					$m.="<li>Un vehículo.</li>";
-				} else if ($ir_array[1]>1) {
-					$m.="<li>".$ir_array[1]." Vehículos.</li>";
-				}
-				$m.="</ul>Primero debe eliminar esas referencias.";
-				error_log("ELIMINACION DEBUG: Bloqueado por integridad referencial");
-				$this->mensaje(
-					"Error al eliminar cliente", 
-					"Error al eliminar cliente", 
+		if ($ir_array['total'] > 0) {
+			// No se puede eliminar porque tiene referencias
+			$m = "No se puede eliminar al cliente porque tiene:<ul>";
+			if ($ir_array['vehiculos'] > 0) {
+				$m .= "<li>" . (($ir_array['vehiculos'] == 1) ? "Un vehículo" : $ir_array['vehiculos'] . " Vehículos") . ".</li>";
+			}
+			if ($ir_array['salidas'] > 0) {
+				$m .= "<li>" . (($ir_array['salidas'] == 1) ? "Una salida" : $ir_array['salidas'] . " Salidas") . ".</li>";
+			}
+			if ($ir_array['facturas'] > 0) {
+				$m .= "<li>" . (($ir_array['facturas'] == 1) ? "Una factura" : $ir_array['facturas'] . " Facturas") . ".</li>";
+			}
+			if ($ir_array['seguimientos'] > 0) {
+				$m .= "<li>" . (($ir_array['seguimientos'] == 1) ? "Un seguimiento" : $ir_array['seguimientos'] . " Seguimientos") . ".</li>";
+			}
+			$m .= "</ul>Primero debe eliminar o desasociar esas referencias.";
 					$m, 
 					"clientes/".$pagina, 
 					"danger"
