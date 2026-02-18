@@ -193,7 +193,7 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="testimonial__card">
-              <img src="../../public/img/avatar-carrusel.jpg" alt="testimonial" />
+              <img src="../../public/img/avatara-carrusel.jpg" alt="testimonial" />
               <p>
                 No podía creer lo que veían mis ojos cuando me devolvieron el
                 coche de la servicio. Se veía y conducía como si acabara de
