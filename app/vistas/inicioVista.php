@@ -88,7 +88,7 @@
         </p>
         <div class="service__grid">
           <div class="service__card">
-            <img src="../../public/img/service-1.jpg" alt="service" />
+            <img src="../../public/img/planchado.jpg" alt="service" />
             <h4>Planchado</h4>
             <p>
               Servicio de planchado especializado para componentes automotrices,
@@ -105,7 +105,7 @@
             </p>
           </div>
           <div class="service__card">
-            <img src="../../public/img/service-3.jpg" alt="service" />
+            <img src="../../public/img/traccionamiento.jpg" alt="service" />
             <h4>Traccionamiento</h4>
             <p>
               Servicio de traccionamiento especializado para mejorar el
@@ -114,7 +114,7 @@
             </p>
           </div>
           <div class="service__card">
-            <img src="../../public/img/service-4.jpg" alt="service" />
+            <img src="../../public/img/mantenimiento.jpg" alt="service" />
             <h4>Mantenimiento</h4>
             <p>
               Servicio de mantenimiento integral para vehículos, garantizando su
