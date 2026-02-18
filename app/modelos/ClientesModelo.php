@@ -111,7 +111,6 @@ public function getId(string $id = ''): array
 		$ir_array = array(
 			'total' => 0,
 			'vehiculos' => 0,
-			'salidas' => 0,
 			'facturas' => 0,
 			'seguimientos' => 0
 		);
@@ -123,21 +122,14 @@ public function getId(string $id = ''): array
 			$ir_array['vehiculos'] = isset($salida['cnt']) ? $salida['cnt'] : $salida['COUNT(*)'];
 		}
 		
-		// Verificar salidas
-		$sql = "SELECT COUNT(*) as cnt FROM salidas WHERE baja=0 AND idCliente=".$id;
-		$salida = $this->db->query($sql);
-		if (!empty($salida)) {
-			$ir_array['salidas'] = isset($salida['cnt']) ? $salida['cnt'] : $salida['COUNT(*)'];
-		}
-		
-		// Verificar facturas
+		// Verificar facturas (si la tabla existe)
 		$sql = "SELECT COUNT(*) as cnt FROM facturas WHERE baja=0 AND idCliente=".$id;
 		$salida = $this->db->query($sql);
 		if (!empty($salida)) {
 			$ir_array['facturas'] = isset($salida['cnt']) ? $salida['cnt'] : $salida['COUNT(*)'];
 		}
 		
-		// Verificar seguimientos
+		// Verificar seguimientos (si la tabla existe)
 		$sql = "SELECT COUNT(*) as cnt FROM seguimientos WHERE baja=0 AND idCliente=".$id;
 		$salida = $this->db->query($sql);
 		if (!empty($salida)) {
@@ -145,7 +137,7 @@ public function getId(string $id = ''): array
 		}
 		
 		// Calcular total
-		$ir_array['total'] = $ir_array['vehiculos'] + $ir_array['salidas'] + $ir_array['facturas'] + $ir_array['seguimientos'];
+		$ir_array['total'] = $ir_array['vehiculos'] + $ir_array['facturas'] + $ir_array['seguimientos'];
 		
 		return $ir_array;
 	}

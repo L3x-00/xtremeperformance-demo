@@ -192,9 +192,6 @@ if (empty($errores)) {
 			if ($ir_array['vehiculos'] > 0) {
 				$m .= "<li>" . (($ir_array['vehiculos'] == 1) ? "Un vehículo" : $ir_array['vehiculos'] . " Vehículos") . ".</li>";
 			}
-			if ($ir_array['salidas'] > 0) {
-				$m .= "<li>" . (($ir_array['salidas'] == 1) ? "Una salida" : $ir_array['salidas'] . " Salidas") . ".</li>";
-			}
 			if ($ir_array['facturas'] > 0) {
 				$m .= "<li>" . (($ir_array['facturas'] == 1) ? "Una factura" : $ir_array['facturas'] . " Facturas") . ".</li>";
 			}
