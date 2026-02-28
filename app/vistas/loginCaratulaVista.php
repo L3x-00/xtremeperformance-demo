@@ -51,7 +51,7 @@
                     </div>
                     
                     <p class="text-center text-muted small mt-4">
-                        &copy; 2025 Xtreme Performance. Todos los derechos reservados.
+                        &copy; 2026 Xtreme Performance. Todos los derechos reservados.
                     </p>
 
                 </div>

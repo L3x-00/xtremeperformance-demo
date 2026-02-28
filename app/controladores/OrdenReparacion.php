@@ -100,13 +100,13 @@ class OrdenReparacion extends Controlador
 	      	array_push($errores,"El formato de la fecha de ingreso no es correcto.");
 	      } else {
 	      	// Construimos DateTime y validamos que la fecha sea la fecha actual o
-	      	// pertenezca al año 2025, según la regla solicitada.
+	      	// pertenezca al año 2026, según la regla solicitada.
 	      	$fechaIngreso_dt = new DateTime($fechaIngreso);
 	      	$yearIngreso = (int)$fechaIngreso_dt->format('Y');
 	      	$hoy_str = $hoy->format('Y-m-d');
 	      	$fechaIngreso_str = $fechaIngreso_dt->format('Y-m-d');
-	      	if ($yearIngreso !== 2025 && $fechaIngreso_str !== $hoy_str) {
-	      		array_push($errores,"La fecha de ingreso debe ser la fecha actual o una fecha del año 2025.");
+	      	if ($yearIngreso !== 2026 && $fechaIngreso_str !== $hoy_str) {
+	      		array_push($errores,"La fecha de ingreso debe ser la fecha actual o una fecha del año 2026.");
 	      	}
 	      }
 
@@ -115,12 +115,12 @@ class OrdenReparacion extends Controlador
 	      } else if(Helper::fecha($fechaSalida)==false){
 	      	array_push($errores,"El formato de la fecha de salida no es correcto.");
 	      } else {
-	      	// Validación similar: permitir solo la fecha actual o cualquier fecha del año 2025.
+	      	// Validación similar: permitir solo la fecha actual o cualquier fecha del año 2026.
 	      	$fechaSalida_dt = new DateTime($fechaSalida);
 	      	$yearSalida = (int)$fechaSalida_dt->format('Y');
 	      	$fechaSalida_str = $fechaSalida_dt->format('Y-m-d');
-	      	if ($yearSalida !== 2025 && $fechaSalida_str !== $hoy->format('Y-m-d')) {
-	      		array_push($errores,"La fecha de salida debe ser la fecha actual o una fecha del año 2025.");
+	      	if ($yearSalida !== 2026 && $fechaSalida_str !== $hoy->format('Y-m-d')) {
+	      		array_push($errores,"La fecha de salida debe ser la fecha actual o una fecha del año 2026.");
 	      	}
 	      	// Si existe fechaIngreso_dt válida, verificamos que la salida no sea anterior.
 	      	if (isset($fechaIngreso_dt)) {
