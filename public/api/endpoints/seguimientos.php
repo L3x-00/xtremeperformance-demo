@@ -60,7 +60,7 @@ if ($method === 'GET') {
             Response::success(['id' => $id['id']], 'Seguimiento agregado');
             
             // Disparar evento Pusher
-            PusherHelper::trigger(
+            $result = PusherHelper::trigger(
                 'orden-' . $idOrdenReparacion,
                 'nuevo-seguimiento',
                 [
@@ -70,6 +70,7 @@ if ($method === 'GET') {
                     'observacion' => $observacion
                 ]
             );
+            error_log("Pusher trigger result: " . ($result ? 'success' : 'failed') . " for orden-$idOrdenReparacion");
         } else {
             Response::error('Error al agregar seguimiento');
         }

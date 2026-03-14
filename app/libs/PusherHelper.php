@@ -5,8 +5,8 @@
 class PusherHelper
 {
     private static $app_id = '2125569'; // Reemplaza con tu app_id de Pusher (número)
-    private static $key = '478d0d46be99a655faba'; // Tu key
-    private static $secret = 'your_secret'; // Reemplaza con tu secret de Pusher
+    private static $key = '24883b4239d5fad125df'; // Tu key
+    private static $secret = '478d0d46be99a655faba'; // Reemplaza con tu secret de Pusher
     private static $cluster = 'mt1'; // Tu cluster
 
     public static function trigger($channel, $event, $data)
@@ -48,10 +48,12 @@ class PusherHelper
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
+        error_log("Pusher trigger: URL=$url, Data=" . json_encode($body) . ", Response=$response, Code=$http_code");
+
         if ($http_code == 200) {
             return true;
         } else {
-            error_log("Pusher error: " . $response);
+            error_log("Pusher error: HTTP $http_code, Response: $response");
             return false;
         }
     }
