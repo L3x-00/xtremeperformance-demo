@@ -5,12 +5,15 @@
  * GET /api/tablero?action=ingresos_mensuales&meses=6
  */
 
-// Definir constantes necesarias (de app/inicio.php)
+// Definir constantes necesarias
 define('ORDEN_ABIERTA', 1);
 define('ORDEN_FACTURADA', 2);
 
-// Incluir MySQLdb
-require_once(__DIR__ . '/../../app/libs/MySQLdb.php');
+// IMPORTACIONES CORREGIDAS
+// Subimos 3 niveles: public/api/endpoints -> public/api -> public -> raíz -> app/libs
+require_once(__DIR__ . '/../../../app/libs/MySQLdb.php');
+require_once(__DIR__ . '/../../../app/libs/Auth.php');      // Necesario para Auth::check()
+require_once(__DIR__ . '/../../../app/libs/Response.php');  // Necesario para Response::success() y errores
 
 $usuarioId = Auth::check();
 $db = new MySQLdb();
@@ -30,12 +33,15 @@ if ($method === 'GET') {
         // Ordenes abiertas
         $r = $db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND estado=".ORDEN_ABIERTA);
         $kpis["ordenes_abiertas"] = isset($r["c"]) ? intval($r["c"]) : 0;
+        
         // Ordenes facturadas
         $r = $db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0 AND estado=".ORDEN_FACTURADA);
         $kpis["ordenes_facturadas"] = isset($r["c"]) ? intval($r["c"]) : 0;
+        
         // Ordenes totales
         $r = $db->query("SELECT COUNT(*) AS c FROM ordenreparacion WHERE baja=0");
         $kpis["ordenes_totales"] = isset($r["c"]) ? intval($r["c"]) : 0;
+        
         // Ingresos del mes (desde facturas: incluye materiales + mano de obra + otros + IVA)
         $r = $db->query("SELECT IFNULL(SUM(total),0) AS s FROM facturas WHERE baja=0 AND DATE_FORMAT(alta_dt,'%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')");
         $kpis["ingresos_mes"] = isset($r["s"]) ? floatval($r["s"]) : 0.0;
@@ -48,9 +54,11 @@ if ($method === 'GET') {
         $sql = "SELECT DATE_FORMAT(alta_dt,'%Y-%m') as ym, SUM(total) as total ".
                "FROM facturas WHERE baja=0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL ".$meses." MONTH) ".
                "GROUP BY ym ORDER BY ym ASC";
+               
         $rows = $db->querySelect($sql);
         $labels = [];
         $data = [];
+        
         foreach ($rows as $row) {
             $labels[] = $row['ym'];
             $data[] = floatval($row['total']);
