@@ -7,7 +7,7 @@ class PusherHelper
     private static $app_id = '2125569'; // Reemplaza con tu app_id de Pusher (número)
     private static $key = '24883b4239d5fad125df'; // Tu key
     private static $secret = '478d0d46be99a655faba'; // Reemplaza con tu secret de Pusher
-    private static $cluster = 'mt1'; // Tu cluster
+    private static $cluster = 'us2'; // Cambiado a estándar
 
     public static function trigger($channel, $event, $data)
     {
