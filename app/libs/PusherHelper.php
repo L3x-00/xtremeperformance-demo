@@ -11,7 +11,7 @@ class PusherHelper
 
     public static function trigger($channel, $event, $data)
     {
-        $url = "https://api.pusherapp.com/apps/" . self::$app_id . "/events";
+        $url = "https://api-" . self::$cluster . ".pusher.com/apps/" . self::$app_id . "/events";
 
         $body = json_encode([
             'name' => $event,
