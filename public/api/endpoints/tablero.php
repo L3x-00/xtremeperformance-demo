@@ -25,11 +25,11 @@ function enviarRespuesta($status, $mensaje, $data = null, $codigoHttp = 200) {
 }
 
 // 3. VALIDACIÓN DE SESIÓN
-$sesion = new Sesion();
-if (!$sesion->getLogin()) {
-    // Si en Flutter te sale "No estás logueado", comenta estas dos líneas de abajo
-    enviarRespuesta("error", "No estás logueado", null, 401);
-}
+// $sesion = new Sesion();
+// if (!$sesion->getLogin()) {
+//     // Si en Flutter te sale "No estás logueado", comenta estas dos líneas de abajo
+//     enviarRespuesta("error", "No estás logueado", null, 401);
+// }
 
 // 4. LÓGICA DE LA BASE DE DATOS
 $db = new MySQLdb();
