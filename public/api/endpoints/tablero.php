@@ -12,10 +12,15 @@ define('ORDEN_FACTURADA', 2);
 // IMPORTACIONES CORREGIDAS
 // Subimos 3 niveles: public/api/endpoints -> public/api -> public -> raíz -> app/libs
 require_once(__DIR__ . '/../../../app/libs/MySQLdb.php');
-require_once(__DIR__ . '/../../../app/libs/Auth.php');      // Necesario para Auth::check()
+require_once(__DIR__ . '/../../../app/libs/Sesion.php');
+$sesion = new Sesion();
+if (!$sesion->getLogin()) {
+    Response::badRequest('No estás logueado');
+    exit;
+}    // Necesario para Auth::check()
 require_once(__DIR__ . '/../../../app/libs/Response.php');  // Necesario para Response::success() y errores
 
-$usuarioId = Auth::check();
+
 $db = new MySQLdb();
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
