@@ -42,6 +42,10 @@ switch ($resource) {
         require_once(__DIR__ . '/endpoints/usuarios.php');
         break;
     
+    case 'tablero':
+        require_once(__DIR__ . '/endpoints/tablero.php');
+        break;
+    
     case 'status':
         Response::success(['version' => API_VERSION], 'API Online');
         break;
