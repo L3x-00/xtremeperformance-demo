@@ -4,10 +4,10 @@
  */
 class PusherHelper
 {
-    private static $app_id = 'your_app_id'; // Reemplaza con tu app_id de Pusher
-    private static $key = 'your_key'; // Reemplaza con tu key
-    private static $secret = 'your_secret'; // Reemplaza con tu secret
-    private static $cluster = 'us2'; // Reemplaza con tu cluster
+    private static $app_id = '2125569'; // Reemplaza con tu app_id de Pusher (número)
+    private static $key = '478d0d46be99a655faba'; // Tu key
+    private static $secret = 'your_secret'; // Reemplaza con tu secret de Pusher
+    private static $cluster = 'mt1'; // Tu cluster
 
     public static function trigger($channel, $event, $data)
     {
