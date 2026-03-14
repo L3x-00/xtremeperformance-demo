@@ -11,6 +11,7 @@ define('ORDEN_FACTURADA', 2);
 
 // Incluir MySQLdb
 require_once(__DIR__ . '/../../../app/libs/MySQLdb.php');
+require_once(__DIR__ . '/../../../app/libs/PusherHelper.php');
 
 $usuarioId = Auth::check();
 $db = new MySQLdb();
@@ -57,6 +58,18 @@ if ($method === 'GET') {
         if ($db->queryNoSelect($sql, $params)) {
             $id = $db->query("SELECT LAST_INSERT_ID() as id");
             Response::success(['id' => $id['id']], 'Seguimiento agregado');
+            
+            // Disparar evento Pusher
+            PusherHelper::trigger(
+                'orden-' . $idOrdenReparacion,
+                'nuevo-seguimiento',
+                [
+                    'id' => $id['id'],
+                    'idOrden' => $idOrdenReparacion,
+                    'fecha' => $fecha,
+                    'observacion' => $observacion
+                ]
+            );
         } else {
             Response::error('Error al agregar seguimiento');
         }
