@@ -9,17 +9,17 @@
 define('ORDEN_ABIERTA', 1);
 define('ORDEN_FACTURADA', 2);
 
-// IMPORTACIONES CORREGIDAS
-// Subimos 3 niveles: public/api/endpoints -> public/api -> public -> raíz -> app/libs
+// 1. PRIMERO TODAS LAS IMPORTACIONES
 require_once(__DIR__ . '/../../../app/libs/MySQLdb.php');
+require_once(__DIR__ . '/../../../app/libs/Response.php'); // <-- LO MOVIMOS ARRIBA
 require_once(__DIR__ . '/../../../app/libs/Sesion.php');
+
+// 2. LUEGO EJECUTAMOS LA LÓGICA
 $sesion = new Sesion();
 if (!$sesion->getLogin()) {
     Response::badRequest('No estás logueado');
     exit;
-}    // Necesario para Auth::check()
-require_once(__DIR__ . '/../../../app/libs/Response.php');  // Necesario para Response::success() y errores
-
+}
 
 $db = new MySQLdb();
 $method = $_SERVER['REQUEST_METHOD'];
@@ -28,6 +28,7 @@ $action = $_GET['action'] ?? null;
 if ($method === 'GET') {
     
     if ($action === 'kpis') {
+// ... todo el resto de tu código hacia abajo se mantiene igual ...
         // Obtener KPIs
         $kpis = [
             "ordenes_abiertas" => 0,
