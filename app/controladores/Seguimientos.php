@@ -1,7 +1,7 @@
 <?php  
 // IMPORTANTE: Ajusta esta ruta dependiendo de dónde guardaste PusherHelper.php
 // Asumiendo que Seguimientos.php está en app/controladores/ y PusherHelper.php está en app/helpers/
-require_once __DIR__ . '/../helpers/PusherHelper.php'; 
+require_once __DIR__ . '/../libs/PusherHelper.php'; 
 
 /**
  * */
