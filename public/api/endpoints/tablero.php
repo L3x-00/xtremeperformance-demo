@@ -5,6 +5,10 @@
  * GET /api/tablero?action=ingresos_mensuales&meses=6
  */
 
+// Definir constantes necesarias (de app/inicio.php)
+define('ORDEN_ABIERTA', 1);
+define('ORDEN_FACTURADA', 2);
+
 $usuarioId = Auth::check();
 $db = new MySQLdb();
 $method = $_SERVER['REQUEST_METHOD'];
