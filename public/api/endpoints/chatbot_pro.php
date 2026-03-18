@@ -7,7 +7,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
-// 2. CONFIGURACIÓN (MODELO EXACTO DE TU CAPTURA: GEMINI 3 FLASH PREVIEW)
+
 $apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
 // La URL exacta para modelos Preview en v1beta
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" . trim($apiKey);
