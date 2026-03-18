@@ -7,10 +7,9 @@ header("Content-Type: application/json; charset=UTF-8");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
-// 2. CONFIGURACIÓN (URL V1BETA - LA MÁS COMPATIBLE CON FLASH)
+// 2. CONFIGURACIÓN (VOLVEMOS A V1BETA)
 $apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
-// Cambia la URL por esta exacta:
-$url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . trim($apiKey);
 
 // 3. RECIBIR DATOS
 $input = json_decode(file_get_contents("php://input"), true);
@@ -21,12 +20,12 @@ if (empty($mensajeUsuario)) {
     exit;
 }
 
-// 4. ESTRUCTURA MINIMALISTA (Para evitar Error 400)
+// 4. ESTRUCTURA DE DATOS
 $data = [
     "contents" => [
         [
             "parts" => [
-                ["text" => "Eres el asistente de Xtreme Performance. Responde breve: " . $mensajeUsuario]
+                ["text" => "Eres el asistente experto de Xtreme Performance. Responde amable y breve: " . $mensajeUsuario]
             ]
         ]
     ]
@@ -48,13 +47,13 @@ curl_close($ch);
 $resultadoIA = json_decode($response, true);
 
 if ($httpCode === 200) {
-    $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, dime más.";
+    $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, cuéntame más.";
     echo json_encode(["respuesta" => $texto]);
 } else {
-    // Si falla, te dirá exactamente por qué
-    $errorMsg = $resultadoIA['error']['message'] ?? "Error desconocido de Google";
+    // Si vuelve a fallar, aquí veremos el por qué
+    $errorMsg = $resultadoIA['error']['message'] ?? "Error desconocido";
     echo json_encode([
-        "respuesta" => "Error $httpCode: No se encontró el modelo o la clave es incorrecta.",
+        "respuesta" => "Error $httpCode: El motor sigue sin arrancar.",
         "detalle" => $errorMsg
     ]);
 }
