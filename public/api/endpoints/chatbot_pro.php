@@ -1,52 +1,58 @@
 <?php
-header("Content-Type: application/json");
+// 1. CABECERAS DE SEGURIDAD (CORS) - Vital para Flutter Web
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Content-Type: application/json; charset=UTF-8");
 
-// 1. TU CONFIGURACIÓN
-$apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; // Pega aquí la clave que obtuviste
+// Manejo de peticiones OPTIONS (Pre-flight)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
+
+// 2. TU CONFIGURACIÓN
+$apiKey = "TU_API_KEY_AQUÍ"; // REVISA QUE ESTÉ BIEN PEGADA
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
 
-// 2. RECIBIR EL MENSAJE DE FLUTTER
+// 3. RECIBIR EL MENSAJE
 $input = json_decode(file_get_contents("php://input"), true);
 $mensajeUsuario = $input['mensaje'] ?? '';
 
-if (empty($mensajeUsuario)) {
-    echo json_encode(["respuesta" => "¡Hola! Soy el asistente de Xtreme Performance. ¿En qué puedo ayudarte con tu vehículo?"]);
+// Si entras desde el navegador (GET), te dará este saludo
+if ($_SERVER['REQUEST_METHOD'] == 'GET' || empty($mensajeUsuario)) {
+    echo json_encode(["respuesta" => "Servidor de IA Activo. Esperando mensaje de Flutter..."]);
     exit;
 }
 
-// 3. EL "SYSTEM PROMPT" (La personalidad del bot)
-$contextoPersonalidad = "Eres el asistente técnico experto de Xtreme Performance, un taller mecánico de alta precisión. 
-Tu tono es profesional, amable y conocedor. Si te preguntan cosas fuera de mecánica, intenta ser educado pero regresa al tema automotriz. 
-IMPORTANTE: Si el usuario pregunta por una 'orden' o 'estado de vehículo', dile que por ahora solo puedes charlar, pero que pronto podrás consultar la base de datos directamente.";
+// 4. PERSONALIDAD
+$contexto = "Eres el asistente experto de Xtreme Performance. Responde de forma breve y amable.";
 
-// 4. PREPARAR LA PETICIÓN PARA GEMINI
 $data = [
     "contents" => [
-        [
-            "parts" => [
-                ["text" => $contextoPersonalidad . "\n\nUsuario: " . $mensajeUsuario]
-            ]
-        ]
+        ["parts" => [["text" => $contexto . "\nUsuario: " . $mensajeUsuario]]]
     ]
 ];
 
-// 5. ENVIAR A GOOGLE
+// 5. LLAMADA CON MANEJO DE ERRORES
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Solo para pruebas si tienes problemas de SSL
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Evita errores de certificados en algunos hostings
 
 $response = curl_exec($ch);
+$err = curl_error($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// 6. PROCESAR LA RESPUESTA
-if ($httpCode == 200) {
-    $resultado = json_decode($response, true);
-    $respuestaIA = $resultado['candidates'][0]['content']['parts'][0]['text'] ?? "Lo siento, mi motor se detuvo un momento. ¿Podrías repetir eso?";
-    echo json_encode(["respuesta" => $respuestaIA]);
+// 6. RESPUESTA DETALLADA
+if ($err) {
+    echo json_encode(["respuesta" => "Error de cURL: " . $err]);
+} elseif ($httpCode !== 200) {
+    echo json_encode(["respuesta" => "Google API devolvió error: " . $httpCode, "detalle" => json_decode($response)]);
 } else {
-    echo json_encode(["respuesta" => "Error de conexión con el cerebro de IA (Código: $httpCode)."]);
+    $resultado = json_decode($response, true);
+    $respuestaIA = $resultado['candidates'][0]['content']['parts'][0]['text'] ?? "No obtuve respuesta de la IA.";
+    echo json_encode(["respuesta" => $respuestaIA]);
 }
