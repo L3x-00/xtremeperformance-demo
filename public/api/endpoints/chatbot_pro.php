@@ -1,15 +1,19 @@
 <?php
+require_once 'claves.php';
 // 1. CABECERAS PARA FLUTTER WEB
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
 
-$apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
-// La URL exacta para modelos Preview en v1beta
+
+// Usamos la constante que definimos
+$apiKey = GEMINI_API_KEY; 
 $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" . trim($apiKey);
 
 // 3. RECIBIR DATOS
