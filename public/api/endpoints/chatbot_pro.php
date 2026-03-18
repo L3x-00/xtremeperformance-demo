@@ -7,21 +7,21 @@ header("Content-Type: application/json; charset=UTF-8");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
-// 2. CONFIGURACIÓN (ACTUALIZADO A GEMINI 3 FLASH - MODELO DE 2026)
+// 2. CONFIGURACIÓN (MODELO EXACTO DE TU CAPTURA: GEMINI 3 FLASH PREVIEW)
 $apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
-// Usamos la versión estable v1 y el modelo gemini-3-flash
-$url = "https://generativelanguage.googleapis.com/v1/models/gemini-3-flash:generateContent?key=" . trim($apiKey);
+// La URL exacta para modelos Preview en v1beta
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" . trim($apiKey);
 
 // 3. RECIBIR DATOS
 $input = json_decode(file_get_contents("php://input"), true);
 $mensajeUsuario = $input['mensaje'] ?? '';
 
 if (empty($mensajeUsuario)) {
-    echo json_encode(["respuesta" => "¡Hola! El motor de Xtreme Performance está listo. ¿En qué te ayudo?"]);
+    echo json_encode(["respuesta" => "¡Sistema de IA de Xtreme Performance en línea!"]);
     exit;
 }
 
-// 4. ESTRUCTURA DE DATOS PARA GEMINI 3
+// 4. ESTRUCTURA DE DATOS
 $data = [
     "contents" => [
         [
@@ -51,10 +51,10 @@ if ($httpCode === 200) {
     $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, dime más.";
     echo json_encode(["respuesta" => $texto]);
 } else {
-    // Si vuelve a fallar, aquí veremos el por qué exacto
+    // Si vuelve a fallar, este detalle nos dirá la verdad absoluta
     $errorMsg = $resultadoIA['error']['message'] ?? "Error desconocido";
     echo json_encode([
         "respuesta" => "Error $httpCode: El motor sigue sin arrancar.",
-        "detalle" => $errorMsg
+        "detalle_final" => $errorMsg
     ]);
 }
