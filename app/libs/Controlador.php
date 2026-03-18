@@ -196,17 +196,28 @@ class Controlador
 			}
 		}
 		//
-		$datos = [
-			"titulo"=> "Perfil del usuario",
-			"subtitulo" => "Perfil del usuario",
-			"admon" => $this->usuario["tipoUsuario"],
-			"menu" => true,
-			"regreso" => $regreso,
-			"activo" => "perfil",
-			"errores" => $errores,
-			"data" => $this->usuario
-		];
-		$this->vista("tableroPerfilVista",$datos);
+		$datosFrescos = $this->modelo->getUsuarioId($this->usuario["id"]);
+        
+        // 2. Aseguramos el tipo de usuario (para que no se pierdan los permisos)
+        $datosFrescos["tipoUsuario"] = $this->usuario["tipoUsuario"];
+        
+        // 3. Sobreescribimos la memoria de la web (sesión) y la variable local
+        $this->sesion->setUsuario($datosFrescos);
+        $this->usuario = $datosFrescos;
+        // ----------------------------------------------
+
+        $datos = [
+            "titulo"=> "Perfil del usuario",
+            "subtitulo" => "Perfil del usuario",
+            "admon" => $this->usuario["tipoUsuario"],
+            "menu" => true,
+            "regreso" => $regreso,
+            "activo" => "perfil",
+            "errores" => $errores,
+            "data" => $this->usuario // ¡Ahora esto tiene los datos 100% actualizados!
+        ];
+        $this->vista("tableroPerfilVista",$datos);
+    }
 	}
 }
 
