@@ -7,9 +7,10 @@ header("Content-Type: application/json; charset=UTF-8");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
-// 2. CONFIGURACIÓN (VOLVEMOS A V1BETA)
+// 2. CONFIGURACIÓN (ACTUALIZADO A GEMINI 3 FLASH - MODELO DE 2026)
 $apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . trim($apiKey);
+// Usamos la versión estable v1 y el modelo gemini-3-flash
+$url = "https://generativelanguage.googleapis.com/v1/models/gemini-3-flash:generateContent?key=" . trim($apiKey);
 
 // 3. RECIBIR DATOS
 $input = json_decode(file_get_contents("php://input"), true);
@@ -20,7 +21,7 @@ if (empty($mensajeUsuario)) {
     exit;
 }
 
-// 4. ESTRUCTURA DE DATOS
+// 4. ESTRUCTURA DE DATOS PARA GEMINI 3
 $data = [
     "contents" => [
         [
@@ -47,10 +48,10 @@ curl_close($ch);
 $resultadoIA = json_decode($response, true);
 
 if ($httpCode === 200) {
-    $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, cuéntame más.";
+    $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, dime más.";
     echo json_encode(["respuesta" => $texto]);
 } else {
-    // Si vuelve a fallar, aquí veremos el por qué
+    // Si vuelve a fallar, aquí veremos el por qué exacto
     $errorMsg = $resultadoIA['error']['message'] ?? "Error desconocido";
     echo json_encode([
         "respuesta" => "Error $httpCode: El motor sigue sin arrancar.",
