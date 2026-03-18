@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
 // 2. CONFIGURACIÓN (URL V1BETA - LA MÁS COMPATIBLE CON FLASH)
 $apiKey = "AIzaSyB5oAkxY6IF0ZcBIsHty4KAjeJgk-uSkEM"; 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
+// Cambia la URL por esta exacta:
+$url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
 
 // 3. RECIBIR DATOS
 $input = json_decode(file_get_contents("php://input"), true);
