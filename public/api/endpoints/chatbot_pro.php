@@ -40,7 +40,7 @@ if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
         $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
         
         // ¡OJO! Asegúrate de que tu tabla se llame "ordenes" y tenga las columnas correctas
-        $stmt = $conn->prepare("SELECT estado FROM ordenes WHERE id = :id");
+        $stmt = $conn->prepare("SELECT estado FROM ordenreparacion WHERE id = :id");
         $stmt->bindParam(':id', $idOrden);
         $stmt->execute();
         $orden = $stmt->fetch(PDO::FETCH_ASSOC);
