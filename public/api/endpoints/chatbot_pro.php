@@ -21,7 +21,7 @@ if (empty($mensajeUsuario)) {
 }
 
 // ====================================================================
-// NUEVA ZONA: EL CEREBRO DETECTIVE (Buscador de Órdenes)
+// NUEVA ZONA: EL CEREBRO DETECTIVE (Buscador de Órdenes Avanzado)
 // ====================================================================
 $infoDelSistema = "";
 
@@ -30,7 +30,6 @@ if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
     $idOrden = $coincidencias[1]; // Aquí atrapamos el número (ej: 19)
 
     // --- CONEXIÓN A TU BASE DE DATOS ---
-    // ¡OJO LUCCIANO! Cambia estos datos por los reales de tu hosting
     $host = "localhost";
     $dbname = "u645180384_taller"; 
     $username = "u645180384_maxi";
@@ -39,20 +38,41 @@ if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
     try {
         $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
         
-        // ¡OJO! Asegúrate de que tu tabla se llame "ordenes" y tenga las columnas correctas
-        $stmt = $conn->prepare("SELECT estado FROM ordenreparacion WHERE id = :id");
+        // Buscamos toda la información útil de la orden
+        $stmt = $conn->prepare("SELECT estado, fechaIngreso, fechaSalida, kilometraje, baja FROM ordenreparacion WHERE id = :id");
         $stmt->bindParam(':id', $idOrden);
         $stmt->execute();
         $orden = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($orden) {
-            // Le "soplamos" la respuesta a Gemini
-            $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden. La base de datos dice que su estado real es: '" . $orden['estado'] . "'. Usa esta información para responderle al cliente de forma amable.";
+            // Verificamos si la orden fue cancelada o dada de baja
+            if ($orden['baja'] == 1) {
+                $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden. Sin embargo, esta orden aparece como DADA DE BAJA o Cancelada en el sistema. Informa esto amablemente.";
+            } else {
+                // Traducimos el código de estado numérico a texto para la IA
+                $textoEstado = "";
+                if ($orden['estado'] == 1) {
+                    $textoEstado = "Lista para entregar / Terminada";
+                } elseif ($orden['estado'] == 2) {
+                    $textoEstado = "En proceso de reparación / En taller";
+                } else {
+                    $textoEstado = "En revisión";
+                }
+
+                // Le damos todo el contexto enriquecido a Gemini
+                $infoDelSistema = "INFORMACIÓN CONFIDENCIAL PARA TI (ÚSALO PARA ARMAR TU RESPUESTA): 
+                El cliente pregunta por la orden número $idOrden. 
+                - Estado actual: **$textoEstado**.
+                - Fecha de ingreso: " . $orden['fechaIngreso'] . ". 
+                - Fecha estimada de salida: " . $orden['fechaSalida'] . ". 
+                - Kilometraje registrado: " . $orden['kilometraje'] . " km.
+                Instrucción: Informa al cliente sobre su estado y fechas de forma muy amable y profesional. Si está en estado 1, dile que ya puede recogerlo. Si está en estado 2, dile que siguen trabajando en él para tenerlo listo en la fecha de salida.";
+            }
         } else {
             $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden, pero NO EXISTE en nuestra base de datos. Pídele que verifique el número amablemente.";
         }
     } catch(PDOException $e) {
-        $infoDelSistema = "INFORMACIÓN PRIVADA: Hubo un error de conexión a la BD. Dile al cliente que el sistema está en mantenimiento.";
+        $infoDelSistema = "INFORMACIÓN PRIVADA: Hubo un error de conexión a la BD. Dile al cliente que el sistema está en mantenimiento en este momento.";
     }
 }
 // ====================================================================
@@ -60,7 +80,7 @@ if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
 // Armamos el "Prompt" final combinando las reglas, el estado de la BD y lo que dijo el usuario
 $promptFinal = "Eres el asistente experto de Xtreme Performance. ";
 if ($infoDelSistema !== "") {
-    $promptFinal .= $infoDelSistema . " Mensaje original del usuario: " . $mensajeUsuario;
+    $promptFinal .= "\n" . $infoDelSistema . "\n\nMensaje original del usuario: " . $mensajeUsuario;
 } else {
     $promptFinal .= "Responde amable y breve: " . $mensajeUsuario;
 }
