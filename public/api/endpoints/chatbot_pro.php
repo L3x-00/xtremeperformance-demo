@@ -49,11 +49,14 @@ if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
                 $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden. Sin embargo, esta orden aparece como DADA DE BAJA o Cancelada en el sistema. Informa esto amablemente.";
             } else {
                 // Traducimos el código de estado numérico a texto para la IA
+             // Traducimos el código de estado numérico a texto para la IA
                 $textoEstado = "";
                 if ($orden['estado'] == 1) {
-                    $textoEstado = "Lista para entregar / Terminada";
+                    // ¡AQUÍ ESTÁ EL CAMBIO! 1 = Abierta
+                    $textoEstado = "Abierta / En proceso de reparación en el taller"; 
                 } elseif ($orden['estado'] == 2) {
-                    $textoEstado = "En proceso de reparación / En taller";
+                    // ¡AQUÍ ESTÁ EL CAMBIO! 2 = Facturada
+                    $textoEstado = "Facturada / Terminada y lista para entrega"; 
                 } else {
                     $textoEstado = "En revisión";
                 }
