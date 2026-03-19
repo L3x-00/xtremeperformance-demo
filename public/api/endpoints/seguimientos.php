@@ -51,6 +51,21 @@ if ($method === 'GET') {
             Response::badRequest('idOrdenReparacion y observacion requeridos');
             exit;
         }
+
+        // ========================================================================
+        // 🛡️ CANDADO DE SEGURIDAD (API FLUTTER): BLOQUEO DE ÓRDENES FACTURADAS
+        // ========================================================================
+        $sqlCheck = "SELECT estado FROM ordenreparacion WHERE id = ?";
+        $resultadoCheck = $db->querySelect($sqlCheck, [$idOrdenReparacion]);
+        
+        if ($resultadoCheck && !empty($resultadoCheck)) {
+            if ($resultadoCheck[0]['estado'] == ORDEN_FACTURADA) {
+                // Usamos la clase Response de tu API para devolver el error a Flutter
+                Response::error('Acción denegada: La orden ya está facturada y cerrada.');
+                exit; // Detiene la ejecución para proteger la base de datos
+            }
+        }
+        // ========================================================================
         
         // Insertar seguimiento
         $sql = "INSERT INTO seguimientos VALUES(0, ?, ?, ?, 0)";
