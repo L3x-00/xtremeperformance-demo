@@ -60,16 +60,16 @@ class Seguimientos extends Controlador
           array_push($errores,"El formato de la fecha no es correcto.");
         } 
 
-        // ========================================================================
+        // ==// ========================================================================
         // 🛡️ CANDADO DE SEGURIDAD: PROHIBIR SEGUIMIENTOS EN ÓRDENES FACTURADAS
         // ========================================================================
         if(!empty($idOrdenReparacion)) {
-            // Usamos tu modelo de Salidas (que ya tienes programado más abajo) para obtener los datos de la orden
-            $salidasModelo = $this->modelo("SalidasModelo");
-            $ordenActual = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
+            // Llamamos al modelo principal de las Órdenes en lugar del de Salidas
+            $ordenModelo = $this->modelo("OrdenReparacionModelo");
+            $ordenActual = $ordenModelo->getId($idOrdenReparacion);
 
-            // Si el estado es 2 (Facturada), agregamos el error al arreglo para bloquear el registro
-            if ($ordenActual && $ordenActual['estado'] == 2) {
+            // Agregamos isset() por extrema seguridad para que PHP no lance advertencias
+            if ($ordenActual && isset($ordenActual['estado']) && $ordenActual['estado'] == 2) {
                 array_push($errores, "Acción denegada: La orden de reparación #$idOrdenReparacion ya se encuentra facturada y cerrada. No se admiten más seguimientos.");
             }
         }
