@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 // IMPORTAMOS LA CLAVE SECRETA (Como lo hicimos con .gitignore)
 require_once 'claves.php'; 
 $apiKey = GEMINI_API_KEY; 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash:generateContent?key=" . trim($apiKey);
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . trim($apiKey);
 $input = json_decode(file_get_contents("php://input"), true);
 $mensajeUsuario = $input['mensaje'] ?? '';
 
