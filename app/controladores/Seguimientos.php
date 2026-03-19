@@ -35,11 +35,12 @@ class Seguimientos extends Controlador
     }
   }
 
-  public function alta(string $idOrdenReparacion=""):void
+ public function alta(string $idOrdenReparacion=""):void
   {
-     //Definir los arreglos
+      //Definir los arreglos
       $data = array();
       $errores = array();
+      
       if ($_SERVER['REQUEST_METHOD']=="POST") {
         //
         $idSeguimiento = $_POST['id'] ?? "";
@@ -58,66 +59,77 @@ class Seguimientos extends Controlador
         if(Helper::fecha($fecha)==false){
           array_push($errores,"El formato de la fecha no es correcto.");
         } 
-        //
+
+        // ========================================================================
+        // 🛡️ CANDADO DE SEGURIDAD: PROHIBIR SEGUIMIENTOS EN ÓRDENES FACTURADAS
+        // ========================================================================
+        if(!empty($idOrdenReparacion)) {
+            // Usamos tu modelo de Salidas (que ya tienes programado más abajo) para obtener los datos de la orden
+            $salidasModelo = $this->modelo("SalidasModelo");
+            $ordenActual = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
+
+            // Si el estado es 2 (Facturada), agregamos el error al arreglo para bloquear el registro
+            if ($ordenActual && $ordenActual['estado'] == 2) {
+                array_push($errores, "Acción denegada: La orden de reparación #$idOrdenReparacion ya se encuentra facturada y cerrada. No se admiten más seguimientos.");
+            }
+        }
+        // ========================================================================
+
+        // Si no hay errores (incluyendo el error del candado), procedemos a guardar
         if (empty($errores)) { 
-      // Crear arreglo de datos
-      //
-      $data = [
-        "id" => $idSeguimiento,
-        "idOrdenReparacion"=>$idOrdenReparacion,
-        "fecha"=>$fecha,
-        "observacion"=>$observacion
-      ];    
+          // Crear arreglo de datos
+          $data = [
+            "id" => $idSeguimiento,
+            "idOrdenReparacion"=>$idOrdenReparacion,
+            "fecha"=>$fecha,
+            "observacion"=>$observacion
+          ];    
+          
           //Enviamos al modelo
           if(trim($idSeguimiento)===""){
             //Alta
             $id = $this->modelo->alta($data);
-        if ($id) {
-          //
-          // Imagenes
-          //
-          if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
-            // Notificar al cliente que se añadió un seguimiento con fotos
-            try {
-              $salidasModelo = $this->modelo("SalidasModelo");
-              $ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
-              $asunto = "Nuevo seguimiento en tu orden #".$idOrdenReparacion;
-              $url = rtrim(SITE_URL,'/')."/";
-              $html = "<p>Hola ".htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8').",</p>".
-                "<p>Se ha añadido un nuevo seguimiento con imágenes a tu orden #".$idOrdenReparacion.".</p>".
-                "<p>Ingresa a tu panel para revisarlo:<br><a href='".$url."'>".$url."</a></p>";
-              $this->enviarCorreoPlano($ord['correo']??'', $asunto, $html);
-            } catch (\Throwable $e) { /* noop */ }
-            
-            // =========================================================
-            // PUSHER: DISPARAR EVENTO DE NUEVO SEGUIMIENTO (ALTA)
-            // =========================================================
-            $canal = 'orden-' . $idOrdenReparacion;
-            $evento = 'nuevo-seguimiento';
-            $datosTracking = [
-                "id_orden" => $idOrdenReparacion,
-                "mensaje" => "Se ha añadido un nuevo seguimiento a la orden."
-            ];
-            PusherHelper::trigger($canal, $evento, $datosTracking);
-            // =========================================================
+            if ($id) {
+              // Imagenes
+              if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
+                // Notificar al cliente que se añadió un seguimiento con fotos
+                try {
+                  $salidasModelo = $this->modelo("SalidasModelo");
+                  $ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
+                  $asunto = "Nuevo seguimiento en tu orden #".$idOrdenReparacion;
+                  $url = rtrim(SITE_URL,'/')."/";
+                  $html = "<p>Hola ".htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8').",</p>".
+                    "<p>Se ha añadido un nuevo seguimiento con imágenes a tu orden #".$idOrdenReparacion.".</p>".
+                    "<p>Ingresa a tu panel para revisarlo:<br><a href='".$url."'>".$url."</a></p>";
+                  $this->enviarCorreoPlano($ord['correo']??'', $asunto, $html);
+                } catch (\Throwable $e) { /* noop */ }
+                
+                // PUSHER: DISPARAR EVENTO DE NUEVO SEGUIMIENTO (ALTA)
+                $canal = 'orden-' . $idOrdenReparacion;
+                $evento = 'nuevo-seguimiento';
+                $datosTracking = [
+                    "id_orden" => $idOrdenReparacion,
+                    "mensaje" => "Se ha añadido un nuevo seguimiento a la orden."
+                ];
+                PusherHelper::trigger($canal, $evento, $datosTracking);
 
-            $this->mensaje(
-              "Alta del seguimiento de una orden de reparación.", 
-              "Alta del seguimiento de una orden de reparación.", 
-              "Se añadió correctamente el seguimiento a la orden de reparación.", 
-              "seguimientos/seguimiento/".$idOrdenReparacion."/1", 
-              "success"
-            );
-          } else {
-            $this->mensaje(
+                $this->mensaje(
+                  "Alta del seguimiento de una orden de reparación.", 
+                  "Alta del seguimiento de una orden de reparación.", 
+                  "Se añadió correctamente el seguimiento a la orden de reparación.", 
+                  "seguimientos/seguimiento/".$idOrdenReparacion."/1", 
+                  "success"
+                );
+              } else {
+                $this->mensaje(
                     "Error al subir las imágenes.", 
                     "Error al subir las imágenes.", 
                     "Error al subir las imágenes.", 
                     "seguimientos/".$pagina,
                     "danger"
                   );
-          }
-              } else {
+              }
+            } else {
                 $this->mensaje(
                   "Error al añadir la orden de reparación.", 
                   "Error al añadir la orden de reparación.", 
@@ -125,54 +137,50 @@ class Seguimientos extends Controlador
                   "OrdenReparacion/".$pagina,
                   "danger"
                 );
-              }
+            }
           } else {
-        //Modificar
-        if ($this->modelo->modificar($data)) {
-          if ($this->subirImagenes($_FILES,$idOrdenReparacion,$idSeguimiento)) {
+            //Modificar
+            if ($this->modelo->modificar($data)) {
+              if ($this->subirImagenes($_FILES,$idOrdenReparacion,$idSeguimiento)) {
+                // PUSHER: DISPARAR EVENTO DE SEGUIMIENTO MODIFICADO
+                $canal = 'orden-' . $idOrdenReparacion;
+                $evento = 'nuevo-seguimiento';
+                $datosTracking = [
+                    "id_orden" => $idOrdenReparacion,
+                    "mensaje" => "Se ha modificado un seguimiento de la orden."
+                ];
+                PusherHelper::trigger($canal, $evento, $datosTracking);
 
-            // =========================================================
-            // PUSHER: DISPARAR EVENTO DE SEGUIMIENTO MODIFICADO
-            // =========================================================
-            $canal = 'orden-' . $idOrdenReparacion;
-            $evento = 'nuevo-seguimiento';
-            $datosTracking = [
-                "id_orden" => $idOrdenReparacion,
-                "mensaje" => "Se ha modificado un seguimiento de la orden."
-            ];
-            PusherHelper::trigger($canal, $evento, $datosTracking);
-            // =========================================================
-
-            $this->mensaje(
-              "Modificación del seguimiento de una orden de reparación.", 
-              "Modificación del seguimiento de una orden de reparación.", 
-              "Se modificó correctamente el seguimiento a la orden de reparación.", 
-              "seguimientos/seguimiento/".$idOrdenReparacion."/1", 
-              "success"
-            );
-          } else {
-            $this->mensaje(
+                $this->mensaje(
+                  "Modificación del seguimiento de una orden de reparación.", 
+                  "Modificación del seguimiento de una orden de reparación.", 
+                  "Se modificó correctamente el seguimiento a la orden de reparación.", 
+                  "seguimientos/seguimiento/".$idOrdenReparacion."/1", 
+                  "success"
+                );
+              } else {
+                $this->mensaje(
                     "Error al subir las imágenes.", 
                     "Error al subir las imágenes.", 
                     "Error al subir las imágenes.", 
                     "seguimientos/".$pagina,
                     "danger"
                   );
-          }
-        } else {
-          $this->mensaje(
-            "Error al modificar el seguimiento.", 
-            "Error al modificar el seguimiento.", 
-            "Error al modificar el seguimiento.", 
-            "seguimientos/".$pagina, 
-            "danger"
-          );
-        }
+              }
+            } else {
+              $this->mensaje(
+                "Error al modificar el seguimiento.", 
+                "Error al modificar el seguimiento.", 
+                "Error al modificar el seguimiento.", 
+                "seguimientos/".$pagina, 
+                "danger"
+              );
+            }
           }
         }
       }
       if(!empty($idOrdenReparacion)){
-        //Vista Alta
+        //Vista Alta (Si hubo un error, como el de la orden facturada, regresará a esta vista mostrando el error)
         $datos = [
           "titulo" => "Seguimiento de una orden de reparación",
           "subtitulo" => "Seguimiento de una orden de reparación",
@@ -180,27 +188,13 @@ class Seguimientos extends Controlador
           "menu" => true,
           "admon" => true,
           "usuario" => $this->usuario,
-          "errores" => $errores,
+          "errores" => $errores, // Aquí viaja el mensaje de error a la pantalla
           "idOrdenReparacion"=>$idOrdenReparacion,
           "pagina" => 1,
           "data" => $data
         ];
         $this->vista("seguimientosAltaVista",$datos);
       }
-    }
-
-    public function borrarImagen(string $id="",string $i="",string $pagina="1"):void
-    {
-      $this->mensaje(
-        "Baja de una imagen", 
-        "Baja de una imagen", 
-        "¿Desea borrar la imagen? Una vez borrada la imagen no podrá ser recuperada.", 
-        "seguimientos/desplegarSeguimiento/".$id."/".$pagina, 
-        "danger",
-        "seguimientos/borrarArchivo/".$id."/".$i."/".$pagina,
-        "danger",
-        "Borrar"
-      );
   }
 
   public function borrarArchivo(string $id,string $i,string $pagina):void
