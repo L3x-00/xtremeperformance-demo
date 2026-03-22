@@ -90,17 +90,19 @@ class OrdenReparacionModelo
 	}
 
 	public function getTabla(int $inicio=1, int $tamano=0):array
-	{
-		$sql = "SELECT v.id, CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo, ";
-		$sql.= "o.id, o.idVehiculo, o.fechaIngreso, o.fechaSalida ";
-		$sql.= "FROM ordenreparacion as o, vehiculos as v ";
-		$sql.= "WHERE o.baja=0 AND o.estado=".ORDEN_ABIERTA." AND ";
-		$sql.= "o.idVehiculo=v.id ";
-		if ($tamano>0) {
-			$sql.= " LIMIT ".$inicio.", ".$tamano;
-		}
-		return $this->db->querySelect($sql);
-	}
+  {
+    $sql = "SELECT v.id, CONCAT(v.marca,' ',v.modelo,' ',v.anio) as vehiculo, ";
+    $sql.= "o.id, o.idVehiculo, o.fechaIngreso, o.fechaSalida, o.estado "; // Agregué el estado para que lo veas
+    $sql.= "FROM ordenreparacion as o, vehiculos as v ";
+    // 🛡️ CORRECCIÓN: Quitamos AND o.estado=".ORDEN_ABIERTA." para que muestre TODAS
+    $sql.= "WHERE o.baja=0 AND "; 
+    $sql.= "o.idVehiculo=v.id ";
+    $sql.= "ORDER BY o.id DESC "; // Bonus: las más nuevas arriba
+    if ($tamano>0) {
+      $sql.= " LIMIT ".$inicio.", ".$tamano;
+    }
+    return $this->db->querySelect($sql);
+  }
 
 	public function modificar(array $data):bool
 	{
