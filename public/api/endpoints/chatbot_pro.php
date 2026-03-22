@@ -115,17 +115,17 @@ if ($conn) {
         try {
             // MATEMÁTICAS GERENCIALES: Sumamos el dinero real facturado por mes
             $sqlDinero = "SELECT 
-                            DATE_FORMAT(o.fechaIngreso, '%b') as mes_label,
+                            DATE_FORMAT(o.fechaIngreso, '%b %Y') as mes_label,
                             SUM(d.cantidad * d.costo) as total_ingreso
                           FROM ordenreparacion o
                           INNER JOIN ordenalmacen oa ON o.id = oa.idOrdenReparacion
                           INNER JOIN ordenalmacendetalle d ON oa.id = d.idOrdenAlmacen
                           WHERE o.baja = 0 
-                            AND o.estado = 2 -- Solo órdenes FACTURADAS (Cerradas)
+                            AND o.estado = 2 -- Solo órdenes FACTURADAS
                             AND oa.baja = 0
-                            AND o.fechaIngreso >= DATE_SUB(NOW(), INTERVAL 6 MONTH) -- Últimos 6 meses
-                          GROUP BY mes_label, MONTH(o.fechaIngreso)
-                          ORDER BY MONTH(o.fechaIngreso) ASC";
+                            AND o.fechaIngreso >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                          GROUP BY YEAR(o.fechaIngreso), MONTH(o.fechaIngreso), mes_label
+                          ORDER BY YEAR(o.fechaIngreso) ASC, MONTH(o.fechaIngreso) ASC";
 
             $stmtDinero = $conn->prepare($sqlDinero);
             $stmtDinero->execute();
