@@ -110,22 +110,19 @@ if ($conn) {
             $infoDelSistema = "INFORMACIÓN PRIVADA: No se pudo obtener la estadística de la base de datos.";
         }
 
-    // 💰 CASO 3 (Barras): El usuario pregunta por GANANCIAS o Dinero (ej: "¿Cómo van las ganancias?")
+   // 💰 CASO 3 (Barras): El usuario pregunta por GANANCIAS o Dinero
     } elseif (preg_match('/(ganancias|dinero|ingresos|ventas|dinero|plata|lucro)/i', $mensajeUsuario)) {
         try {
-            // MATEMÁTICAS GERENCIALES: Sumamos el dinero real facturado por mes
+            // MATEMÁTICAS GERENCIALES CLONADAS DEL DASHBOARD (Usando la tabla 'facturas')
             $sqlDinero = "SELECT 
-                            DATE_FORMAT(o.fechaIngreso, '%b %Y') as mes_label,
-                            SUM(d.cantidad * d.costo) as total_ingreso
-                          FROM ordenreparacion o
-                          INNER JOIN ordenalmacen oa ON o.id = oa.idOrdenReparacion
-                          INNER JOIN ordenalmacendetalle d ON oa.id = d.idOrdenAlmacen
-                          WHERE o.baja = 0 
-                            AND o.estado = 2 -- Solo órdenes FACTURADAS
-                            AND oa.baja = 0
-                            AND o.fechaIngreso >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-                          GROUP BY YEAR(o.fechaIngreso), MONTH(o.fechaIngreso), mes_label
-                          ORDER BY YEAR(o.fechaIngreso) ASC, MONTH(o.fechaIngreso) ASC";
+                            DATE_FORMAT(alta_dt, '%Y-%m') as ym, 
+                            DATE_FORMAT(alta_dt, '%b %Y') as mes_label,
+                            SUM(total) as total_ingreso
+                          FROM facturas 
+                          WHERE baja = 0 
+                            AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+                          GROUP BY ym, mes_label
+                          ORDER BY ym ASC";
 
             $stmtDinero = $conn->prepare($sqlDinero);
             $stmtDinero->execute();
@@ -138,22 +135,27 @@ if ($conn) {
                 $resumenTexto = "";
 
                 foreach ($resDinero as $row) {
-                    $barLabels[] = $row['mes_label']; // 'Ene', 'Feb', etc.
+                    // Traducimos el mes de inglés a español básico
+                    $meses = ['Jan'=>'Ene', 'Feb'=>'Feb', 'Mar'=>'Mar', 'Apr'=>'Abr', 'May'=>'May', 'Jun'=>'Jun', 'Jul'=>'Jul', 'Aug'=>'Ago', 'Sep'=>'Sep', 'Oct'=>'Oct', 'Nov'=>'Nov', 'Dec'=>'Dic'];
+                    $partes = explode(' ', $row['mes_label']);
+                    $mesLabelEspanol = (isset($meses[$partes[0]]) ? $meses[$partes[0]] : $partes[0]) . ' ' . $partes[1];
+
+                    $barLabels[] = $mesLabelEspanol; 
                     $barData[] = (double)$row['total_ingreso'];
-                    $resumenTexto .= "- " . $row['mes_label'] . ": S/ " . number_format($row['total_ingreso'], 2) . "\n";
+                    $resumenTexto .= "- " . $mesLabelEspanol . ": S/ " . number_format($row['total_ingreso'], 2) . "\n";
                 }
 
                 $infoDelSistema = "INFORMACIÓN FINANCIERA DEL TALLER (ÚSALO PARA ARMAR TU RESPUESTA): 
                 El usuario (administrador) pregunta por el flujo de ingresos.
-                Aquí tienes el resumen real de los últimos meses:\n
+                Aquí tienes el resumen real de los últimos meses, incluyendo mano de obra, piezas e impuestos:\n
                 $resumenTexto
-                Instrucción: Haz un análisis gerencial muy profesional, felicitando al equipo si los ingresos suben o animándolos si bajan. Usa términos como 'flujo de caja', 'optimización' y 'alto rendimiento'.";
+                Instrucción: Haz un análisis gerencial muy profesional. Usa términos como 'flujo de caja', 'optimización' y 'alto rendimiento'.";
             } else {
-                $infoDelSistema = "INFORMACIÓN FINANCIERA: No se registraron ingresos facturados en los últimos 6 meses.";
+                $infoDelSistema = "INFORMACIÓN FINANCIERA: No se registraron facturas pagadas en los últimos 6 meses.";
             }
 
         } catch(PDOException $e) {
-            $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar los ingresos en la base de datos.";
+            $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar los ingresos en la base de datos de facturas.";
         }
     }
 }
