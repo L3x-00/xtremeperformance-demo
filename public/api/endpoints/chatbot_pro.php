@@ -20,11 +20,17 @@ if (empty($mensajeUsuario)) {
 }
 
 // ====================================================================
-// VARIABLES GLOBALES PARA EL GRÁFICO
+// VARIABLES GLOBALES PARA LA IA Y GRÁFICOS
 // ==========================================
 $infoDelSistema = "";
-$abiertas = null;    // Inicializamos en null para saber si el usuario pidió estadísticas
-$facturadas = null;
+
+// Variables para el gráfico de DONA (Órdenes)
+$countAbiertas = null;    
+$countFacturadas = null;
+
+// Variables para el gráfico de BARRAS (Dinero)
+$barLabels = null;
+$barData = null;
 
 // --- CONEXIÓN A TU BASE DE DATOS ---
 $host = "localhost";
@@ -64,13 +70,13 @@ if ($conn) {
                         $textoEstado = "En revisión";
                     }
 
-                    $infoDelSistema = "INFORMACIÓN CONFIDENCIAL PARA TI: 
+                    $infoDelSistema = "INFORMACIÓN CONFIDENCIAL PARA TI (ÚSALO PARA ARMAR TU RESPUESTA): 
                     El cliente pregunta por la orden número $idOrden. 
                     - Estado actual: **$textoEstado**.
                     - Fecha de ingreso: " . $orden['fechaIngreso'] . ". 
-                    - Fecha de salida: " . $orden['fechaSalida'] . ". 
-                    - Kilometraje: " . $orden['kilometraje'] . " km.
-                    Instrucción: Informa al cliente sobre su estado y fechas. Si está en estado 1 (Abierta), dile que siguen trabajando en él. Si está en estado 2 (Facturada), dile que ya puede recogerlo.";
+                    - Fecha estimada de salida: " . $orden['fechaSalida'] . ". 
+                    - Kilometraje registrado: " . $orden['kilometraje'] . " km.
+                    Instrucción: Informa al cliente sobre su estado y fechas de forma muy amable y profesional.";
                 }
             } else {
                 $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden, pero NO EXISTE en nuestra base de datos. Pídele que verifique el número amablemente.";
@@ -79,29 +85,75 @@ if ($conn) {
             $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar la orden.";
         }
 
-    // CASO 2: El usuario pregunta por ESTADÍSTICAS o resumen del taller
+    // 📊 CASO 2 (Dona): El usuario pregunta por TOTALES de órdenes (ej: "¿Cuántas órdenes hay?")
     } elseif (preg_match('/(cuántas|cuantas|total|resumen|estadística|estadisticas|dashboard).*(ordenes|órdenes|estado|pedidos|vehículos|autos)/i', $mensajeUsuario)) {
         try {
             $stmtStats = $conn->prepare("SELECT estado, COUNT(*) as total FROM ordenreparacion WHERE baja = 0 GROUP BY estado");
             $stmtStats->execute();
             $resStats = $stmtStats->fetchAll(PDO::FETCH_ASSOC);
 
-            // Asignamos a las variables globales
-            $abiertas = 0;
-            $facturadas = 0;
+            // Asignamos a las variables globales para la dona
+            $countAbiertas = 0;
+            $countFacturadas = 0;
 
             foreach ($resStats as $row) {
-                if ($row['estado'] == 1) $abiertas = (int)$row['total'];
-                if ($row['estado'] == 2) $facturadas = (int)$row['total'];
+                if ($row['estado'] == 1) $countAbiertas = (int)$row['total'];
+                if ($row['estado'] == 2) $countFacturadas = (int)$row['total'];
             }
 
             $infoDelSistema = "INFORMACIÓN ESTADÍSTICA DEL TALLER: El usuario pide un resumen. 
-            Actualmente tenemos:
-            - $abiertas órdenes ABIERTAS (En proceso).
-            - $facturadas órdenes FACTURADAS (Terminadas).
+            Actualmente tenemos en el sistema:
+            - $countAbiertas órdenes ABIERTAS (En proceso de reparación).
+            - $countFacturadas órdenes FACTURADAS (Terminadas/Listas).
             Instrucción: Dáselo como un resumen gerencial muy profesional e infla el pecho de orgullo por Xtreme Performance.";
         } catch(PDOException $e) {
             $infoDelSistema = "INFORMACIÓN PRIVADA: No se pudo obtener la estadística de la base de datos.";
+        }
+
+    // 💰 CASO 3 (Barras): El usuario pregunta por GANANCIAS o Dinero (ej: "¿Cómo van las ganancias?")
+    } elseif (preg_match('/(ganancias|dinero|ingresos|ventas|dinero|plata|lucro)/i', $mensajeUsuario)) {
+        try {
+            // MATEMÁTICAS GERENCIALES: Sumamos el dinero real facturado por mes
+            $sqlDinero = "SELECT 
+                            DATE_FORMAT(o.fechaIngreso, '%b') as mes_label,
+                            SUM(d.cantidad * d.costo) as total_ingreso
+                          FROM ordenreparacion o
+                          INNER JOIN ordenalmacen oa ON o.id = oa.idOrdenReparacion
+                          INNER JOIN ordenalmacendetalle d ON oa.id = d.idOrdenAlmacen
+                          WHERE o.baja = 0 
+                            AND o.estado = 2 -- Solo órdenes FACTURADAS (Cerradas)
+                            AND oa.baja = 0
+                            AND o.fechaIngreso >= DATE_SUB(NOW(), INTERVAL 6 MONTH) -- Últimos 6 meses
+                          GROUP BY mes_label, MONTH(o.fechaIngreso)
+                          ORDER BY MONTH(o.fechaIngreso) ASC";
+
+            $stmtDinero = $conn->prepare($sqlDinero);
+            $stmtDinero->execute();
+            $resDinero = $stmtDinero->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($resDinero) {
+                // Preparamos los datos para las barras en Flutter
+                $barLabels = [];
+                $barData = [];
+                $resumenTexto = "";
+
+                foreach ($resDinero as $row) {
+                    $barLabels[] = $row['mes_label']; // 'Ene', 'Feb', etc.
+                    $barData[] = (double)$row['total_ingreso'];
+                    $resumenTexto .= "- " . $row['mes_label'] . ": S/ " . number_format($row['total_ingreso'], 2) . "\n";
+                }
+
+                $infoDelSistema = "INFORMACIÓN FINANCIERA DEL TALLER (ÚSALO PARA ARMAR TU RESPUESTA): 
+                El usuario (administrador) pregunta por el flujo de ingresos.
+                Aquí tienes el resumen real de los últimos meses:\n
+                $resumenTexto
+                Instrucción: Haz un análisis gerencial muy profesional, felicitando al equipo si los ingresos suben o animándolos si bajan. Usa términos como 'flujo de caja', 'optimización' y 'alto rendimiento'.";
+            } else {
+                $infoDelSistema = "INFORMACIÓN FINANCIERA: No se registraron ingresos facturados en los últimos 6 meses.";
+            }
+
+        } catch(PDOException $e) {
+            $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar los ingresos en la base de datos.";
         }
     }
 }
@@ -109,18 +161,18 @@ if ($conn) {
 
 // Armamos el "Prompt" final con REGLAS ESTRICTAS
 $promptFinal = "Eres el asistente experto de 'Xtreme Performance', un taller mecánico de alto rendimiento. \n";
-$promptFinal .= "REGLAS ESTRICTAS:\n";
+$promptFinal .= "REGLAS ESTRICTAS QUE DEBES CUMPLIR OBLIGATORIAMENTE:\n";
 $promptFinal .= "1. Tu ÚNICO tema de conversación es sobre autos, mecánica, repuestos, y los servicios de Xtreme Performance.\n";
-$promptFinal .= "2. Si te preguntan de otra cosa, niégate cortésmente.\n";
-$promptFinal .= "3. TIENES PERMISO EXPRESO para hablar de estadísticas o totales del taller si la información te es proporcionada en este prompt.\n";
+$promptFinal .= "2. Si el usuario te pregunta por recetas, chistes, política, o cualquier tema que NO sea de autos, DEBES NEGARTE CORTÉSMENTE.\n";
+$promptFinal .= "3. TIENES PERMISO EXPRESO para hablar de estadísticas, totales, o flujo de ingresos financieros del taller si la información te es proporcionada en este prompt.\n";
 
 if ($infoDelSistema !== "") {
-    $promptFinal .= "\n" . $infoDelSistema . "\n\nMensaje del usuario: " . $mensajeUsuario;
+    $promptFinal .= "\n" . $infoDelSistema . "\n\nMensaje original del usuario: " . $mensajeUsuario;
 } else {
-    $promptFinal .= "\nResponde amable y breve. Mensaje del usuario: " . $mensajeUsuario;
+    $promptFinal .= "\nResponde amable, breve y siempre dispuesto a ayudar. Mensaje del usuario: " . $mensajeUsuario;
 }
 
-// ENVÍO A GEMINI
+// 4. ESTRUCTURA DE DATOS PARA GEMINI
 $data = [
     "contents" => [
         [
@@ -131,6 +183,7 @@ $data = [
     ]
 ];
 
+// 5. ENVÍO POR CURL
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -143,7 +196,7 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 // ====================================================================
-// RESPUESTA FINAL AL FLUTTER (AQUÍ INYECTAMOS EL GRÁFICO)
+// RESPUESTA FINAL AL FLUTTER (AQUÍ INYECTAMOS LOS GRÁFICOS)
 // ====================================================================
 $resultadoIA = json_decode($response, true);
 
@@ -153,16 +206,25 @@ if ($httpCode === 200) {
     // Armamos la respuesta base
     $respuestaFinal = ["respuesta" => $texto];
 
-    // 📊 Si el CASO 2 se activó, $abiertas y $facturadas ya no serán null
-    // y enviamos el JSON del gráfico al Flutter
-    if ($abiertas !== null && $facturadas !== null) {
+    // 📊 INYECCIÓN DEL GRÁFICO DE DONA (Órdenes)
+    if ($countAbiertas !== null && $countFacturadas !== null) {
         $respuestaFinal["chart"] = [
             "tipo" => "pastel",
-            "titulo" => "Órdenes de Reparación",
+            "titulo" => "Resumen de Órdenes",
             "series" => [
-                ["label" => "Abiertas", "value" => $abiertas, "color" => "blue"],
-                ["label" => "Facturadas", "value" => $facturadas, "color" => "green"]
+                ["label" => "Abiertas", "value" => $countAbiertas, "color" => "blue"],
+                ["label" => "Facturadas", "value" => $countFacturadas, "color" => "green"]
             ]
+        ];
+    }
+
+    // 💰 INYECCIÓN DEL GRÁFICO DE BARRAS (Dinero)
+    if ($barLabels !== null && $barData !== null) {
+        $respuestaFinal["chart"] = [
+            "tipo" => "barras",
+            "titulo" => "Flujo de Ingresos (S/)",
+            "labels" => $barLabels,
+            "data" => $barData
         ];
     }
 
