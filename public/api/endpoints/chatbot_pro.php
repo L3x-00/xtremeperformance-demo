@@ -149,7 +149,23 @@ $resultadoIA = json_decode($response, true);
 
 if ($httpCode === 200) {
     $texto = $resultadoIA['candidates'][0]['content']['parts'][0]['text'] ?? "Entendido, dime más.";
-    echo json_encode(["respuesta" => $texto]);
+    
+    // Armamos la respuesta base
+    $respuestaFinal = ["respuesta" => $texto];
+
+    // 📊 NUEVO: Si calculamos estadísticas arriba, inyectamos el gráfico
+    if (isset($abiertas) && isset($facturadas)) {
+        $respuestaFinal["chart"] = [
+            "tipo" => "pastel",
+            "titulo" => "Órdenes de Reparación",
+            "series" => [
+                ["label" => "Abiertas", "value" => (int)$abiertas, "color" => "blue"],
+                ["label" => "Facturadas", "value" => (int)$facturadas, "color" => "green"]
+            ]
+        ];
+    }
+
+    echo json_encode($respuestaFinal);
 } else {
     $errorMsg = $resultadoIA['error']['message'] ?? "Error desconocido";
     echo json_encode([
