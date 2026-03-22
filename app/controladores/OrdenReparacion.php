@@ -249,30 +249,24 @@ class OrdenReparacion extends Controlador
 	public function caratula(string $pagina="1"):void
   {
     $num = $this->modelo->getNumRegistros();
-    
-    // Convertimos explícitamente a entero por seguridad matemática en PHP 8
-    $paginaActual = intval($pagina); 
-    if ($paginaActual <= 0) $paginaActual = 1;
-
-    $inicio = ($paginaActual - 1) * TAMANO_PAGINA;
-    $totalPaginas = ceil($num / TAMANO_PAGINA);
-    $data = $this->modelo->getTabla($inicio, TAMANO_PAGINA);
-    
+    $inicio = ($pagina-1)*TAMANO_PAGINA;
+    $totalPaginas = ceil($num/TAMANO_PAGINA);
+    $data = $this->modelo->getTabla($inicio,TAMANO_PAGINA);
     $datos = [
       "titulo" => "Orden de reparación",
       "subtitulo" => "Orden de reparación",
-      "usuario"=>$this->usuario,
-      "data"=>$data,
+      "usuario" => $this->usuario,
+      "data" => $data,
       "activo" => "ordenreparacion",
       "pag" => [
           "totalPaginas" => $totalPaginas,
-          // 🛡️ SOLUCIÓN: Agregamos el método explícito a la ruta
-          "regresa" => "OrdenReparacion/caratula", 
-          "pagina" => $paginaActual
+          // 🛡️ EL CAMBIO CLAVE: 'o' minúscula para que el router lo entienda igual que en seguimientos
+          "regresa" => "ordenReparacion", 
+          "pagina" => $pagina
         ],
       "menu" => true
     ];
-    $this->vista("ordenReparacionCaratulaVista", $datos);
+    $this->vista("ordenReparacionCaratulaVista",$datos);
   }
 
 	public function exportarCsv(): void
