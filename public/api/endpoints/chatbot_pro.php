@@ -83,7 +83,7 @@ if ($conn) {
     } elseif (preg_match('/(cuántas|cuantas|total|resumen|estadística|estadisticas|dashboard).*(ordenes|órdenes|estado|pedidos|vehículos|autos)/i', $mensajeUsuario)) {
         try {
             // Hacemos un COUNT agrupando por el estado
-            $stmtStats = $conn->prepare("SELECT estado, COUNT(*) as total FROM ordenreparacion GROUP BY estado");
+            $stmtStats = $conn->prepare("SELECT estado, COUNT(*) as total FROM ordenreparacion WHERE baja = 0 GROUP BY estado");
             $stmtStats->execute();
             $resStats = $stmtStats->fetchAll(PDO::FETCH_ASSOC);
 
