@@ -14,6 +14,9 @@ class Auth {
     /**
      * Intentar login con correo y contraseña
      */
+   /**
+     * Intentar login con correo y contraseña
+     */
     public static function login($correo, $clave) {
         self::init();
         
@@ -21,10 +24,10 @@ class Auth {
             Response::error('Correo y contraseña son requeridos', 400);
         }
         
-        // Hashear contraseña con el mismo método que el sistema
+        // Hashear contraseña con el mismo método que el sistema (Para Admins/Mecánicos)
         $claveHasheada = hash_hmac("sha512", $clave, CLAVE);
         
-        // Buscar usuario por correo (puede ser cliente o usuario del sistema)
+        // 1. Buscar usuario por correo (Admins y Mecánicos)
         $sql = "SELECT id, nombres, apellidos, correo, clave, tipoUsuario 
                 FROM usuarios 
                 WHERE correo = ? AND baja = 0 
@@ -32,9 +35,10 @@ class Auth {
         
         $usuario = self::$db->querySelect($sql, [$correo]);
         
+        // 2. Si no es usuario, buscar en clientes
         if (empty($usuario)) {
-            // Buscar en clientes
-            $sql = "SELECT id, nombres, apellidos, correo, clave, 'CLIENTE' as tipoUsuario 
+            // 🛡️ CORRECCIÓN 1: Enviar el número 3, no la palabra 'CLIENTE'
+            $sql = "SELECT id, nombres, apellidos, correo, clave, 3 as tipoUsuario 
                     FROM clientes 
                     WHERE correo = ? AND baja = 0 
                     LIMIT 1";
@@ -47,7 +51,10 @@ class Auth {
         
         // Verificar contraseña
         $usuarioData = $usuario[0];
-        if ($claveHasheada !== $usuarioData['clave']) {
+        
+        // 🛡️ CORRECCIÓN 2: Validación flexible de contraseñas.
+        // Pasa si coincide con el Hash (Admins) o si coincide con el texto plano (Clientes)
+        if ($claveHasheada !== $usuarioData['clave'] && $clave !== $usuarioData['clave']) {
             Response::unauthorized('Correo o contraseña incorrectos');
         }
         
@@ -61,7 +68,8 @@ class Auth {
                 'nombres' => $usuarioData['nombres'],
                 'apellidos' => $usuarioData['apellidos'],
                 'correo' => $usuarioData['correo'],
-                'tipo' => $usuarioData['tipoUsuario']
+                // Para asegurarnos de que siempre viaje como un número entero a Flutter:
+                'tipo' => (int)$usuarioData['tipoUsuario'] 
             ]
         ], 'Login exitoso', 200);
     }
