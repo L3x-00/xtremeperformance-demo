@@ -242,5 +242,74 @@ class Vehiculos extends Controlador
 		];
 		$this->vista("vehiculosAltaVista",$datos);
 	}
+  // ---------------------------------------------------------
+  // MÉTODOS PARA EXPORTAR DATOS DE VEHÍCULOS
+  // ---------------------------------------------------------
+  
+  public function exportarCsv(): void
+  {
+    // Obtenemos todos los registros de vehículos
+    $num = $this->modelo->getNumRegistros();
+    $rows = $this->modelo->getTabla(0, $num);
+    
+    // Configuramos las cabeceras para forzar la descarga del CSV
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="reporte_vehiculos.csv"');
+    echo "\xEF\xBB\xBF"; // BOM para que Excel lea los acentos correctamente
+    
+    $out = fopen('php://output', 'w');
+    
+    // Escribimos los encabezados de las columnas
+    fputcsv($out, ['ID', 'Marca', 'Modelo', 'Año', 'Color', 'Placas', 'Cliente ID']);
+    
+    // Recorremos los datos y escribimos fila por fila
+    foreach ($rows as $r) {
+      fputcsv($out, [
+        $r['id'] ?? '',
+        html_entity_decode($r['marca'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['modelo'] ?? '', ENT_QUOTES, 'UTF-8'),
+        $r['anio'] ?? '',
+        html_entity_decode($r['color'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['placas'] ?? '', ENT_QUOTES, 'UTF-8'),
+        $r['idCliente'] ?? ''
+      ]);
+    }
+    fclose($out);
+    exit;
+  }
+
+  public function exportarPdf(): void
+  {
+    // Obtenemos todos los registros de vehículos
+    $num = $this->modelo->getNumRegistros();
+    $rows = $this->modelo->getTabla(0, $num);
+    
+    // Definimos las cabeceras para el PDF
+    $headers = ['ID', 'Marca', 'Modelo', 'Año', 'Color', 'Placas'];
+    $data = [];
+    
+    // Llenamos la data (excluyendo el idCliente para que quepa bien en el PDF)
+    foreach ($rows as $r) {
+      $data[] = [
+        $r['id'] ?? '',
+        html_entity_decode($r['marca'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['modelo'] ?? '', ENT_QUOTES, 'UTF-8'),
+        $r['anio'] ?? '',
+        html_entity_decode($r['color'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['placas'] ?? '', ENT_QUOTES, 'UTF-8')
+      ];
+    }
+    
+    // Instanciamos tu clase ReporteTabla (la misma que usas en OrdenAlmacen)
+    $pdf = new ReporteTabla('L'); // 'L' para formato Horizontal (Landscape)
+    $pdf->AliasNbPages();
+    $pdf->setTitulos('Reporte de Vehículos', 'Listado general del taller');
+    $pdf->AddPage();
+    $pdf->Tabla($headers, $data);
+    
+    // Forzamos la descarga del PDF
+    $pdf->Output('D', 'reporte_vehiculos.pdf');
+    exit;
+  }
 }
 ?>
