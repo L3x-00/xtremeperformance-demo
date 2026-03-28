@@ -270,5 +270,73 @@ class Mecanicos extends Controlador
 		];
 		$this->vista("mecanicosAltaVista",$datos);
 	}
+  // ---------------------------------------------------------
+  // MÉTODOS PARA EXPORTAR DATOS DE MECÁNICOS
+  // ---------------------------------------------------------
+  
+  public function exportarCsv(): void
+  {
+    // Obtenemos todos los registros de mecánicos
+    $num = $this->modelo->getNumRegistros();
+    $rows = $this->modelo->getTabla(0, $num);
+    
+    // Configuramos las cabeceras para forzar la descarga del CSV
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="reporte_mecanicos.csv"');
+    echo "\xEF\xBB\xBF"; // BOM para que Excel lea los acentos correctamente
+    
+    $out = fopen('php://output', 'w');
+    
+    // Escribimos los encabezados de las columnas
+    fputcsv($out, ['ID', 'Nombre', 'Tipo', 'Estado']);
+    
+    // Recorremos los datos y escribimos fila por fila
+    foreach ($rows as $r) {
+      fputcsv($out, [
+        $r['id'] ?? '',
+        html_entity_decode($r['nombre'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['tipo'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['estado'] ?? '', ENT_QUOTES, 'UTF-8')
+      ]);
+    }
+    fclose($out);
+    exit;
+  }
+
+  public function exportarPdf(): void
+  {
+    // Obtenemos todos los registros de mecánicos
+    $num = $this->modelo->getNumRegistros();
+    $rows = $this->modelo->getTabla(0, $num);
+    
+    // Definimos las cabeceras para el PDF
+    $headers = ['ID', 'Nombre Completo', 'Especialidad / Tipo', 'Estado'];
+    $data = [];
+    
+    // Llenamos la data asegurando la decodificación de caracteres especiales
+    foreach ($rows as $r) {
+      $data[] = [
+        $r['id'] ?? '',
+        html_entity_decode($r['nombre'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['tipo'] ?? '', ENT_QUOTES, 'UTF-8'),
+        html_entity_decode($r['estado'] ?? '', ENT_QUOTES, 'UTF-8')
+      ];
+    }
+    
+    // Instanciamos la clase ReporteTabla en modo Horizontal ('L')
+    // Asumiendo que esta clase existe y funciona como en OrdenAlmacen y Vehiculos
+    $pdf = new ReporteTabla('L'); 
+    $pdf->AliasNbPages();
+    $pdf->setTitulos('Reporte de Mecánicos', 'Plantilla activa del taller Xtreme Performance');
+    $pdf->AddPage();
+    
+    // NOTA: Como ReporteTabla ajusta el ancho de las celdas automáticamente, 
+    // enviar solo estas 4 columnas debería dar un resultado ancho y muy limpio.
+    $pdf->Tabla($headers, $data);
+    
+    // Forzamos la descarga del PDF
+    $pdf->Output('D', 'reporte_mecanicos.pdf');
+    exit;
+  }
 }
 ?>
