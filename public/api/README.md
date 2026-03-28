@@ -3,6 +3,7 @@
 API REST para consumir desde aplicaciones móviles (Flutter, React Native, etc.)
 
 ## Base URL
+
 ```
 https://www.xtremeperformancepe.com/public/api
 ```
@@ -20,6 +21,7 @@ Authorization: Bearer {token}
 ### Autenticación
 
 #### Login
+
 ```
 POST /auth/login
 Content-Type: application/json
@@ -48,6 +50,7 @@ Respuesta:
 ```
 
 #### Verificar Token
+
 ```
 GET /auth/verify
 Authorization: Bearer {token}
@@ -66,6 +69,7 @@ Respuesta:
 ### Clientes
 
 #### Listar Clientes
+
 ```
 GET /clientes?pagina=1&limite=10
 Authorization: Bearer {token}
@@ -93,12 +97,14 @@ Respuesta:
 ```
 
 #### Obtener Cliente
+
 ```
 GET /clientes/{id}
 Authorization: Bearer {token}
 ```
 
 #### Crear Cliente
+
 ```
 POST /clientes
 Authorization: Bearer {token}
@@ -117,6 +123,7 @@ Content-Type: application/json
 ```
 
 #### Actualizar Cliente
+
 ```
 PUT /clientes/{id}
 Authorization: Bearer {token}
@@ -131,6 +138,7 @@ Content-Type: application/json
 ```
 
 #### Eliminar Cliente
+
 ```
 DELETE /clientes/{id}
 Authorization: Bearer {token}
@@ -139,6 +147,7 @@ Authorization: Bearer {token}
 ### Vehículos
 
 #### Listar Vehículos
+
 ```
 GET /vehiculos?pagina=1&limite=10&idCliente=1
 Authorization: Bearer {token}
@@ -150,12 +159,14 @@ Parámetros opcionales:
 ```
 
 #### Obtener Vehículo
+
 ```
 GET /vehiculos/{id}
 Authorization: Bearer {token}
 ```
 
 #### Crear Vehículo
+
 ```
 POST /vehiculos
 Authorization: Bearer {token}
@@ -172,6 +183,7 @@ Content-Type: application/json
 ```
 
 #### Actualizar Vehículo
+
 ```
 PUT /vehiculos/{id}
 Authorization: Bearer {token}
@@ -186,6 +198,7 @@ Content-Type: application/json
 ```
 
 #### Eliminar Vehículo
+
 ```
 DELETE /vehiculos/{id}
 Authorization: Bearer {token}
@@ -194,12 +207,14 @@ Authorization: Bearer {token}
 ### Órdenes de Reparación
 
 #### Listar Órdenes
+
 ```
 GET /ordenes?pagina=1&limite=10&idVehiculo=1
 Authorization: Bearer {token}
 ```
 
 #### Obtener Orden
+
 ```
 GET /ordenes/{id}
 Authorization: Bearer {token}
@@ -208,6 +223,7 @@ Authorization: Bearer {token}
 ### Usuarios
 
 #### Obtener Perfil
+
 ```
 GET /usuarios/perfil
 Authorization: Bearer {token}
@@ -216,6 +232,7 @@ Authorization: Bearer {token}
 ### Status
 
 #### Verificar API Online
+
 ```
 GET /status
 ```
@@ -235,17 +252,21 @@ GET /status
 ## Estructura de Respuesta
 
 ### Éxito
+
 ```json
 {
   "success": true,
   "code": 200,
   "message": "Mensaje descriptivo",
-  "data": { /* datos */ },
+  "data": {
+    /* datos */
+  },
   "timestamp": "2024-02-17 10:30:45"
 }
 ```
 
 ### Error
+
 ```json
 {
   "success": false,
