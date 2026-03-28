@@ -100,8 +100,17 @@
 	
 	<!-- Sistema de Toggle de Tema -->
 	<script src="<?php echo RUTA; ?>public/js/theme-toggle.js?v=<?php echo time(); ?>"></script>
-	
-
+	<style>
+  /* Fulminar la barra de scroll horizontal en las tablas */
+  .table-responsive::-webkit-scrollbar {
+      height: 0px; 
+      display: none; /* Safari y Chrome */
+  }
+  .table-responsive {
+      -ms-overflow-style: none;  /* IE y Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+</style>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark admin-navbar shadow-sm">
