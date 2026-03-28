@@ -9,7 +9,7 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-striped table-hover align-middle" style="width: 100%; margin-bottom: 0;">
+    <table id="tablaMecanicos" class="table table-striped table-hover align-middle" style="width: 100%; margin-bottom: 0;">
       <thead>
         <tr>
           <th>id</th>
@@ -38,3 +38,34 @@
   </div>
 
   <div class="mt-4">
+    <?php include_once("paginacion.php"); ?> 
+    
+    <a href="<?php print RUTA; ?>mecanicos/alta" class="btn btn-success mt-3">
+      Dar de alta un mecánico
+    </a>
+  </div>
+
+<?php include_once("piepagina.php"); ?>         
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const input = document.getElementById('filterMecanicos');
+  const table = document.getElementById('tablaMecanicos'); 
+  
+  if (!input || !table) return; 
+  
+  const tbody = table.querySelector('tbody');
+  if (!tbody) return;
+  const rows = Array.from(tbody.rows);
+  
+  input.addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    
+    rows.forEach(tr => {
+      // textContent es mucho más estable para leer lo que hay dentro de la fila
+      const text = tr.textContent.toLowerCase();
+      tr.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+});
+</script>
