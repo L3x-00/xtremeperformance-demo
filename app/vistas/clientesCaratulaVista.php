@@ -1,5 +1,13 @@
 <?php include_once("encabezado.php"); ?>
-  
+
+  <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="btn-group" role="group" aria-label="Exportar">
+      <a class="btn btn-outline-secondary" href="<?php print RUTA; ?>clientes/exportarCsv">Exportar CSV</a>
+      <a class="btn btn-outline-secondary" href="<?php print RUTA; ?>clientes/exportarPdf">Exportar PDF</a>
+    </div>
+    <input type="search" id="filterClientes" class="form-control" style="max-width:320px" placeholder="Buscar en esta página...">
+  </div>
+
   <div class="table-responsive">
     <table class="table table-striped table-hover align-middle" style="width: 100%; margin-bottom: 0;">
       <thead>
@@ -38,3 +46,19 @@
   </div>
 
 <?php include_once("piepagina.php"); ?>
+
+<script>
+(function(){
+  const input = document.getElementById('filterClientes');
+  const table = document.querySelector('table.table');
+  if (!input || !table) return;
+  const rows = Array.from(table.tBodies[0].rows);
+  input.addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    rows.forEach(tr => {
+      const text = tr.innerText.toLowerCase();
+      tr.style.display = text.indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
