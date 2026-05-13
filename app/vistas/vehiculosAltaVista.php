@@ -87,10 +87,8 @@
         $('#idCliente').select2({
             placeholder: "--- Escribe para buscar un cliente ---",
             allowClear: true,
-            width: '100%' // Asegura que tome todo el ancho del form-group
+            width: '100%' 
         });
     });
   </script>
-
-<?php include_once("piepagina.php"); ?>
 <?php include_once("piepagina.php"); ?>
