@@ -44,7 +44,7 @@
       </select>
     </div>
 
-    <div class="form-group text-start">
+    <div class="form-group text-start" style="margin-top: 25px;">
       <input type="hidden" name="id" id="id" value="<?php if (isset($datos['data']['id'])) { print $datos['data']['id']; } else { print ""; } ?>">
       <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pagina'])) { print $datos['pagina']; } else { print "1"; } ?>">
       
