@@ -58,20 +58,6 @@
       <?php } ?> 
     </div>
   </form>
-  <div class="form-group text-start">
-      <input type="hidden" name="id" id="id" value="<?php if (isset($datos['data']['id'])) { print $datos['data']['id']; } else { print ""; } ?>">
-      <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pagina'])) { print $datos['pagina']; } else { print "1"; } ?>">
-      
-      <?php if (isset($datos["baja"])) { ?>
-        <a href="<?php print RUTA; ?>vehiculos/bajaLogica/<?php print $datos['data']['id']."/".$datos["pagina"]; ?>" class="btn btn-danger">Borrar</a>
-        <a href="<?php print RUTA.'vehiculos/'.$datos['pagina']; ?>" class="btn btn-danger">Regresar</a>
-        <p><b>Advertencia: una vez borrado el registro, no podrá recuperar la información.</b></p>
-      <?php } else { ?>
-      <input type="submit" value="Enviar" class="btn btn-success">
-      <a href="<?php print RUTA; ?>vehiculos" class="btn btn-info">Regresar</a>
-      <?php } ?> 
-    </div>
-  </form>
 
   <!-- 1. Cargar CSS de Select2 -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -87,8 +73,9 @@
         $('#idCliente').select2({
             placeholder: "--- Escribe para buscar un cliente ---",
             allowClear: true,
-            width: '100%' 
+            width: '100%' // Asegura que tome todo el ancho del form-group
         });
     });
   </script>
+
 <?php include_once("piepagina.php"); ?>
