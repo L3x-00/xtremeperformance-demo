@@ -38,10 +38,11 @@ class Auth {
         // 2. Si no es usuario, buscar en clientes
         if (empty($usuario)) {
             // 🛡️ CORRECCIÓN 1: Enviar el número 3, no la palabra 'CLIENTE'
-            $sql = "SELECT id, nombres, apellidos, correo, clave, 3 as tipoUsuario 
-                    FROM clientes 
-                    WHERE correo = ? AND baja = 0 
-                    LIMIT 1";
+            // Modifica esta línea en tu api/auth.php
+$sql = "SELECT id, nombres, apellidos, correo, clave, 4 as tipoUsuario 
+        FROM clientes 
+        WHERE correo = ? AND baja = 0 
+        LIMIT 1";
             $usuario = self::$db->querySelect($sql, [$correo]);
         }
         
