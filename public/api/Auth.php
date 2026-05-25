@@ -37,7 +37,7 @@ class Auth {
         
         // 2. Si no es usuario, buscar en clientes
         if (empty($usuario)) {
-            // 🛡️ CORRECCIÓN 1: Enviar el número 3, no la palabra 'CLIENTE'
+            // 🛡️ CORRECCIÓN 1: Enviar el número 4, no la palabra 'CLIENTE'
             // Modifica esta línea en tu api/auth.php
 $sql = "SELECT id, nombres, apellidos, correo, clave, 4 as tipoUsuario 
         FROM clientes 
