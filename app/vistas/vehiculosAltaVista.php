@@ -44,7 +44,7 @@
       </select>
     </div>
 
-    <div class="form-group text-start">
+    <div class="form-group text-start" style="margin-top: 25px;">
       <input type="hidden" name="id" id="id" value="<?php if (isset($datos['data']['id'])) { print $datos['data']['id']; } else { print ""; } ?>">
       <input type="hidden" name="pagina" id="pagina" value="<?php if (isset($datos['pagina'])) { print $datos['pagina']; } else { print "1"; } ?>">
       
@@ -58,4 +58,24 @@
       <?php } ?> 
     </div>
   </form>
+
+  <!-- 1. Cargar CSS de Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <!-- 2. Cargar JS de Select2 (Asegúrate de que jQuery esté cargado antes de esta línea) -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <!-- 3. Inicializar el buscador -->
+  <script>
+    // Esperamos a que el documento esté listo
+    $(document).ready(function() {
+        // Inicializamos Select2 en el select con el ID 'idCliente'
+        $('#idCliente').select2({
+            placeholder: "--- Escribe para buscar un cliente ---",
+            allowClear: true,
+            width: '100%' // Asegura que tome todo el ancho del form-group
+        });
+    });
+  </script>
+
 <?php include_once("piepagina.php"); ?>
