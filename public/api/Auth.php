@@ -17,6 +17,9 @@ class Auth {
    /**
      * Intentar login con correo y contraseña
      */
+   /**
+     * Intentar login con correo y contraseña
+     */
     public static function login($correo, $clave) {
         self::init();
         
@@ -27,34 +30,40 @@ class Auth {
         // Hashear contraseña con el mismo método que el sistema (Para Admins/Mecánicos)
         $claveHasheada = hash_hmac("sha512", $clave, CLAVE);
         
-        // 1. Buscar usuario por correo (Admins y Mecánicos)
+        // 1. Buscar en USUARIOS (Administradores y Operadores)
         $sql = "SELECT id, nombres, apellidos, correo, clave, tipoUsuario 
                 FROM usuarios 
                 WHERE correo = ? AND baja = 0 
                 LIMIT 1";
-        
         $usuario = self::$db->querySelect($sql, [$correo]);
         
-        // 2. Si no es usuario, buscar en clientes
+        // 2. Si no es usuario, buscar en MECÁNICOS (Asignamos el rol 3)
         if (empty($usuario)) {
-            // 🛡️ CORRECCIÓN 1: Enviar el número 4, no la palabra 'CLIENTE'
-            // Modifica esta línea en tu api/auth.php
-$sql = "SELECT id, nombres, apellidos, correo, clave, 4 as tipoUsuario 
-        FROM clientes 
-        WHERE correo = ? AND baja = 0 
-        LIMIT 1";
+            $sql = "SELECT id, nombres, apellidos, correo, clave, 3 as tipoUsuario 
+                    FROM mecanicos 
+                    WHERE correo = ? AND baja = 0 
+                    LIMIT 1";
             $usuario = self::$db->querySelect($sql, [$correo]);
         }
         
+        // 3. Si tampoco es mecánico, buscar en CLIENTES (Asignamos el rol 4)
+        if (empty($usuario)) {
+            $sql = "SELECT id, nombres, apellidos, correo, clave, 4 as tipoUsuario 
+                    FROM clientes 
+                    WHERE correo = ? AND baja = 0 
+                    LIMIT 1";
+            $usuario = self::$db->querySelect($sql, [$correo]);
+        }
+        
+        // Si después de buscar en las 3 tablas sigue vacío, rechazamos
         if (empty($usuario)) {
             Response::unauthorized('Correo o contraseña incorrectos');
         }
         
-        // Verificar contraseña
         $usuarioData = $usuario[0];
         
-        // 🛡️ CORRECCIÓN 2: Validación flexible de contraseñas.
-        // Pasa si coincide con el Hash (Admins) o si coincide con el texto plano (Clientes)
+        // Validación flexible de contraseñas.
+        // Pasa si coincide con el Hash (Admins/Mecánicos) o si coincide con el texto plano (Clientes)
         if ($claveHasheada !== $usuarioData['clave'] && $clave !== $usuarioData['clave']) {
             Response::unauthorized('Correo o contraseña incorrectos');
         }
@@ -69,12 +78,10 @@ $sql = "SELECT id, nombres, apellidos, correo, clave, 4 as tipoUsuario
                 'nombres' => $usuarioData['nombres'],
                 'apellidos' => $usuarioData['apellidos'],
                 'correo' => $usuarioData['correo'],
-                // Para asegurarnos de que siempre viaje como un número entero a Flutter:
                 'tipo' => (int)$usuarioData['tipoUsuario'] 
             ]
         ], 'Login exitoso', 200);
     }
-    
     /**
      * Generar token (JWT simple)
      */
