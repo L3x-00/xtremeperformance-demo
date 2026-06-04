@@ -3,7 +3,7 @@
 
   <div class="form-group text-left">
     <label for="fecha">* Fecha de seguimiento:</label>
-    <input type="date" name="fecha" id="fecha" class="form-control" required value="<?php print isset($datos['data']['fecha'])?$datos['data']['fecha']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+    <input type="date" name="fecha" id="fecha" class="form-control" required max="<?php echo date('Y').'-12-31'; ?>" value="<?php print isset($datos['data']['fecha'])?$datos['data']['fecha']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
   </div>
 
   <div class="form-group text-left">

@@ -55,10 +55,12 @@ class Seguimientos extends Controlador
 
         if(empty($fecha)){
           array_push($errores,"La fecha del seguimiento es requerida.");
-        } 
+        }
         if(Helper::fecha($fecha)==false){
           array_push($errores,"El formato de la fecha no es correcto.");
-        } 
+        } else if ((int)(new DateTime($fecha))->format('Y') > (int)date('Y')) {
+          array_push($errores,"El año de la fecha de seguimiento no puede ser mayor al año actual.");
+        }
 
         // ==// ========================================================================
         // 🛡️ CANDADO DE SEGURIDAD: PROHIBIR SEGUIMIENTOS EN ÓRDENES FACTURADAS
