@@ -47,12 +47,12 @@
 
   <div class="form-group text-left">
     <label for="fechaIngreso">* Fecha de ingreso:</label>
-    <input type="date" name="fechaIngreso" id="fechaIngreso" class="form-control" required max="<?php echo date('Y').'-12-31'; ?>" value="<?php print isset($datos['data']['fechaIngreso'])?$datos['data']['fechaIngreso']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+    <input type="date" name="fechaIngreso" id="fechaIngreso" class="form-control" required min="2026-01-01" max="<?php echo date('Y').'-12-31'; ?>" value="<?php print isset($datos['data']['fechaIngreso'])?$datos['data']['fechaIngreso']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
   </div>
 
   <div class="form-group text-left">
     <label for="fechaSalida">* Fecha de salida:</label>
-    <input type="date" name="fechaSalida" id="fechaSalida" class="form-control" required max="<?php echo date('Y').'-12-31'; ?>" value="<?php print isset($datos['data']['fechaSalida'])?$datos['data']['fechaSalida']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
+    <input type="date" name="fechaSalida" id="fechaSalida" class="form-control" required min="2026-01-01" max="<?php echo date('Y').'-12-31'; ?>" value="<?php print isset($datos['data']['fechaSalida'])?$datos['data']['fechaSalida']:''; ?>" <?php if (isset($datos["baja"])) { print " disabled "; }?>>
   </div>
 
   <div class="form-group text-left">

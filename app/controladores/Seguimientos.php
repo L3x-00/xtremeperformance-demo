@@ -58,8 +58,13 @@ class Seguimientos extends Controlador
         }
         if(Helper::fecha($fecha)==false){
           array_push($errores,"El formato de la fecha no es correcto.");
-        } else if ((int)(new DateTime($fecha))->format('Y') > (int)date('Y')) {
-          array_push($errores,"El año de la fecha de seguimiento no puede ser mayor al año actual.");
+        } else {
+          $yearFecha = (int)(new DateTime($fecha))->format('Y');
+          if ($yearFecha < 2026) {
+            array_push($errores,"El año de la fecha de seguimiento no puede ser inferior a 2026.");
+          } else if ($yearFecha > (int)date('Y')) {
+            array_push($errores,"El año de la fecha de seguimiento no puede ser mayor al año actual.");
+          }
         }
 
         // ==// ========================================================================

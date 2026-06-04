@@ -101,7 +101,9 @@ class OrdenReparacion extends Controlador
 	      } else {
 	      	$fechaIngreso_dt = new DateTime($fechaIngreso);
 	      	$yearIngreso = (int)$fechaIngreso_dt->format('Y');
-	      	if ($yearIngreso > (int)date('Y')) {
+	      	if ($yearIngreso < 2026) {
+	      		array_push($errores, "El año de la fecha de ingreso no puede ser inferior a 2026.");
+	      	} else if ($yearIngreso > (int)date('Y')) {
 	      		array_push($errores, "El año de la fecha de ingreso no puede ser mayor al año actual.");
 	      	}
 	      }
@@ -113,7 +115,9 @@ class OrdenReparacion extends Controlador
 	      } else {
 	      	$fechaSalida_dt = new DateTime($fechaSalida);
 	      	$yearSalida = (int)$fechaSalida_dt->format('Y');
-	      	if ($yearSalida > (int)date('Y')) {
+	      	if ($yearSalida < 2026) {
+	      		array_push($errores, "El año de la fecha de salida no puede ser inferior a 2026.");
+	      	} else if ($yearSalida > (int)date('Y')) {
 	      		array_push($errores, "El año de la fecha de salida no puede ser mayor al año actual.");
 	      	}
 	      	// Si existe fechaIngreso_dt válida, verificamos que la salida no sea anterior.
