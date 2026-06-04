@@ -4,6 +4,6 @@ RewriteEngine on
 RewriteRule ^(css|js|img|fotos)/(.*)$ public/$1/$2 [L]
 # Redirigir la página principal al sistema PHP
 RewriteRule ^$ public/index.php [L]
-# Redirigir todo lo demás al sistema PHP con parámetro URL
+
 RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L]
 </IfModule>
