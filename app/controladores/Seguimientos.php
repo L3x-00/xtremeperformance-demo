@@ -100,17 +100,59 @@ class Seguimientos extends Controlador
               // Imagenes
               if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
                 // Notificar al cliente que se añadió un seguimiento con fotos
+                // Notificar al cliente que se añadió un seguimiento con fotos
                 try {
                   $salidasModelo = $this->modelo("SalidasModelo");
                   $ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
-                  $asunto = "Nuevo seguimiento en tu orden #".$idOrdenReparacion;
+                  
+                  // 1. Un asunto más llamativo
+                  $asunto = "🚗 Actualización de tu vehículo - Orden #" . $idOrdenReparacion;
                   $url = rtrim(SITE_URL,'/')."/";
-                  $html = "<p>Hola ".htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8').",</p>".
-                    "<p>Se ha añadido un nuevo seguimiento con imágenes a tu orden #".$idOrdenReparacion.".</p>".
-                    "<p>Ingresa a tu panel para revisarlo:<br><a href='".$url."'>".$url."</a></p>";
+                  $nombreCliente = htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8');
+                  
+                  // 2. Plantilla HTML profesional con CSS en línea
+                  $html = "
+                  <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
+                      
+                      <div style='background-color: #12171D; padding: 25px; text-align: center;'>
+                          <h1 style='color: #448AFF; margin: 0; font-size: 24px; letter-spacing: 1px;'>Xtreme Performance</h1>
+                      </div>
+                      
+                      <div style='padding: 30px; background-color: #ffffff;'>
+                          <h2 style='color: #12171D; margin-top: 0; font-size: 20px;'>¡Hola, {$nombreCliente}!</h2>
+                          
+                          <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
+                              El equipo técnico ha registrado un nuevo avance en la reparación de tu vehículo correspondiente a la <strong>Orden #{$idOrdenReparacion}</strong>.
+                          </p>
+                          
+                          <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
+                              Se han adjuntado nuevas observaciones e imágenes detallando el estado actual de tu auto.
+                          </p>
+                          
+                          <div style='text-align: center; margin: 35px 0;'>
+                              <a href='{$url}' style='background-color: #448AFF; color: #ffffff; padding: 14px 28px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; display: inline-block;'>
+                                  Ver Estado de mi Vehículo
+                              </a>
+                          </div>
+                          
+                          <hr style='border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;'>
+                          <p style='font-size: 13px; color: #888888; text-align: center; margin-bottom: 0;'>
+                              Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+                              <a href='{$url}' style='color: #448AFF; text-decoration: none;'>{$url}</a>
+                          </p>
+                      </div>
+                      
+                      <div style='background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #999999;'>
+                          &copy; " . date('Y') . " Xtreme Performance. Todos los derechos reservados.
+                      </div>
+                      
+                  </div>
+                  ";
+                  
                   $this->enviarCorreoPlano($ord['correo']??'', $asunto, $html);
-                } catch (\Throwable $e) { /* noop */ }
-                
+                } catch (\Throwable $e) { 
+                    error_log("Error enviando correo de seguimiento: " . $e->getMessage()); 
+                }
                 // PUSHER: DISPARAR EVENTO DE NUEVO SEGUIMIENTO (ALTA)
                 $canal = 'orden-' . $idOrdenReparacion;
                 $evento = 'nuevo-seguimiento';
