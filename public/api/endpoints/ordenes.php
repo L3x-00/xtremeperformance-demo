@@ -31,6 +31,7 @@ if ($method === 'GET') {
     } else {
         // GET /api/ordenes
         $vehiculoId = $_GET['idVehiculo'] ?? null;
+        $idCliente = $_GET['idCliente'] ?? null; // 1. Recibimos el parámetro de Flutter
         $pagina = $_GET['pagina'] ?? 1;
         $limite = $_GET['limite'] ?? 10;
         $offset = ($pagina - 1) * $limite;
@@ -47,15 +48,29 @@ if ($method === 'GET') {
             $sql .= " AND o.idVehiculo = " . intval($vehiculoId);
         }
         
+        // 2. Aplicamos el filtro si detectamos que viene un cliente
+        if (!empty($idCliente)) {
+            $sql .= " AND c.id = " . intval($idCliente);
+        }
+        
         $sql .= " ORDER BY o.fechaIngreso DESC LIMIT $offset, $limite";
         
         $ordenes = $db->querySelect($sql);
         
-        // Contar total
-        $sqlCount = "SELECT COUNT(*) as total FROM ordenreparacion WHERE baja = 0";
+        // Contar total (3. Agregamos los JOIN aquí también para que el filtro funcione)
+        $sqlCount = "SELECT COUNT(o.id) as total 
+                     FROM ordenreparacion o
+                     LEFT JOIN vehiculos v ON o.idVehiculo = v.id
+                     LEFT JOIN clientes c ON v.idCliente = c.id
+                     WHERE o.baja = 0";
+                     
         if (!empty($vehiculoId)) {
-            $sqlCount .= " AND idVehiculo = " . intval($vehiculoId);
+            $sqlCount .= " AND o.idVehiculo = " . intval($vehiculoId);
         }
+        if (!empty($idCliente)) {
+            $sqlCount .= " AND c.id = " . intval($idCliente);
+        }
+        
         $totalResult = $db->query($sqlCount);
         $total = $totalResult['total'] ?? 0;
         

@@ -92,15 +92,9 @@ class Seguimientos extends Controlador
             if ($id) {
               // Imagenes
               if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
-                // Notificar al cliente que se añadió un seguimiento con fotos
-                // Notificar al cliente que se añadió un seguimiento con fotos
-                // Notificar al cliente que se añadió un seguimiento con fotos
                 try {
                   $salidasModelo = $this->modelo("SalidasModelo");
                   $ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
-                  
-                  // 1. Capturamos la observación ingresada por el mecánico de forma segura
-                  // Si tu variable POST se llama diferente, ajusta el nombre 'observacion'
                   $textoObservacion = isset($data['observacion']) ? $data['observacion'] : 'Se ha añadido una nueva actualización.';
                   $observacionLimpia = nl2br(htmlentities($textoObservacion, ENT_QUOTES, 'UTF-8'));
 
@@ -194,7 +188,6 @@ class Seguimientos extends Controlador
             //Modificar
             if ($this->modelo->modificar($data)) {
               if ($this->subirImagenes($_FILES,$idOrdenReparacion,$idSeguimiento)) {
-                // PUSHER: DISPARAR EVENTO DE SEGUIMIENTO MODIFICADO
                 $canal = 'orden-' . $idOrdenReparacion;
                 $evento = 'nuevo-seguimiento';
                 $datosTracking = [
