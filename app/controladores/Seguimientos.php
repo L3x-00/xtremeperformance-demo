@@ -67,22 +67,15 @@ class Seguimientos extends Controlador
           }
         }
 
-        // ==// ========================================================================
-        // 🛡️ CANDADO DE SEGURIDAD: PROHIBIR SEGUIMIENTOS EN ÓRDENES FACTURADAS
-        // ========================================================================
         if(!empty($idOrdenReparacion)) {
-            // Llamamos al modelo principal de las Órdenes en lugar del de Salidas
             $ordenModelo = $this->modelo("OrdenReparacionModelo");
             $ordenActual = $ordenModelo->getId($idOrdenReparacion);
 
-            // Agregamos isset() por extrema seguridad para que PHP no lance advertencias
             if ($ordenActual && isset($ordenActual['estado']) && $ordenActual['estado'] == 2) {
                 array_push($errores, "Acción denegada: La orden de reparación #$idOrdenReparacion ya se encuentra facturada y cerrada. No se admiten más seguimientos.");
             }
         }
-        // ========================================================================
-
-        // Si no hay errores (incluyendo el error del candado), procedemos a guardar
+      
         if (empty($errores)) { 
           // Crear arreglo de datos
           $data = [
@@ -101,16 +94,21 @@ class Seguimientos extends Controlador
               if ($this->subirImagenes($_FILES,$idOrdenReparacion,$id)) {
                 // Notificar al cliente que se añadió un seguimiento con fotos
                 // Notificar al cliente que se añadió un seguimiento con fotos
+                // Notificar al cliente que se añadió un seguimiento con fotos
                 try {
                   $salidasModelo = $this->modelo("SalidasModelo");
                   $ord = $salidasModelo->getOrdenReparacion($idOrdenReparacion);
                   
-                  // 1. Un asunto más llamativo
+                  // 1. Capturamos la observación ingresada por el mecánico de forma segura
+                  // Si tu variable POST se llama diferente, ajusta el nombre 'observacion'
+                  $textoObservacion = isset($data['observacion']) ? $data['observacion'] : 'Se ha añadido una nueva actualización.';
+                  $observacionLimpia = nl2br(htmlentities($textoObservacion, ENT_QUOTES, 'UTF-8'));
+
                   $asunto = "🚗 Actualización de tu vehículo - Orden #" . $idOrdenReparacion;
                   $url = rtrim(SITE_URL,'/')."/";
                   $nombreCliente = htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8');
                   
-                  // 2. Plantilla HTML profesional con CSS en línea
+                  // 2. Plantilla HTML profesional con el mensaje incluido
                   $html = "
                   <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
                       
@@ -125,13 +123,19 @@ class Seguimientos extends Controlador
                               El equipo técnico ha registrado un nuevo avance en la reparación de tu vehículo correspondiente a la <strong>Orden #{$idOrdenReparacion}</strong>.
                           </p>
                           
+                          <div style='background-color: #F8F9FA; border-left: 4px solid #448AFF; padding: 15px 20px; margin: 25px 0; border-radius: 0 6px 6px 0;'>
+                              <p style='margin: 0; font-size: 15px; color: #333333; font-style: italic;'>
+                                  \"{$observacionLimpia}\"
+                              </p>
+                          </div>
+                          
                           <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
-                              Se han adjuntado nuevas observaciones e imágenes detallando el estado actual de tu auto.
+                              Se han adjuntado imágenes detallando el estado actual. Ingresa a tu panel para verlas a detalle.
                           </p>
                           
                           <div style='text-align: center; margin: 35px 0;'>
                               <a href='{$url}' style='background-color: #448AFF; color: #ffffff; padding: 14px 28px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; display: inline-block;'>
-                                  Ver Estado de mi Vehículo
+                                  Ver Fotos en mi Panel
                               </a>
                           </div>
                           
@@ -153,7 +157,6 @@ class Seguimientos extends Controlador
                 } catch (\Throwable $e) { 
                     error_log("Error enviando correo de seguimiento: " . $e->getMessage()); 
                 }
-                // PUSHER: DISPARAR EVENTO DE NUEVO SEGUIMIENTO (ALTA)
                 $canal = 'orden-' . $idOrdenReparacion;
                 $evento = 'nuevo-seguimiento';
                 $datosTracking = [
