@@ -4,15 +4,51 @@ class Controlador
 {
     function __construct(){}
 
-    public function enviarCorreo(array $data=[]):bool
+   public function enviarCorreo(array $data=[]):bool
     {
         $salida = false;
         if (!empty($data)) {
             $id = Helper::encriptar($data["id"]);
             $link = rtrim(SITE_URL, '/')."/login/cambiarclave/".$id;
-            $msg = "Entra a la siguiente liga para cambiar tu clave de acceso al sistema de Xtreme Performance:<br>";
-            $msg.= "<a href='".$link."'>Cambiar tu clave de acceso</a><br><br>";
-            $msg.= "Si el enlace no funciona, copia y pega esta URL en tu navegador: ".$link;
+            
+            // Plantilla HTML profesional con CSS en línea
+            $html = "
+            <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
+                
+                <div style='background-color: #12171D; padding: 25px; text-align: center;'>
+                    <h1 style='color: #448AFF; margin: 0; font-size: 24px; letter-spacing: 1px;'>Xtreme Performance</h1>
+                </div>
+                
+                <div style='padding: 30px; background-color: #ffffff;'>
+                    <h2 style='color: #12171D; margin-top: 0; font-size: 20px;'>Recuperación de contraseña</h2>
+                    
+                    <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
+                        Hemos recibido una solicitud para restablecer la clave de acceso de tu cuenta en el sistema.
+                    </p>
+                    
+                    <div style='text-align: center; margin: 35px 0;'>
+                        <a href='{$link}' style='background-color: #448AFF; color: #ffffff; padding: 14px 28px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; display: inline-block;'>
+                            Cambiar mi clave de acceso
+                        </a>
+                    </div>
+                    
+                    <p style='font-size: 14px; line-height: 1.6; color: #777777;'>
+                        Si no solicitaste este cambio, puedes ignorar este correo de forma segura. Tu contraseña actual seguirá siendo válida.
+                    </p>
+                    
+                    <hr style='border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;'>
+                    <p style='font-size: 13px; color: #888888; text-align: center; margin-bottom: 0;'>
+                        Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+                        <a href='{$link}' style='color: #448AFF; text-decoration: none; word-break: break-all;'>{$link}</a>
+                    </p>
+                </div>
+                
+                <div style='background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #999999;'>
+                    &copy; " . date('Y') . " Xtreme Performance. Todos los derechos reservados.
+                </div>
+                
+            </div>
+            ";
 
             $from = MAIL_FROM_NAME.' <'.MAIL_FROM.'>';
             $headers = "MIME-Version: 1.0\r\n"; 
@@ -21,9 +57,9 @@ class Controlador
             $headers.= "Reply-To: ".MAIL_REPLY_TO."\r\n";
             $headers.= "X-Mailer: PHP/".phpversion()."\r\n";
 
-            $asunto = "Cambiar clave de acceso";
+            $asunto = "🔐 Instrucciones para cambiar tu clave de acceso";
             $extraParams = "-f".MAIL_FROM;
-            $salida = @mail($data["correo"],$asunto,$msg, $headers, $extraParams);
+            $salida = @mail($data["correo"], $asunto, $html, $headers, $extraParams);
         }
         return $salida;
     }
