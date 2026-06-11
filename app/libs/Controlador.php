@@ -1,7 +1,5 @@
 <?php  
-/**
- * Clase base Controlador
- */
+
 class Controlador
 {
     function __construct(){}
