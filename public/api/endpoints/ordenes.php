@@ -36,7 +36,7 @@ if ($method === 'GET') {
         $limite = $_GET['limite'] ?? 10;
         $offset = ($pagina - 1) * $limite;
         
-        $sql = "SELECT o.id, o.fechaIngreso, o.fechaSalida, o.estado, 
+        $sql = "SELECT o.id, o.fechaIngreso, o.fechaSalida, o.estado, o.total, 
                 v.marca, v.modelo, v.placas,
                 CONCAT(c.apellidos, ', ', c.nombres) as cliente
                 FROM ordenreparacion o
