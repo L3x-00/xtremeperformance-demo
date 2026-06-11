@@ -246,13 +246,13 @@ class Salidas extends Controlador
 				$this->factura->Output('D', 'factura_'.str_pad($factura, 5, "0", STR_PAD_LEFT).'.pdf');
 				// Notificación por correo al cliente (y copia a correo del taller) por cambio de estado
 				try {
-                    // 1. Asunto más llamativo y preparación de variables
+                
                     $asunto = "🧾 Tu orden #" . $data['id'] . " ha sido facturada";
                     $urlPanel = rtrim(SITE_URL,'/') . "/";
                     $nombreCliente = htmlentities($data['nombres'] . ' ' . $data['apellidos'], ENT_QUOTES, 'UTF-8');
                     $montoTotal = number_format($total, 2);
                     
-                    // 2. Plantilla HTML con estilo corporativo
+          
                     $html = "
                     <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
                         

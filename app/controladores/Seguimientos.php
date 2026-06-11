@@ -101,8 +101,7 @@ class Seguimientos extends Controlador
                   $asunto = "🚗 Actualización de tu vehículo - Orden #" . $idOrdenReparacion;
                   $url = rtrim(SITE_URL,'/')."/";
                   $nombreCliente = htmlentities(($ord['nombres']??'').' '.($ord['apellidos']??''), ENT_QUOTES, 'UTF-8');
-                  
-                  // 2. Plantilla HTML profesional con el mensaje incluido
+               
                   $html = "
                   <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
                       

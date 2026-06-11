@@ -9,5 +9,4 @@
 		<a href="<?php print RUTA; ?>login" class="btn btn-success">Regresar</a>
 	</div>
 </form>
-<p>Escribe tu correo registrado en el sistema</p>
-<?php include_once("piepagina.php"); ?>					
+<p>Escribe tu correo registrado en el sistema</p>				

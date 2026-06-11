@@ -79,7 +79,7 @@ class Login extends Controlador
 		}
 		$datos = [
 			"titulo" => "Olvido de la clave de acceso",
-			"subtitulo" => "Olvidaste tu clave de accesso",
+			"subtitulo" => "Olvidaste tu clave de acceso",
 			"errores" => $errores
 		];
 		$this->vista("loginOlvidoVista",$datos);
