@@ -246,19 +246,69 @@ class Salidas extends Controlador
 				$this->factura->Output('D', 'factura_'.str_pad($factura, 5, "0", STR_PAD_LEFT).'.pdf');
 				// Notificación por correo al cliente (y copia a correo del taller) por cambio de estado
 				try {
-					$asunto = "Tu orden #".$data['id']." ha sido facturada";
-					$urlPanel = rtrim(SITE_URL,'/')."/";
-					$detalle = "<p>Hola ".htmlentities($data['nombres'].' '.$data['apellidos'], ENT_QUOTES, 'UTF-8').",</p>".
-						"<p>Tu orden de reparación #".$data['id']." ha sido facturada.</p>".
-						"<p><strong>Total:</strong> S/ ".number_format($total,2)."</p>".
-						"<p>Puedes ingresar al panel para ver el detalle y descargar tus documentos:<br>".
-						"<a href='".$urlPanel."'>".$urlPanel."</a></p>";
-					$this->enviarCorreoPlano($data['correo'], $asunto, $detalle);
-					if (!empty($razonSocial['correo'])) {
-						$this->enviarCorreoPlano($razonSocial['correo'], "[Copia] ".$asunto, $detalle);
-					}
-				} catch (\Throwable $e) { /* noop */ }
-				//
+                    // 1. Asunto más llamativo y preparación de variables
+                    $asunto = "🧾 Tu orden #" . $data['id'] . " ha sido facturada";
+                    $urlPanel = rtrim(SITE_URL,'/') . "/";
+                    $nombreCliente = htmlentities($data['nombres'] . ' ' . $data['apellidos'], ENT_QUOTES, 'UTF-8');
+                    $montoTotal = number_format($total, 2);
+                    
+                    // 2. Plantilla HTML con estilo corporativo
+                    $html = "
+                    <div style='font-family: Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; color: #333333;'>
+                        
+                        <div style='background-color: #12171D; padding: 25px; text-align: center;'>
+                            <h1 style='color: #448AFF; margin: 0; font-size: 24px; letter-spacing: 1px;'>Xtreme Performance</h1>
+                        </div>
+                        
+                        <div style='padding: 30px; background-color: #ffffff;'>
+                            <h2 style='color: #12171D; margin-top: 0; font-size: 20px;'>¡Hola, {$nombreCliente}!</h2>
+                            
+                            <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
+                                Te informamos que el proceso de tu vehículo ha finalizado y tu <strong>Orden de Reparación #{$data['id']}</strong> ha sido facturada exitosamente.
+                            </p>
+                            
+                            <div style='background-color: #F8F9FA; border-left: 4px solid #448AFF; padding: 15px 20px; margin: 25px 0; border-radius: 0 6px 6px 0; text-align: center;'>
+                                <p style='margin: 0; font-size: 14px; color: #777777; text-transform: uppercase; letter-spacing: 1px;'>Total a pagar</p>
+                                <p style='margin: 5px 0 0 0; font-size: 28px; color: #12171D; font-weight: bold;'>
+                                    S/ {$montoTotal}
+                                </p>
+                            </div>
+                            
+                            <p style='font-size: 16px; line-height: 1.6; color: #555555;'>
+                                Ya puedes ingresar a tu panel de cliente para ver el detalle completo de los servicios realizados y descargar tus comprobantes de pago.
+                            </p>
+                            
+                            <div style='text-align: center; margin: 35px 0;'>
+                                <a href='{$urlPanel}' style='background-color: #448AFF; color: #ffffff; padding: 14px 28px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; display: inline-block;'>
+                                    Ver Detalle y Factura
+                                </a>
+                            </div>
+                            
+                            <hr style='border: 0; border-top: 1px solid #eeeeee; margin: 20px 0;'>
+                            <p style='font-size: 13px; color: #888888; text-align: center; margin-bottom: 0;'>
+                                Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
+                                <a href='{$urlPanel}' style='color: #448AFF; text-decoration: none; word-break: break-all;'>{$urlPanel}</a>
+                            </p>
+                        </div>
+                        
+                        <div style='background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #999999;'>
+                            &copy; " . date('Y') . " Xtreme Performance. Todos los derechos reservados.
+                        </div>
+                        
+                    </div>
+                    ";
+                    
+                    // 3. Envío de correos usando la nueva plantilla HTML
+                    $this->enviarCorreoPlano($data['correo'], $asunto, $html);
+                    
+                    if (!empty($razonSocial['correo'])) {
+                        $this->enviarCorreoPlano($razonSocial['correo'], "[Copia] " . $asunto, $html);
+                    }
+                    
+                } catch (\Throwable $e) { 
+                    // Reemplazado el /* noop */ por un registro de error silencioso
+                    error_log("Error enviando correo de facturación: " . $e->getMessage()); 
+                }
 				$this->mensaje(
 				"Impresión de una orden de reparación", 
 				"Impresión de una orden de reparación", 
