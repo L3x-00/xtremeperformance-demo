@@ -19,9 +19,10 @@
     position: fixed;
     bottom: 80px;
     right: 20px;
-    width: 544px; 
-    height: 816px; 
+    width: 435px;  
+    height: 653px; 
     
+    /* Reglas de seguridad responsivas */
     max-width: 90vw; 
     max-height: 85vh;
     
