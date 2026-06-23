@@ -16,13 +16,25 @@
         cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 9999;
     }
     #chatbot-window {
-        position: fixed; bottom: 80px; right: 20px;
-        width: 320px; height: 480px; background-color: #0F111A;
-        border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        display: flex; flex-direction: column; overflow: hidden;
-        z-index: 9999; transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 544px; 
+    height: 816px; 
+    
+    max-width: 90vw; 
+    max-height: 85vh;
+    
+    background-color: #0F111A;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
     .chat-oculto { display: none !important; }
     .chat-header {
         background: linear-gradient(135deg, #12121D, #1E2235); color: white;
