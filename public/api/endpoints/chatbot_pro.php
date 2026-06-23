@@ -109,7 +109,38 @@ if ($conn) {
         } catch(PDOException $e) {
             $infoDelSistema = "INFORMACIÓN PRIVADA: No se pudo obtener la estadística de la base de datos.";
         }
+// 📋 CASO 4: El usuario pide listar cuáles son las órdenes pendientes
+} elseif (preg_match('/(cuales|cuáles|lista|mostrar|dime).*(pendientes|activas|abiertas|proceso)/i', $mensajeUsuario) || preg_match('/ordenes.*pendientes/i', $mensajeUsuario)) {
+    try {
+        // Buscamos las órdenes en estado 1 (Abiertas)
+        $sqlPendientes = "SELECT o.id, v.marca, v.modelo, c.nombres, c.apellidos
+                          FROM ordenreparacion o
+                          LEFT JOIN vehiculos v ON o.idVehiculo = v.id
+                          LEFT JOIN clientes c ON v.idCliente = c.id
+                          WHERE o.estado = 1 AND o.baja = 0
+                          ORDER BY o.fechaIngreso ASC LIMIT 10";
+        
+        $stmtPend = $conn->prepare($sqlPendientes);
+        $stmtPend->execute();
+        $resPend = $stmtPend->fetchAll(PDO::FETCH_ASSOC);
 
+        if ($resPend && count($resPend) > 0) {
+            $lista = "";
+            foreach ($resPend as $row) {
+                $lista .= "- Orden #" . $row['id'] . " (" . $row['marca'] . " " . $row['modelo'] . ") del cliente " . $row['nombres'] . " " . $row['apellidos'] . ".\n";
+            }
+            
+            $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA (ÚSALO PARA ARMAR TU RESPUESTA): 
+            El usuario pregunta cuáles son las órdenes pendientes o activas. 
+            Aquí tienes la lista real de los vehículos que están en proceso de reparación en este momento:
+            \n" . $lista . "\n
+            Instrucción: Lee esta lista y menciónale al usuario los vehículos y dueños de forma muy amigable, natural y profesional. No parezcas un robot leyendo una tabla.";
+        } else {
+            $infoDelSistema = "INFORMACIÓN DEL SISTEMA: El usuario pregunta por órdenes pendientes, pero actualmente NO HAY ninguna orden pendiente (estado 1) en el taller. Todas están facturadas o el taller está vacío. Informa esto amablemente.";
+        }
+    } catch(PDOException $e) {
+        $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar las órdenes pendientes en la base de datos.";
+    }
    // 💰 CASO 3 (Barras): El usuario pregunta por GANANCIAS o Dinero
     } elseif (preg_match('/(ganancias|dinero|ingresos|ventas|dinero|plata|lucro)/i', $mensajeUsuario)) {
         try {

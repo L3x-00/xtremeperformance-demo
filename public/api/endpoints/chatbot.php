@@ -1,5 +1,4 @@
 <?php
-// 1. Cabeceras estrictas para vencer el error CORS de Flutter Web
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -12,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header("Content-Type: application/json; charset=UTF-8");
 
-// 3. Conexión a la base de datos
 require_once '../../../app/libs/MySQLdb.php'; 
 
 $input = json_decode(file_get_contents("php://input"), true);
