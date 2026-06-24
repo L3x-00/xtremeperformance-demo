@@ -94,8 +94,16 @@
 </div>
 
 <script>
-    // 🛡️ Nivel de acceso del usuario
-    const rolUsuarioActivo = <?php echo isset($datos['usuario']['tipoUsuario']) ? $datos['usuario']['tipoUsuario'] : 3; ?>;
+    // 🛡️ Nivel de acceso del usuario (Inyectado desde la sesión de PHP)
+    // Obtenemos los valores numéricos
+    const rolNumerico = <?php echo isset($_SESSION['usuario']['tipoUsuario']) ? $_SESSION['usuario']['tipoUsuario'] : 3; ?>;
+    const idUsuarioActivo = <?php echo isset($_SESSION['usuario']['id']) ? $_SESSION['usuario']['id'] : 0; ?>;
+
+    // Traducimos el número al texto que espera nuestro chatbot.php
+    let rolUsuarioTexto = 'VISITANTE';
+    if (rolNumerico == 1) rolUsuarioTexto = 'ADMON';
+    else if (rolNumerico == 2) rolUsuarioTexto = 'MECANICO';
+    else if (rolNumerico == 3) rolUsuarioTexto = 'CLIENTE';
 
     function toggleChat() {
         document.getElementById('chatbot-window').classList.toggle('chat-oculto');
@@ -190,24 +198,25 @@
     }
 
     async function enviarMensajeWeb() {
-    const input = document.getElementById('chat-input');
-    const mensaje = input.value.trim();
-    if (!mensaje) return;
+        const input = document.getElementById('chat-input');
+        const mensaje = input.value.trim();
+        if (!mensaje) return;
 
-    agregarBurbuja(mensaje, 'usuario');
-    input.value = '';
-    agregarBurbuja('Mecánico analizando...', 'bot', true);
+        agregarBurbuja(mensaje, 'usuario');
+        input.value = '';
+        agregarBurbuja('Mecánico analizando...', 'bot', true);
 
-    try {
-        const response = await fetch('https://www.xtremeperformancepe.com/public/api/endpoints/chatbot_pro.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                mensaje: mensaje,
-                rol: rolUsuarioActivo,      // Debe ser 'ADMON', 'CLIENTE' o 'MECANICO'
-                id_usuario: idUsuarioActivo // Debe ser el ID numérico (ej. 20)
-            })
-        });
+        try {
+            const response = await fetch('https://www.xtremeperformancepe.com/public/api/endpoints/chatbot_pro.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    mensaje: mensaje,
+                    rol: rolUsuarioTexto,      // Enviamos 'ADMON', 'CLIENTE' o 'MECANICO'
+                    id_usuario: idUsuarioActivo // Enviamos el ID real (ej. 20)
+                })
+            });
+            
             const data = await response.json();
             
             const tempMsg = document.getElementById('escribiendo-temp');
