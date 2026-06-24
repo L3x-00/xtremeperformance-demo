@@ -14,6 +14,10 @@ $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash
 $input = json_decode(file_get_contents("php://input"), true);
 $mensajeUsuario = $input['mensaje'] ?? '';
 
+// 1. CAPTURAMOS EL ROL Y EL ID DEL USUARIO
+// Si no envían rol, asumimos por seguridad que es un visitante sin privilegios
+$rolUsuario = $input['rol'] ?? 'VISITANTE'; 
+$idUsuarioActivo = $input['id_usuario'] ?? 0;
 if (empty($mensajeUsuario)) {
     echo json_encode(["respuesta" => "¡Sistema de IA de Xtreme Performance en línea!"]);
     exit;
@@ -47,146 +51,164 @@ try {
 }
 
 if ($conn) {
-    // CASO 1: El usuario pregunta por una orden específica (ej: "orden 19")
-    if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
-        $idOrden = $coincidencias[1]; 
-
-        try {
-            $stmt = $conn->prepare("SELECT estado, fechaIngreso, fechaSalida, kilometraje, baja FROM ordenreparacion WHERE id = :id");
-            $stmt->bindParam(':id', $idOrden);
-            $stmt->execute();
-            $orden = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($orden) {
-                if ($orden['baja'] == 1) {
-                    $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden. Sin embargo, esta orden aparece como DADA DE BAJA o Cancelada. Informa esto amablemente.";
-                } else {
-                    $textoEstado = "";
-                    if ($orden['estado'] == 1) {
-                        $textoEstado = "Abierta / En proceso de reparación en el taller"; 
-                    } elseif ($orden['estado'] == 2) {
-                        $textoEstado = "Facturada / Terminada y lista para entrega"; 
-                    } else {
-                        $textoEstado = "En revisión";
-                    }
-
-                    $infoDelSistema = "INFORMACIÓN CONFIDENCIAL PARA TI (ÚSALO PARA ARMAR TU RESPUESTA): 
-                    El cliente pregunta por la orden número $idOrden. 
-                    - Estado actual: **$textoEstado**.
-                    - Fecha de ingreso: " . $orden['fechaIngreso'] . ". 
-                    - Fecha estimada de salida: " . $orden['fechaSalida'] . ". 
-                    - Kilometraje registrado: " . $orden['kilometraje'] . " km.
-                    Instrucción: Informa al cliente sobre su estado y fechas de forma muy amable y profesional.";
-                }
-            } else {
-                $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA: El cliente pregunta por la orden $idOrden, pero NO EXISTE en nuestra base de datos. Pídele que verifique el número amablemente.";
-            }
-        } catch(PDOException $e) {
-            $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar la orden.";
-        }
-
-    // 📊 CASO 2 (Dona): El usuario pregunta por TOTALES de órdenes (ej: "¿Cuántas órdenes hay?")
-    } elseif (preg_match('/(cuántas|cuantas|total|resumen|estadística|estadisticas|dashboard).*(ordenes|órdenes|estado|pedidos|vehículos|autos)/i', $mensajeUsuario)) {
-        try {
-            $stmtStats = $conn->prepare("SELECT estado, COUNT(*) as total FROM ordenreparacion WHERE baja = 0 GROUP BY estado");
-            $stmtStats->execute();
-            $resStats = $stmtStats->fetchAll(PDO::FETCH_ASSOC);
-
-            // Asignamos a las variables globales para la dona
-            $countAbiertas = 0;
-            $countFacturadas = 0;
-
-            foreach ($resStats as $row) {
-                if ($row['estado'] == 1) $countAbiertas = (int)$row['total'];
-                if ($row['estado'] == 2) $countFacturadas = (int)$row['total'];
-            }
-
-            $infoDelSistema = "INFORMACIÓN ESTADÍSTICA DEL TALLER: El usuario pide un resumen. 
-            Actualmente tenemos en el sistema:
-            - $countAbiertas órdenes ABIERTAS (En proceso de reparación).
-            - $countFacturadas órdenes FACTURADAS (Terminadas/Listas).
-            Instrucción: Dáselo como un resumen gerencial muy profesional e infla el pecho de orgullo por Xtreme Performance.";
-        } catch(PDOException $e) {
-            $infoDelSistema = "INFORMACIÓN PRIVADA: No se pudo obtener la estadística de la base de datos.";
-        }
-// 📋 CASO 4: El usuario pide listar cuáles son las órdenes pendientes
-} elseif (preg_match('/(cuales|cuáles|lista|mostrar|dime).*(pendientes|activas|abiertas|proceso)/i', $mensajeUsuario) || preg_match('/ordenes.*pendientes/i', $mensajeUsuario)) {
-    try {
-        // Buscamos las órdenes en estado 1 (Abiertas)
-        $sqlPendientes = "SELECT o.id, v.marca, v.modelo, c.nombres, c.apellidos
-                          FROM ordenreparacion o
-                          LEFT JOIN vehiculos v ON o.idVehiculo = v.id
-                          LEFT JOIN clientes c ON v.idCliente = c.id
-                          WHERE o.estado = 1 AND o.baja = 0
-                          ORDER BY o.fechaIngreso ASC LIMIT 10";
+    
+    // -------------------------------------------------------------------------
+    // 🛡️ ROL 1: ADMINISTRADOR (Tiene acceso a TODO)
+    // -------------------------------------------------------------------------
+    if ($rolUsuario === 'ADMON') {
         
-        $stmtPend = $conn->prepare($sqlPendientes);
-        $stmtPend->execute();
-        $resPend = $stmtPend->fetchAll(PDO::FETCH_ASSOC);
+        // CASO 1: Orden específica
+        if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
+            $idOrden = $coincidencias[1]; 
+            try {
+                $stmt = $conn->prepare("SELECT estado, fechaIngreso, fechaSalida, kilometraje, baja FROM ordenreparacion WHERE id = :id");
+                $stmt->bindParam(':id', $idOrden);
+                $stmt->execute();
+                $orden = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resPend && count($resPend) > 0) {
-            $lista = "";
-            foreach ($resPend as $row) {
-                $lista .= "- Orden #" . $row['id'] . " (" . $row['marca'] . " " . $row['modelo'] . ") del cliente " . $row['nombres'] . " " . $row['apellidos'] . ".\n";
-            }
-            
-            $infoDelSistema = "INFORMACIÓN PRIVADA DEL SISTEMA (ÚSALO PARA ARMAR TU RESPUESTA): 
-            El usuario pregunta cuáles son las órdenes pendientes o activas. 
-            Aquí tienes la lista real de los vehículos que están en proceso de reparación en este momento:
-            \n" . $lista . "\n
-            Instrucción: Lee esta lista y menciónale al usuario los vehículos y dueños de forma muy amigable, natural y profesional. No parezcas un robot leyendo una tabla.";
-        } else {
-            $infoDelSistema = "INFORMACIÓN DEL SISTEMA: El usuario pregunta por órdenes pendientes, pero actualmente NO HAY ninguna orden pendiente (estado 1) en el taller. Todas están facturadas o el taller está vacío. Informa esto amablemente.";
-        }
-    } catch(PDOException $e) {
-        $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar las órdenes pendientes en la base de datos.";
-    }
-   // 💰 CASO 3 (Barras): El usuario pregunta por GANANCIAS o Dinero
-    } elseif (preg_match('/(ganancias|dinero|ingresos|ventas|dinero|plata|lucro)/i', $mensajeUsuario)) {
-        try {
-            // MATEMÁTICAS GERENCIALES CLONADAS DEL DASHBOARD (Usando la tabla 'facturas')
-            $sqlDinero = "SELECT 
-                            DATE_FORMAT(alta_dt, '%Y-%m') as ym, 
-                            DATE_FORMAT(alta_dt, '%b %Y') as mes_label,
-                            SUM(total) as total_ingreso
-                          FROM facturas 
-                          WHERE baja = 0 
-                            AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-                          GROUP BY ym, mes_label
-                          ORDER BY ym ASC";
-
-            $stmtDinero = $conn->prepare($sqlDinero);
-            $stmtDinero->execute();
-            $resDinero = $stmtDinero->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($resDinero) {
-                // Preparamos los datos para las barras en Flutter
-                $barLabels = [];
-                $barData = [];
-                $resumenTexto = "";
-
-                foreach ($resDinero as $row) {
-                    // Traducimos el mes de inglés a español básico
-                    $meses = ['Jan'=>'Ene', 'Feb'=>'Feb', 'Mar'=>'Mar', 'Apr'=>'Abr', 'May'=>'May', 'Jun'=>'Jun', 'Jul'=>'Jul', 'Aug'=>'Ago', 'Sep'=>'Sep', 'Oct'=>'Oct', 'Nov'=>'Nov', 'Dec'=>'Dic'];
-                    $partes = explode(' ', $row['mes_label']);
-                    $mesLabelEspanol = (isset($meses[$partes[0]]) ? $meses[$partes[0]] : $partes[0]) . ' ' . $partes[1];
-
-                    $barLabels[] = $mesLabelEspanol; 
-                    $barData[] = (double)$row['total_ingreso'];
-                    $resumenTexto .= "- " . $mesLabelEspanol . ": S/ " . number_format($row['total_ingreso'], 2) . "\n";
+                if ($orden) {
+                    if ($orden['baja'] == 1) {
+                        $infoDelSistema = "INFORMACIÓN: La orden $idOrden está DADA DE BAJA o Cancelada.";
+                    } else {
+                        $textoEstado = ($orden['estado'] == 1) ? "Abierta" : (($orden['estado'] == 2) ? "Facturada" : "En revisión");
+                        $infoDelSistema = "INFORMACIÓN CONFIDENCIAL: El administrador pregunta por la orden $idOrden. Estado: **$textoEstado**. Ingreso: {$orden['fechaIngreso']}. Salida: {$orden['fechaSalida']}. Km: {$orden['kilometraje']} km.";
+                    }
+                } else {
+                    $infoDelSistema = "INFORMACIÓN: La orden $idOrden NO EXISTE en la base de datos.";
                 }
-
-                $infoDelSistema = "INFORMACIÓN FINANCIERA DEL TALLER (ÚSALO PARA ARMAR TU RESPUESTA): 
-                El usuario (administrador) pregunta por el flujo de ingresos.
-                Aquí tienes el resumen real de los últimos meses, incluyendo mano de obra, piezas e impuestos:\n
-                $resumenTexto
-                Instrucción: Haz un análisis gerencial muy profesional. Usa términos como 'flujo de caja', 'optimización' y 'alto rendimiento'.";
-            } else {
-                $infoDelSistema = "INFORMACIÓN FINANCIERA: No se registraron facturas pagadas en los últimos 6 meses.";
+            } catch(PDOException $e) {
+                $infoDelSistema = "INFORMACIÓN: Error al consultar la orden.";
             }
+        }
+        
+        // CASO 2: Dona / Totales
+        elseif (preg_match('/(cuántas|cuantas|total|resumen|estadística|estadisticas|dashboard).*(ordenes|órdenes|estado|pedidos|vehículos|autos)/i', $mensajeUsuario)) {
+            try {
+                $stmtStats = $conn->prepare("SELECT estado, COUNT(*) as total FROM ordenreparacion WHERE baja = 0 GROUP BY estado");
+                $stmtStats->execute();
+                $resStats = $stmtStats->fetchAll(PDO::FETCH_ASSOC);
+                $countAbiertas = 0; $countFacturadas = 0;
+                foreach ($resStats as $row) {
+                    if ($row['estado'] == 1) $countAbiertas = (int)$row['total'];
+                    if ($row['estado'] == 2) $countFacturadas = (int)$row['total'];
+                }
+                $infoDelSistema = "INFORMACIÓN ESTADÍSTICA: Tenemos $countAbiertas órdenes ABIERTAS y $countFacturadas FACTURADAS. Dáselo como resumen gerencial.";
+            } catch(PDOException $e) {}
+        }
+        
+        // CASO 3: Listar pendientes
+        elseif (preg_match('/(cuales|cuáles|lista|mostrar|dime).*(pendientes|activas|abiertas|proceso)/i', $mensajeUsuario) || preg_match('/ordenes.*pendientes/i', $mensajeUsuario)) {
+            try {
+                $sqlPendientes = "SELECT o.id, v.marca, v.modelo, c.nombres, c.apellidos
+                                  FROM ordenreparacion o
+                                  LEFT JOIN vehiculos v ON o.idVehiculo = v.id
+                                  LEFT JOIN clientes c ON v.idCliente = c.id
+                                  WHERE o.estado = 1 AND o.baja = 0 ORDER BY o.fechaIngreso ASC LIMIT 10";
+                $stmtPend = $conn->prepare($sqlPendientes);
+                $stmtPend->execute();
+                $resPend = $stmtPend->fetchAll(PDO::FETCH_ASSOC);
 
-        } catch(PDOException $e) {
-            $infoDelSistema = "INFORMACIÓN PRIVADA: Error al consultar los ingresos en la base de datos de facturas.";
+                if ($resPend && count($resPend) > 0) {
+                    $lista = "";
+                    foreach ($resPend as $row) {
+                        $lista .= "- Orden #" . $row['id'] . " (" . $row['marca'] . " " . $row['modelo'] . ") de " . $row['nombres'] . " " . $row['apellidos'] . ".\n";
+                    }
+                    $infoDelSistema = "INFORMACIÓN: Lista de pendientes:\n" . $lista . "\nMenciónale al administrador los vehículos de forma natural.";
+                } else {
+                    $infoDelSistema = "INFORMACIÓN: NO HAY órdenes pendientes (estado 1) en este momento.";
+                }
+            } catch(PDOException $e) {}
+        }
+
+        // CASO 4: Ganancias (Barras)
+        elseif (preg_match('/(ganancias|dinero|ingresos|ventas|plata|lucro)/i', $mensajeUsuario)) {
+            try {
+                $sqlDinero = "SELECT DATE_FORMAT(alta_dt, '%Y-%m') as ym, DATE_FORMAT(alta_dt, '%b %Y') as mes_label, SUM(total) as total_ingreso
+                              FROM facturas WHERE baja = 0 AND alta_dt >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) GROUP BY ym, mes_label ORDER BY ym ASC";
+                $stmtDinero = $conn->prepare($sqlDinero);
+                $stmtDinero->execute();
+                $resDinero = $stmtDinero->fetchAll(PDO::FETCH_ASSOC);
+
+                if ($resDinero) {
+                    $barLabels = []; $barData = []; $resumenTexto = "";
+                    $meses = ['Jan'=>'Ene', 'Feb'=>'Feb', 'Mar'=>'Mar', 'Apr'=>'Abr', 'May'=>'May', 'Jun'=>'Jun', 'Jul'=>'Jul', 'Aug'=>'Ago', 'Sep'=>'Sep', 'Oct'=>'Oct', 'Nov'=>'Nov', 'Dec'=>'Dic'];
+                    foreach ($resDinero as $row) {
+                        $partes = explode(' ', $row['mes_label']);
+                        $mesLabelEspanol = ($meses[$partes[0]] ?? $partes[0]) . ' ' . $partes[1];
+                        $barLabels[] = $mesLabelEspanol; 
+                        $barData[] = (double)$row['total_ingreso'];
+                        $resumenTexto .= "- $mesLabelEspanol: S/ " . number_format($row['total_ingreso'], 2) . "\n";
+                    }
+                    $infoDelSistema = "INFORMACIÓN FINANCIERA: Flujo de ingresos de los últimos meses:\n$resumenTexto\nHaz un análisis gerencial.";
+                } else {
+                    $infoDelSistema = "INFORMACIÓN FINANCIERA: No se registraron facturas pagadas en los últimos 6 meses.";
+                }
+            } catch(PDOException $e) {}
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 🛡️ ROL 2: CLIENTE (Solo puede consultar sus propios vehículos)
+    // -------------------------------------------------------------------------
+    elseif ($rolUsuario === 'CLIENTE') {
+        
+        // CASO 1: Orden específica (Obligatorio cruzar con su ID de cliente)
+        if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
+            $idOrden = $coincidencias[1]; 
+            try {
+                // NOTA: Se añadió INNER JOIN para validar que el auto sea suyo
+                $stmt = $conn->prepare("SELECT o.estado, o.fechaIngreso, o.fechaSalida, o.kilometraje, o.baja 
+                                        FROM ordenreparacion o
+                                        INNER JOIN vehiculos v ON o.idVehiculo = v.id
+                                        WHERE o.id = :id AND v.idCliente = :idCliente");
+                $stmt->bindParam(':id', $idOrden);
+                $stmt->bindParam(':idCliente', $idUsuarioActivo);
+                $stmt->execute();
+                $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($orden) {
+                    if ($orden['baja'] == 1) {
+                        $infoDelSistema = "INFORMACIÓN: Su orden aparece como DADA DE BAJA.";
+                    } else {
+                        $textoEstado = ($orden['estado'] == 1) ? "Abierta" : (($orden['estado'] == 2) ? "Facturada" : "En revisión");
+                        $infoDelSistema = "INFORMACIÓN: El cliente pregunta por SU orden $idOrden. Estado: **$textoEstado**. Ingreso: {$orden['fechaIngreso']}. Salida: {$orden['fechaSalida']}. Km: {$orden['kilometraje']}. Informa muy amablemente.";
+                    }
+                } else {
+                    $infoDelSistema = "REGLA DE SEGURIDAD: El cliente preguntó por la orden $idOrden, pero NO EXISTE o NO LE PERTENECE. Dile amablemente que por seguridad solo puede consultar sus propios vehículos.";
+                }
+            } catch(PDOException $e) {}
+        }
+        
+        // Bloqueo de seguridad si pregunta por finanzas o listados globales
+        elseif (preg_match('/(ganancias|dinero|estadistica|cuantas|pendientes|cuales|todas)/i', $mensajeUsuario)) {
+            $infoDelSistema = "REGLA DE SEGURIDAD: El usuario es un CLIENTE. No tiene permisos para ver finanzas, estadísticas globales ni vehículos de otras personas. Rechaza su solicitud de forma cortés indicando que solo puedes informarle sobre sus propias órdenes.";
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 🛡️ ROL 3: MECÁNICO (Limitado, sin finanzas)
+    // -------------------------------------------------------------------------
+    elseif ($rolUsuario === 'MECANICO') {
+        if (preg_match('/orden\s*#?\s*(\d+)/i', $mensajeUsuario, $coincidencias)) {
+            // Mismo código de consulta general que el Administrador (Caso 1)
+            // (El mecánico sí puede consultar autos en el taller)
+            $idOrden = $coincidencias[1]; 
+            try {
+                $stmt = $conn->prepare("SELECT estado, fechaIngreso, fechaSalida, kilometraje, baja FROM ordenreparacion WHERE id = :id");
+                $stmt->bindParam(':id', $idOrden);
+                $stmt->execute();
+                $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($orden) {
+                    $textoEstado = ($orden['estado'] == 1) ? "Abierta" : (($orden['estado'] == 2) ? "Facturada" : "En revisión");
+                    $infoDelSistema = "INFORMACIÓN: El mecánico consulta la orden $idOrden. Estado: **$textoEstado**. Ingreso: {$orden['fechaIngreso']}. Salida: {$orden['fechaSalida']}. Km: {$orden['kilometraje']}.";
+                }
+            } catch(PDOException $e) {}
+        }
+        
+        // Bloqueo de seguridad si pregunta por finanzas
+        elseif (preg_match('/(ganancias|dinero|ingresos|ventas|plata|lucro)/i', $mensajeUsuario)) {
+            $infoDelSistema = "REGLA DE SEGURIDAD: El usuario es un MECÁNICO. No tiene permisos de administrador para ver las finanzas. Rechaza la solicitud cortésmente.";
         }
     }
 }

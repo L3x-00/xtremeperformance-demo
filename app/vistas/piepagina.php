@@ -190,24 +190,24 @@
     }
 
     async function enviarMensajeWeb() {
-        const input = document.getElementById('chat-input');
-        const mensaje = input.value.trim();
-        if (!mensaje) return;
+    const input = document.getElementById('chat-input');
+    const mensaje = input.value.trim();
+    if (!mensaje) return;
 
-        agregarBurbuja(mensaje, 'usuario');
-        input.value = '';
-        agregarBurbuja('Mecánico analizando...', 'bot', true);
+    agregarBurbuja(mensaje, 'usuario');
+    input.value = '';
+    agregarBurbuja('Mecánico analizando...', 'bot', true);
 
-        try {
-            const response = await fetch('https://www.xtremeperformancepe.com/public/api/endpoints/chatbot_pro.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    mensaje: mensaje,
-                    tipoUsuario: rolUsuarioActivo 
-                })
-            });
-            
+    try {
+        const response = await fetch('https://www.xtremeperformancepe.com/public/api/endpoints/chatbot_pro.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                mensaje: mensaje,
+                rol: rolUsuarioActivo,      // Debe ser 'ADMON', 'CLIENTE' o 'MECANICO'
+                id_usuario: idUsuarioActivo // Debe ser el ID numérico (ej. 20)
+            })
+        });
             const data = await response.json();
             
             const tempMsg = document.getElementById('escribiendo-temp');
