@@ -1,54 +1,40 @@
 <?php
 /**
- * Clase para cargar configuración desde archivo .env
+ * Clase de configuración - Carga desde .env para Cloud SQL
  */
 class Config
 {
     private static $config = [];
     private static $loaded = false;
 
-    public static function load($file = __DIR__ . '/.env')
+    public static function load()
     {
-        if (self::$loaded) return;
-
-        if (!file_exists($file)) {
-            // Si no existe .env, usar valores por defecto desde inicio.php
-            self::$loaded = true;
+        if (self::$loaded) {
             return;
         }
 
-        $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($lines as $line) {
-            if (strpos(trim($line), '#') === 0) continue; // Ignora comentarios
-            
-            if (strpos($line, '=') !== false) {
-                list($key, $value) = explode('=', $line, 2);
-                $key = trim($key);
-                $value = trim($value);
-                
-                // Remover comillas si existen
-                if ((substr($value, 0, 1) === '"' && substr($value, -1) === '"') ||
-                    (substr($value, 0, 1) === "'" && substr($value, -1) === "'")) {
-                    $value = substr($value, 1, -1);
+        $envFile = __DIR__ . '/../config/.env';
+        
+        if (file_exists($envFile)) {
+            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                if (strpos(trim($line), '#') === 0) {
+                    continue;
                 }
                 
-                self::$config[$key] = $value;
+                if (strpos($line, '=') !== false) {
+                    list($key, $value) = explode('=', $line, 2);
+                    self::$config[trim($key)] = trim($value);
+                }
             }
         }
-        
+
         self::$loaded = true;
     }
 
     public static function get($key, $default = null)
     {
         self::load();
-        return isset(self::$config[$key]) ? self::$config[$key] : $default;
-    }
-
-    public static function has($key)
-    {
-        self::load();
-        return isset(self::$config[$key]);
+        return self::$config[$key] ?? $default;
     }
 }
-?>
